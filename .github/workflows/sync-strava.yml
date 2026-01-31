@@ -14,12 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Refresh Strava Token & Fetch Data
+      - name: Refresh Strava Token & Fetch Activities
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
@@ -34,9 +29,8 @@ jobs:
             -d "refresh_token=${STRAVA_REFRESH_TOKEN}")
           
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
-          ATHLETE_ID=$(echo "$TOKEN_RESPONSE" | jq -r '.athlete.id')
           
-          if [ "$ACCESS_TOKEN" = "null" ]; then
+          if [ "$ACCESS_TOKEN" = "null" ] || [ -z "$ACCESS_TOKEN" ]; then
             echo "Failed to refresh token"
             echo "$TOKEN_RESPONSE"
             exit 1
@@ -46,110 +40,128 @@ jobs:
           
           # Fetch all activities (paginated)
           echo "Fetching activities..."
-          > data/activities.json
-          echo "[" > /tmp/all_activities.json
-          first=true
+          echo "[]" > /tmp/all.json
           
           for page in 1 2 3 4 5 6 7 8 9 10; do
-            ACTIVITIES=$(curl -s -H "Authorization: Bearer $ACCESS_TOKEN" \
-              "https://www.strava.com/api/v3/athlete/activities?page=${page}&per_page=200")
+            curl -s -H "Authorization: Bearer $ACCESS_TOKEN" \
+              "https://www.strava.com/api/v3/athlete/activities?page=${page}&per_page=200" > /tmp/page.json
             
-            COUNT=$(echo "$ACTIVITIES" | jq 'length')
+            COUNT=$(jq 'length' /tmp/page.json)
             echo "Page $page: $COUNT activities"
             
             if [ "$COUNT" = "0" ] || [ "$COUNT" = "null" ]; then
               break
             fi
             
-            if [ "$first" = true ]; then
-              first=false
-            else
-              echo "," >> /tmp/all_activities.json
-            fi
-            
-            echo "$ACTIVITIES" | jq -c '.[]' | paste -sd ',' >> /tmp/all_activities.json
+            # Merge arrays
+            jq -s '.[0] + .[1]' /tmp/all.json /tmp/page.json > /tmp/merged.json
+            mv /tmp/merged.json /tmp/all.json
             
             if [ "$COUNT" -lt 200 ]; then
               break
             fi
           done
           
-          echo "]" >> /tmp/all_activities.json
-          cat /tmp/all_activities.json | jq '.' > data/activities.json
+          cp /tmp/all.json data/activities.json
+          echo "Total activities: $(jq 'length' data/activities.json)"
+
+      - name: Generate Stats
+        run: |
+          # Get current date info
+          TODAY=$(date -u +%Y-%m-%d)
+          YEAR=$(date -u +%Y)
+          MONTH=$(date -u +%m)
+          WEEK_AGO=$(date -u -d '7 days ago' +%Y-%m-%d 2>/dev/null || date -u -v-7d +%Y-%m-%d)
+          TWO_WEEKS_AGO=$(date -u -d '14 days ago' +%Y-%m-%d 2>/dev/null || date -u -v-14d +%Y-%m-%d)
           
-          echo "Total activities: $(cat data/activities.json | jq 'length')"
+          echo "Generating stats for $TODAY..."
           
-          # Generate stats.json
-          echo "Generating stats..."
-          cat data/activities.json | jq '
-            def week_runs(start; end):
-              [.[] | select(.type == "Run" and .start_date_local >= start and .start_date_local < end)];
-            
+          # Create stats using jq
+          jq --arg today "$TODAY" --arg year "$YEAR" --arg month "$MONTH" --arg week_ago "$WEEK_AGO" --arg two_weeks_ago "$TWO_WEEKS_AGO" '
             [.[] | select(.type == "Run")] as $runs |
-            ($runs | group_by(.start_date_local[0:7]) | map({month: .[0].start_date_local[0:7], count: length})) as $monthly |
+            
+            # YTD 2026
+            ([$runs[] | select(.start_date_local | startswith("2026-01"))] | {
+              runs: length,
+              distance_km: (if length > 0 then ([.[].distance] | add / 1000 * 10 | round / 10) else 0 end),
+              time_hrs: (if length > 0 then ([.[].moving_time] | add / 3600 * 10 | round / 10) else 0 end)
+            }) as $ytd_2026 |
+            
+            # YTD 2025 same period
+            ([$runs[] | select(.start_date_local | startswith("2025-01"))] | {
+              runs: length,
+              distance_km: (if length > 0 then ([.[].distance] | add / 1000 * 10 | round / 10) else 0 end),
+              time_hrs: (if length > 0 then ([.[].moving_time] | add / 3600 * 10 | round / 10) else 0 end)
+            }) as $ytd_2025 |
+            
+            # YTD 2021 same period (best year)
+            ([$runs[] | select(.start_date_local | startswith("2021-01"))] | {
+              runs: length,
+              distance_km: (if length > 0 then ([.[].distance] | add / 1000 * 10 | round / 10) else 0 end),
+              time_hrs: (if length > 0 then ([.[].moving_time] | add / 3600 * 10 | round / 10) else 0 end)
+            }) as $ytd_2021 |
+            
+            # This week
+            ([$runs[] | select(.start_date_local >= $week_ago)] | {
+              runs: length,
+              distance_km: (if length > 0 then ([.[].distance] | add / 1000 * 10 | round / 10) else 0 end),
+              time_min: (if length > 0 then ([.[].moving_time] | add / 60 | round) else 0 end)
+            }) as $this_week |
+            
+            # Last week
+            ([$runs[] | select(.start_date_local >= $two_weeks_ago and .start_date_local < $week_ago)] | {
+              runs: length,
+              distance_km: (if length > 0 then ([.[].distance] | add / 1000 * 10 | round / 10) else 0 end),
+              time_min: (if length > 0 then ([.[].moving_time] | add / 60 | round) else 0 end)
+            }) as $last_week |
+            
+            # Last run
+            ($runs | sort_by(.start_date_local) | last | {
+              date: .start_date_local[0:10],
+              distance: ((.distance / 1000 * 100 | round) / 100 | tostring),
+              pace: (((.moving_time / 60) / (.distance / 1000) * 100 | round) / 100 | tostring)
+            }) as $last_run |
             
             {
-              ytd_2026: ([$runs[] | select(.start_date_local | startswith("2026-01"))] | {
-                runs: length,
-                distance_km: ([.[].distance] | add / 1000 | . * 10 | round / 10),
-                time_hrs: ([.[].moving_time] | add / 3600 | . * 10 | round / 10)
-              }),
-              ytd_2025_same_period: ([$runs[] | select(.start_date_local | startswith("2025-01"))] | {
-                runs: length,
-                distance_km: (if length > 0 then [.[].distance] | add / 1000 | . * 10 | round / 10 else 0 end),
-                time_hrs: (if length > 0 then [.[].moving_time] | add / 3600 | . * 10 | round / 10 else 0 end)
-              }),
-              ytd_2021_same_period: ([$runs[] | select(.start_date_local | startswith("2021-01"))] | {
-                runs: length,
-                distance_km: (if length > 0 then [.[].distance] | add / 1000 | . * 10 | round / 10 else 0 end),
-                time_hrs: (if length > 0 then [.[].moving_time] | add / 3600 | . * 10 | round / 10 else 0 end)
-              }),
-              this_week: {
-                runs: ([$runs[] | select(.start_date_local >= (now - 7*86400 | strftime("%Y-%m-%d")))] | length),
-                distance_km: ([$runs[] | select(.start_date_local >= (now - 7*86400 | strftime("%Y-%m-%d")))] | if length > 0 then [.[].distance] | add / 1000 | . * 10 | round / 10 else 0 end),
-                time_min: ([$runs[] | select(.start_date_local >= (now - 7*86400 | strftime("%Y-%m-%d")))] | if length > 0 then [.[].moving_time] | add / 60 | round else 0 end)
-              },
-              last_week: {
-                runs: ([$runs[] | select(.start_date_local >= (now - 14*86400 | strftime("%Y-%m-%d")) and .start_date_local < (now - 7*86400 | strftime("%Y-%m-%d")))] | length),
-                distance_km: ([$runs[] | select(.start_date_local >= (now - 14*86400 | strftime("%Y-%m-%d")) and .start_date_local < (now - 7*86400 | strftime("%Y-%m-%d")))] | if length > 0 then [.[].distance] | add / 1000 | . * 10 | round / 10 else 0 end),
-                time_min: ([$runs[] | select(.start_date_local >= (now - 14*86400 | strftime("%Y-%m-%d")) and .start_date_local < (now - 7*86400 | strftime("%Y-%m-%d")))] | if length > 0 then [.[].moving_time] | add / 60 | round else 0 end)
-              },
-              lastRun: ($runs | sort_by(.start_date_local) | last | {
-                date: .start_date_local[0:10],
-                distance: ((.distance / 1000 * 100 | round) / 100 | tostring),
-                pace: (((.moving_time / 60) / (.distance / 1000) * 100 | round) / 100 | tostring)
-              }),
-              streak: 2,
-              updated_at: (now | strftime("%Y-%m-%dT%H:%M:%S+07:00"))
+              ytd_2026: $ytd_2026,
+              ytd_2025_same_period: $ytd_2025,
+              ytd_2021_same_period: $ytd_2021,
+              this_week: $this_week,
+              last_week: $last_week,
+              lastRun: $last_run,
+              streak: $this_week.runs,
+              updated_at: ($today + "T04:00:00+07:00")
             }
-          ' > data/stats.json
+          ' data/activities.json > data/stats.json
           
-          echo "Stats generated"
+          echo "Stats generated:"
           cat data/stats.json | jq '{ytd_2026, this_week, lastRun}'
-          
-          # Generate weekly.json for heatmap
+
+      - name: Generate Weekly Heatmap Data
+        run: |
           echo "Generating weekly heatmap data..."
-          cat data/activities.json | jq '
+          
+          jq '
             [.[] | select(.type == "Run")] |
             group_by(.start_date_local[0:4]) |
             map({
               year: .[0].start_date_local[0:4],
               total_runs: length,
-              total_distance: ([.[].distance] | add / 1000 | . * 10 | round / 10),
+              total_distance: ([.[].distance] | add / 1000 * 10 | round / 10),
               weeks: (
                 group_by(.start_date_local[0:10] | strptime("%Y-%m-%d") | strftime("%Y-W%V")) |
                 map({
                   week_num: (.[0].start_date_local[0:10] | strptime("%Y-%m-%d") | strftime("%V") | tonumber),
                   runs: length,
-                  distance_km: ([.[].distance] | add / 1000 | . * 10 | round / 10)
+                  distance_km: ([.[].distance] | add / 1000 * 10 | round / 10)
                 })
               )
             })
-          ' > data/weekly.json
+          ' data/activities.json > data/weekly.json
           
-          echo "Weekly data generated"
+          echo "Weekly data generated: $(jq 'length' data/weekly.json) years"
 
-      - name: Commit and push changes
+      - name: Commit and Push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -161,5 +173,5 @@ jobs:
           else
             git commit -m "chore: sync strava data $(date -u +%Y-%m-%d)"
             git push
-            echo "Data synced and pushed!"
+            echo "✅ Data synced and pushed!"
           fi
