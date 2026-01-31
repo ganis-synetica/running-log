@@ -36,5 +36,11 @@
     "time_min": 118
   },
   "weekly_goal": 3,
-  "updated_at": "2026-01-31T11:25:00+07:00"
+  "updated_at": "2026-01-31T11:25:00+07:00",
+  "lastRun": {
+    "date": "2026-01-30",
+    "distance": "3.58",
+    "pace": "9.44"
+  },
+  "streak": 2
 }

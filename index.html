@@ -3,361 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Running Log — Ganis</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Run, Ganis, Run!</title>
+  <link rel="stylesheet" href="css/shared.css">
   <style>
-    :root {
-      --red: #E53935;
-      --blue: #1E88E5;
-      --yellow: #FDD835;
-      --black: #212121;
-      --white: #FAFAFA;
-      --gray: #757575;
-      --light: #EEEEEE;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
+      background: var(--cream);
       color: var(--black);
-      min-height: 100vh;
     }
     
-    /* Bauhaus Header */
-    header {
-      background: var(--black);
-      color: var(--white);
-      padding: 40px 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
+    /* Bauhaus decorations */
+    .bg-circle {
+      width: 300px;
+      height: 300px;
       background: var(--red);
-      border-radius: 50%;
+      top: -100px;
+      right: -100px;
     }
     
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -30px;
-      right: 100px;
+    .bg-square {
+      width: 150px;
+      height: 150px;
+      background: var(--blue);
+      bottom: 100px;
+      left: -50px;
+    }
+    
+    .bg-circle-2 {
       width: 100px;
       height: 100px;
       background: var(--yellow);
+      bottom: 50px;
+      right: 10%;
     }
     
-    .header-content {
-      position: relative;
-      z-index: 1;
-      max-width: 1200px;
-      margin: 0 auto;
+    /* Week Progress */
+    .week-hero {
+      text-align: center;
+      padding: 60px 24px;
     }
     
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    
-    .subtitle {
-      color: var(--gray);
-      margin-top: 8px;
+    .week-hero h2 {
       font-size: 1rem;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    
-    /* Grid Layout */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    
-    /* Cards */
-    .card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      padding: 24px;
-      position: relative;
-    }
-    
-    .card-full { grid-column: span 12; }
-    .card-half { grid-column: span 6; }
-    .card-third { grid-column: span 4; }
-    
-    @media (max-width: 768px) {
-      .card-half, .card-third { grid-column: span 12; }
-    }
-    
-    .card-label {
-      font-size: 0.75rem;
-      font-weight: 700;
+      color: var(--gray);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--gray);
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
     
-    .card-value {
-      font-size: 3rem;
+    .week-runs {
+      font-size: 8rem;
       font-weight: 700;
       line-height: 1;
     }
     
-    .card-unit {
-      font-size: 1rem;
+    .week-goal {
+      font-size: 2rem;
       color: var(--gray);
-      margin-left: 4px;
     }
     
-    .card-detail {
-      font-size: 0.875rem;
-      color: var(--gray);
-      margin-top: 8px;
-    }
-    
-    /* Accent Colors */
-    .accent-red { border-left: 8px solid var(--red); }
-    .accent-blue { border-left: 8px solid var(--blue); }
-    .accent-yellow { border-left: 8px solid var(--yellow); }
-    
-    /* Comparison */
-    .comparison {
+    .goal-dots {
       display: flex;
-      gap: 24px;
+      justify-content: center;
+      gap: 16px;
+      margin: 32px 0;
+    }
+    
+    .goal-dot {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--black);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .goal-dot.filled {
+      background: var(--yellow);
+      transform: scale(1.1);
+    }
+    
+    .week-distance {
+      font-size: 1.5rem;
       margin-top: 16px;
     }
     
-    .comp-item {
-      flex: 1;
+    .week-distance span {
+      font-weight: 700;
+      font-size: 2rem;
     }
     
-    .comp-label {
+    /* Week comparison */
+    .week-compare {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 40px;
+      padding: 24px;
+    }
+    
+    .compare-item {
+      text-align: center;
+    }
+    
+    .compare-label {
       font-size: 0.75rem;
       color: var(--gray);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     
-    .comp-value {
+    .compare-value {
       font-size: 1.5rem;
       font-weight: 700;
       margin-top: 4px;
     }
     
-    .positive { color: var(--blue); }
-    .positive::before { content: '▲ '; }
-    .negative { color: var(--red); }
-    .negative::before { content: '▼ '; }
-    .neutral { color: var(--gray); }
+    .compare-value.up { color: var(--blue); }
+    .compare-value.down { color: var(--red); }
     
-    /* Progress Bar */
-    .progress-bar {
-      height: 8px;
-      background: var(--light);
-      margin-top: 16px;
-      position: relative;
+    /* Last run card */
+    .last-run {
+      background: var(--black);
+      color: var(--white);
+      padding: 32px;
+      margin: 40px auto;
+      max-width: 600px;
+      border: none;
     }
     
-    .progress-fill {
-      height: 100%;
-      background: var(--blue);
-      transition: width 0.5s ease;
-    }
-    
-    .progress-fill.complete {
-      background: var(--yellow);
-    }
-    
-    /* Goal Dots */
-    .goal-dots {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    
-    .goal-dot {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--black);
-      border-radius: 50%;
-    }
-    
-    .goal-dot.filled {
-      background: var(--yellow);
-    }
-    
-    /* Week Comparison */
-    .week-bars {
-      display: flex;
-      gap: 16px;
-      align-items: flex-end;
-      height: 120px;
-      margin-top: 16px;
-    }
-    
-    .week-bar {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .bar {
-      width: 100%;
-      max-width: 80px;
-      background: var(--light);
-      transition: height 0.5s ease;
-    }
-    
-    .bar.current {
-      background: var(--blue);
-    }
-    
-    .bar-label {
-      font-size: 0.75rem;
+    .last-run .card-label {
       color: var(--gray);
-      margin-top: 8px;
-      text-transform: uppercase;
     }
     
-    .bar-value {
-      font-size: 0.875rem;
-      font-weight: 700;
-      margin-top: 4px;
+    .last-run-stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 24px;
     }
     
-    /* Footer */
-    footer {
+    .last-run-stat {
       text-align: center;
-      padding: 24px;
-      color: var(--gray);
+    }
+    
+    .last-run-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--yellow);
+    }
+    
+    .last-run-label {
       font-size: 0.75rem;
-    }
-    
-    /* Geometric Decorations */
-    .geo-circle {
-      position: absolute;
-      border-radius: 50%;
-      z-index: 0;
-    }
-    
-    .geo-square {
-      position: absolute;
-      z-index: 0;
+      color: var(--gray);
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <h1>Running Log</h1>
-      <p class="subtitle">Movement as Identity Anchor — 2026 · <a href="heatmap.html" style="color: var(--yellow);">View Activity Heatmap →</a></p>
+  <div class="bauhaus-circle bg-circle"></div>
+  <div class="bauhaus-square bg-square"></div>
+  <div class="bauhaus-circle bg-circle-2"></div>
+  
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="musang-container">
+        <div class="musang-body">🦝</div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+      </div>
+      <span class="nav-title">Run, Ganis, Run!</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">This Week</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="heatmap.html" class="nav-link">Heatmap</a>
+      <a href="runs.html" class="nav-link">All Runs</a>
     </div>
-  </header>
+  </nav>
 
-  <main class="container">
-    <!-- This Week -->
-    <div class="grid">
-      <div class="card card-half accent-yellow">
-        <div class="card-label">This Week</div>
-        <div class="card-value"><span id="weekRuns">-</span><span class="card-unit">/ 3 runs</span></div>
-        <div class="goal-dots" id="goalDots"></div>
-        <div class="card-detail"><span id="weekDistance">-</span> km this week</div>
+  <main>
+    <section class="week-hero">
+      <h2>This Week</h2>
+      <div class="week-runs"><span id="weekRuns">-</span></div>
+      <div class="week-goal">of 3 runs</div>
+      
+      <div class="goal-dots" id="goalDots"></div>
+      
+      <div class="week-distance">
+        <span id="weekDistance">-</span> km covered
       </div>
       
-      <div class="card card-half accent-blue">
-        <div class="card-label">Week vs Week</div>
-        <div class="week-bars">
-          <div class="week-bar">
-            <div class="bar" id="lastWeekBar"></div>
-            <div class="bar-label">Last</div>
-            <div class="bar-value"><span id="lastWeekKm">-</span> km</div>
-          </div>
-          <div class="week-bar">
-            <div class="bar current" id="thisWeekBar"></div>
-            <div class="bar-label">This</div>
-            <div class="bar-value"><span id="thisWeekKm">-</span> km</div>
-          </div>
+      <div class="week-compare">
+        <div class="compare-item">
+          <div class="compare-label">vs Last Week</div>
+          <div class="compare-value" id="vsLastWeek">-</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label">Streak</div>
+          <div class="compare-value" id="streak">-</div>
         </div>
       </div>
-    </div>
-
-    <!-- YTD Comparisons -->
-    <div class="grid">
-      <div class="card card-half accent-red">
-        <div class="card-label">YTD vs Last Year (Jan)</div>
-        <div class="card-value"><span id="ytdDistance">-</span><span class="card-unit">km</span></div>
-        <div class="comparison">
-          <div class="comp-item">
-            <div class="comp-label">2025 Jan</div>
-            <div class="comp-value" id="ytd2025">-</div>
+    </section>
+    
+    <div class="container">
+      <div class="card last-run">
+        <div class="card-label">Last Run</div>
+        <div class="last-run-stats">
+          <div class="last-run-stat">
+            <div class="last-run-value" id="lastDate">-</div>
+            <div class="last-run-label">Date</div>
           </div>
-          <div class="comp-item">
-            <div class="comp-label">Difference</div>
-            <div class="comp-value" id="diffLastYear">-</div>
+          <div class="last-run-stat">
+            <div class="last-run-value" id="lastDistance">-</div>
+            <div class="last-run-label">Distance</div>
           </div>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressLastYear"></div>
-        </div>
-      </div>
-      
-      <div class="card card-half accent-red">
-        <div class="card-label">YTD vs Best Year (2021 Jan)</div>
-        <div class="card-value"><span id="ytdDistance2">-</span><span class="card-unit">km</span></div>
-        <div class="comparison">
-          <div class="comp-item">
-            <div class="comp-label">2021 Jan</div>
-            <div class="comp-value" id="ytd2021">-</div>
-          </div>
-          <div class="comp-item">
-            <div class="comp-label">Difference</div>
-            <div class="comp-value" id="diffBestYear">-</div>
+          <div class="last-run-stat">
+            <div class="last-run-value" id="lastPace">-</div>
+            <div class="last-run-label">Pace</div>
           </div>
         </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressBestYear"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="grid">
-      <div class="card card-third">
-        <div class="card-label">Total Runs (2026)</div>
-        <div class="card-value" id="totalRuns">-</div>
-      </div>
-      <div class="card card-third">
-        <div class="card-label">Total Time</div>
-        <div class="card-value"><span id="totalHours">-</span><span class="card-unit">hrs</span></div>
-      </div>
-      <div class="card card-third">
-        <div class="card-label">Best Year Goal</div>
-        <div class="card-value"><span id="bestYearProgress">-</span><span class="card-unit">%</span></div>
-        <div class="card-detail">of 928.7 km (2021)</div>
       </div>
     </div>
   </main>
 
-  <footer>
-    Last updated: <span id="updatedAt">-</span> · Data synced from Strava
+  <footer class="page-footer">
+    Last updated: <span id="updatedAt">-</span> · Synced from Strava
   </footer>
 
   <script>
@@ -366,7 +235,7 @@
         const res = await fetch('data/stats.json');
         const d = await res.json();
         
-        // This week
+        // Week stats
         document.getElementById('weekRuns').textContent = d.this_week.runs;
         document.getElementById('weekDistance').textContent = d.this_week.distance_km;
         
@@ -376,40 +245,21 @@
         ).join('');
         document.getElementById('goalDots').innerHTML = dots;
         
-        // Week bars
-        const maxKm = Math.max(d.this_week.distance_km, d.last_week.distance_km, 15);
-        document.getElementById('lastWeekBar').style.height = (d.last_week.distance_km / maxKm * 100) + 'px';
-        document.getElementById('thisWeekBar').style.height = (d.this_week.distance_km / maxKm * 100) + 'px';
-        document.getElementById('lastWeekKm').textContent = d.last_week.distance_km;
-        document.getElementById('thisWeekKm').textContent = d.this_week.distance_km;
+        // vs Last week
+        const diff = d.this_week.distance_km - d.last_week.distance_km;
+        const vsEl = document.getElementById('vsLastWeek');
+        vsEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + ' km';
+        vsEl.className = 'compare-value ' + (diff >= 0 ? 'up' : 'down');
         
-        // YTD vs Last Year
-        document.getElementById('ytdDistance').textContent = d.ytd_2026.distance_km;
-        document.getElementById('ytdDistance2').textContent = d.ytd_2026.distance_km;
-        document.getElementById('ytd2025').textContent = d.ytd_2025_same_period.distance_km + ' km';
-        document.getElementById('ytd2021').textContent = d.ytd_2021_same_period.distance_km + ' km';
+        // Streak (calculate from stats)
+        document.getElementById('streak').textContent = (d.streak || d.this_week.runs) + ' days';
         
-        const diffLast = d.ytd_2026.distance_km - d.ytd_2025_same_period.distance_km;
-        const diffBest = d.ytd_2026.distance_km - d.ytd_2021_same_period.distance_km;
-        
-        const diffLastEl = document.getElementById('diffLastYear');
-        diffLastEl.textContent = (diffLast >= 0 ? '+' : '') + diffLast.toFixed(1) + ' km';
-        diffLastEl.className = 'comp-value ' + (diffLast >= 0 ? 'positive' : 'negative');
-        
-        const diffBestEl = document.getElementById('diffBestYear');
-        diffBestEl.textContent = (diffBest >= 0 ? '+' : '') + diffBest.toFixed(1) + ' km';
-        diffBestEl.className = 'comp-value ' + (diffBest >= 0 ? 'positive' : 'negative');
-        
-        // Progress bars
-        const pctLast = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2025_same_period.distance_km) * 100);
-        const pctBest = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2021_same_period.distance_km) * 100);
-        document.getElementById('progressLastYear').style.width = pctLast + '%';
-        document.getElementById('progressBestYear').style.width = pctBest + '%';
-        
-        // Stats
-        document.getElementById('totalRuns').textContent = d.ytd_2026.runs;
-        document.getElementById('totalHours').textContent = d.ytd_2026.time_hrs;
-        document.getElementById('bestYearProgress').textContent = ((d.ytd_2026.distance_km / 928.7) * 100).toFixed(1);
+        // Last run
+        if (d.lastRun) {
+          document.getElementById('lastDate').textContent = d.lastRun.date.split('-').slice(1).join('/');
+          document.getElementById('lastDistance').textContent = d.lastRun.distance + ' km';
+          document.getElementById('lastPace').textContent = d.lastRun.pace + '/km';
+        }
         
         // Updated
         document.getElementById('updatedAt').textContent = new Date(d.updated_at).toLocaleString();

@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Running Heatmap — Ganis</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
+  <title>Heatmap — Run, Ganis, Run!</title>
+  <link rel="stylesheet" href="css/shared.css">
   <style>
     :root {
       --bg: #0d1117;
@@ -240,12 +239,26 @@
   </style>
 </head>
 <body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="musang-container">
+        <div class="musang-body">🦝</div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+      </div>
+      <span class="nav-title">Run, Ganis, Run!</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">This Week</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="heatmap.html" class="nav-link active">Heatmap</a>
+      <a href="runs.html" class="nav-link">All Runs</a>
+    </div>
+  </nav>
+  
   <div class="container">
-    <nav class="nav">
-      <a href="index.html">← Dashboard</a>
-    </nav>
-    
-    <h1>Running Activity</h1>
+    <h1 style="margin-top: 24px;">Activity Heatmap</h1>
     <p class="subtitle">Weekly running activity relative to each year's average</p>
     
     <div class="legend">
