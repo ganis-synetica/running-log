@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 — RUN, GANIS, RUN!</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* 
+     * THIS YEAR
+     * Inspired by Joost Schmidt's Bauhaus Exhibition Poster (1923)
+     * Bold diagonal typography, stark contrasts, architectural precision
+     */
+    
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: var(--blue);
+      color: var(--white);
+      min-height: 100vh;
+    }
+    
+    .poster {
+      min-height: calc(100vh - 60px);
+      padding: 60px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Diagonal stripe */
+    .diagonal-stripe {
+      position: absolute;
+      width: 200%;
+      height: 120px;
+      background: var(--yellow);
+      transform: rotate(-5deg);
+      top: 200px;
+      left: -50%;
+      z-index: 0;
+    }
+    
+    .diagonal-stripe-2 {
+      position: absolute;
+      width: 200%;
+      height: 40px;
+      background: var(--red);
+      transform: rotate(-5deg);
+      top: 320px;
+      left: -50%;
+      z-index: 0;
+    }
+    
+    /* Geometric accents */
+    .geo-circle {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 20px solid var(--white);
+      border-radius: 50%;
+      opacity: 0.1;
+      bottom: -100px;
+      right: -100px;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      opacity: 0.6;
+    }
+    
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 15vw, 10rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      margin: 20px 0 40px;
+    }
+    
+    .section-subtitle {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      max-width: 500px;
+      line-height: 1.4;
+      opacity: 0.8;
+    }
+    
+    /* Comparison cards */
+    .comparisons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 80px;
+    }
+    
+    .compare-card {
+      background: var(--white);
+      color: var(--black);
+      padding: 32px;
+      position: relative;
+    }
+    
+    .compare-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 100%;
+      background: var(--yellow);
+    }
+    
+    .compare-card.alt::before {
+      background: var(--red);
+    }
+    
+    .compare-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    
+    .compare-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      margin: 8px 0 24px;
+    }
+    
+    .compare-numbers {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    
+    .compare-current {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+    }
+    
+    .compare-vs {
+      text-align: right;
+    }
+    
+    .compare-vs-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      opacity: 0.5;
+    }
+    
+    .compare-vs-label {
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    
+    .compare-diff {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.25rem;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 2px solid var(--black);
+    }
+    
+    .compare-diff.positive { color: var(--blue); }
+    .compare-diff.negative { color: var(--red); }
+    
+    /* Progress bar */
+    .progress-track {
+      height: 8px;
+      background: rgba(0,0,0,0.1);
+      margin-top: 16px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      transition: width 0.5s;
+    }
+    
+    /* Stats strip */
+    .stats-strip {
+      display: flex;
+      gap: 48px;
+      margin-top: 60px;
+      padding: 32px 0;
+      border-top: 2px solid rgba(255,255,255,0.2);
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    
+    .strip-stat {
+      text-align: center;
+    }
+    
+    .strip-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--yellow);
+    }
+    
+    .strip-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+    
+    @media (max-width: 768px) {
+      .stats-strip { flex-wrap: wrap; gap: 24px; justify-content: center; }
+      .diagonal-stripe { height: 80px; top: 150px; }
+      .diagonal-stripe-2 { top: 230px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="musang-container">
+        <div class="musang-body">🦝</div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+      </div>
+      <span class="nav-title">RUN, GANIS, RUN!</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">THIS WEEK</a>
+      <a href="year.html" class="nav-link active">THIS YEAR</a>
+      <a href="alltime.html" class="nav-link">ALL TIME</a>
+    </div>
+  </nav>
+
+  <main class="poster">
+    <div class="diagonal-stripe"></div>
+    <div class="diagonal-stripe-2"></div>
+    <div class="geo-circle"></div>
+    
+    <div class="content">
+      <div class="section-label">YEAR-TO-DATE PERFORMANCE</div>
+      <h1 class="section-title">2026</h1>
+      <p class="section-subtitle">
+        The year you promised would be different. 
+        Let's see if past-you was lying to future-you again.
+      </p>
+      
+      <div class="comparisons">
+        <div class="compare-card">
+          <div class="compare-label">COMPARISON</div>
+          <div class="compare-title">VS LAST YEAR (JAN 2025)</div>
+          <div class="compare-numbers">
+            <div class="compare-current"><span id="ytd2026">-</span><small style="font-size: 0.4em; opacity: 0.5;"> km</small></div>
+            <div class="compare-vs">
+              <div class="compare-vs-value" id="ytd2025">-</div>
+              <div class="compare-vs-label">Jan 2025</div>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressLast"></div>
+          </div>
+          <div class="compare-diff" id="diffLast">-</div>
+        </div>
+        
+        <div class="compare-card alt">
+          <div class="compare-label">COMPARISON</div>
+          <div class="compare-title">VS BEST YEAR (JAN 2021)</div>
+          <div class="compare-numbers">
+            <div class="compare-current"><span id="ytd2026b">-</span><small style="font-size: 0.4em; opacity: 0.5;"> km</small></div>
+            <div class="compare-vs">
+              <div class="compare-vs-value" id="ytd2021">-</div>
+              <div class="compare-vs-label">Jan 2021</div>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressBest" style="background: var(--red);"></div>
+          </div>
+          <div class="compare-diff" id="diffBest">-</div>
+        </div>
+      </div>
+      
+      <div class="stats-strip">
+        <div class="strip-stat">
+          <div class="strip-value" id="totalRuns">-</div>
+          <div class="strip-label">Total Runs</div>
+        </div>
+        <div class="strip-stat">
+          <div class="strip-value" id="totalHours">-</div>
+          <div class="strip-label">Hours</div>
+        </div>
+        <div class="strip-stat">
+          <div class="strip-value" id="goalPct">-</div>
+          <div class="strip-label">Of 2021 Pace</div>
+        </div>
+        <div class="strip-stat">
+          <div class="strip-value" id="weeksHit">-</div>
+          <div class="strip-label">Weeks Goal Hit</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="tribute">
+      <div class="tribute-title">DESIGN TRIBUTE</div>
+      <p class="tribute-text">
+        This page draws from <span class="tribute-designer">Joost Schmidt</span>'s 
+        iconic Bauhaus Exhibition Poster <span class="tribute-year">(1923)</span>. 
+        Schmidt's work featured bold diagonal compositions, stark typographic contrasts, 
+        and a sense of architectural precision. The diagonal stripes and oversized year 
+        echo his belief that typography itself could be architecture.
+      </p>
+      <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
+    </div>
+  </footer>
+
+  <script>
+    async function loadData() {
+      try {
+        const res = await fetch('data/stats.json');
+        const d = await res.json();
+        
+        // YTD values
+        document.getElementById('ytd2026').textContent = d.ytd_2026.distance_km;
+        document.getElementById('ytd2026b').textContent = d.ytd_2026.distance_km;
+        document.getElementById('ytd2025').textContent = d.ytd_2025_same_period.distance_km + ' km';
+        document.getElementById('ytd2021').textContent = d.ytd_2021_same_period.distance_km + ' km';
+        
+        // Differences
+        const diffLast = d.ytd_2026.distance_km - d.ytd_2025_same_period.distance_km;
+        const diffBest = d.ytd_2026.distance_km - d.ytd_2021_same_period.distance_km;
+        
+        const diffLastEl = document.getElementById('diffLast');
+        diffLastEl.textContent = (diffLast >= 0 ? '↑ ' : '↓ ') + Math.abs(diffLast).toFixed(1) + ' km ' + (diffLast >= 0 ? 'ahead' : 'behind');
+        diffLastEl.className = 'compare-diff ' + (diffLast >= 0 ? 'positive' : 'negative');
+        
+        const diffBestEl = document.getElementById('diffBest');
+        diffBestEl.textContent = (diffBest >= 0 ? '↑ ' : '↓ ') + Math.abs(diffBest).toFixed(1) + ' km ' + (diffBest >= 0 ? 'ahead' : 'behind');
+        diffBestEl.className = 'compare-diff ' + (diffBest >= 0 ? 'positive' : 'negative');
+        
+        // Progress bars
+        const pctLast = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2025_same_period.distance_km) * 100);
+        const pctBest = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2021_same_period.distance_km) * 100);
+        document.getElementById('progressLast').style.width = pctLast + '%';
+        document.getElementById('progressBest').style.width = pctBest + '%';
+        
+        // Stats
+        document.getElementById('totalRuns').textContent = d.ytd_2026.runs;
+        document.getElementById('totalHours').textContent = d.ytd_2026.time_hrs + 'h';
+        document.getElementById('goalPct').textContent = ((d.ytd_2026.distance_km / d.ytd_2021_same_period.distance_km) * 100).toFixed(0) + '%';
+        document.getElementById('weeksHit').textContent = Math.floor(d.ytd_2026.runs / 3);
+        
+        document.getElementById('updatedAt').textContent = new Date(d.updated_at).toLocaleString();
+      } catch (e) {
+        console.error('Error:', e);
+      }
+    }
+    loadData();
+  </script>
+</body>
+</html>

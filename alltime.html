@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALL TIME — RUN, GANIS, RUN!</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* 
+     * ALL TIME
+     * Inspired by László Moholy-Nagy's photomontages and data visualization
+     * Grid systems, documentary precision, constructivist composition
+     */
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1A1A1A;
+      color: var(--white);
+      min-height: 100vh;
+    }
+    
+    .poster {
+      min-height: calc(100vh - 60px);
+      padding: 40px 24px;
+      position: relative;
+    }
+    
+    /* Constructivist accents */
+    .construct-line {
+      position: absolute;
+      background: var(--red);
+      z-index: 0;
+    }
+    
+    .construct-line-1 {
+      width: 4px;
+      height: 60%;
+      top: 20%;
+      left: 40px;
+    }
+    
+    .construct-line-2 {
+      width: 200px;
+      height: 4px;
+      top: 40px;
+      right: 10%;
+    }
+    
+    .construct-circle {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border: 4px solid var(--yellow);
+      border-radius: 50%;
+      bottom: 100px;
+      right: 60px;
+      opacity: 0.3;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      color: var(--yellow);
+    }
+    
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+    }
+    
+    .section-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.875rem;
+      max-width: 400px;
+      line-height: 1.5;
+      opacity: 0.6;
+    }
+    
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.1);
+      margin-bottom: 48px;
+    }
+    
+    .stat-cell {
+      background: #1A1A1A;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .stat-cell-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--yellow);
+    }
+    
+    .stat-cell-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-top: 8px;
+    }
+    
+    /* Heatmap section */
+    .heatmap-section {
+      background: #222;
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+    
+    .heatmap-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      opacity: 0.6;
+    }
+    
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+    
+    .year-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .year-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      width: 50px;
+      opacity: 0.5;
+    }
+    
+    .weeks-container {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .week-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: #333;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    
+    .week-dot:hover { transform: scale(1.8); }
+    .week-dot.above-high { background: #39d353; }
+    .week-dot.above { background: #26a641; }
+    .week-dot.average { background: #9e6a03; }
+    .week-dot.below { background: #5c2727; }
+    
+    .year-stats {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      margin-left: 16px;
+      opacity: 0.4;
+    }
+    
+    .year-stats strong {
+      color: var(--yellow);
+      opacity: 1;
+    }
+    
+    /* Runs table section */
+    .runs-section {
+      background: #222;
+      padding: 32px;
+    }
+    
+    .runs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .runs-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+    }
+    
+    .runs-filters {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .filter-select {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      background: #333;
+      color: var(--white);
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+    
+    .runs-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .runs-table th,
+    .runs-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    
+    .runs-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 400;
+    }
+    
+    .runs-table td {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.875rem;
+    }
+    
+    .runs-table tr:hover {
+      background: #2a2a2a;
+    }
+    
+    .distance-col {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    
+    .page-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 16px;
+      background: #333;
+      color: var(--white);
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+    
+    .page-btn:hover { background: #444; }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    
+    /* Tooltip */
+    .tooltip {
+      position: fixed;
+      background: #000;
+      border: 1px solid var(--yellow);
+      padding: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .tooltip.visible { display: block; }
+    
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .week-dot { width: 8px; height: 8px; }
+      .year-stats { display: none; }
+      .construct-line-1 { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="musang-container">
+        <div class="musang-body">🦝</div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+      </div>
+      <span class="nav-title">RUN, GANIS, RUN!</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">THIS WEEK</a>
+      <a href="year.html" class="nav-link">THIS YEAR</a>
+      <a href="alltime.html" class="nav-link active">ALL TIME</a>
+    </div>
+  </nav>
+
+  <main class="poster">
+    <div class="construct-line construct-line-1"></div>
+    <div class="construct-line construct-line-2"></div>
+    <div class="construct-circle"></div>
+    
+    <div class="content">
+      <div class="section-header">
+        <div>
+          <div class="section-label">COMPLETE ARCHIVE</div>
+          <h1 class="section-title">ALL TIME</h1>
+        </div>
+        <p class="section-subtitle">
+          808 runs. Zero regrets. (Okay, maybe that one time in 2022 when you only ran 18 times the whole year. We don't talk about 2022.)
+        </p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="stat-cell-value" id="totalRuns">-</div>
+          <div class="stat-cell-label">Total Runs</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-value" id="totalDistance">-</div>
+          <div class="stat-cell-label">Kilometers</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-value" id="totalHours">-</div>
+          <div class="stat-cell-label">Hours</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-value" id="activeWeeks">-</div>
+          <div class="stat-cell-label">Active Weeks</div>
+        </div>
+      </div>
+      
+      <div class="heatmap-section">
+        <div class="heatmap-title">ACTIVITY HEATMAP</div>
+        <div class="heatmap-legend">
+          <span>LESS</span>
+          <div class="legend-box" style="background: #333;"></div>
+          <div class="legend-box" style="background: #5c2727;"></div>
+          <div class="legend-box" style="background: #9e6a03;"></div>
+          <div class="legend-box" style="background: #26a641;"></div>
+          <div class="legend-box" style="background: #39d353;"></div>
+          <span>MORE</span>
+          <span style="margin-left: 16px;">// RELATIVE TO YEAR AVG</span>
+        </div>
+        <div id="heatmap"></div>
+      </div>
+      
+      <div class="runs-section">
+        <div class="runs-header">
+          <div class="runs-title">RUN LOG</div>
+          <div class="runs-filters">
+            <select class="filter-select" id="yearFilter">
+              <option value="all">ALL YEARS</option>
+            </select>
+            <select class="filter-select" id="limitFilter">
+              <option value="25">25 RUNS</option>
+              <option value="50">50 RUNS</option>
+              <option value="100">100 RUNS</option>
+            </select>
+          </div>
+        </div>
+        <table class="runs-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Distance</th>
+              <th>Time</th>
+              <th>Pace</th>
+            </tr>
+          </thead>
+          <tbody id="runsTable"></tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="tribute">
+      <div class="tribute-title">DESIGN TRIBUTE</div>
+      <p class="tribute-text">
+        This page is inspired by <span class="tribute-designer">László Moholy-Nagy</span>'s 
+        constructivist compositions and data visualizations <span class="tribute-year">(1920s-30s)</span>. 
+        Moholy-Nagy pioneered the integration of photography, typography, and information design. 
+        The grid-based heatmap and monospaced data tables honor his belief that 
+        design should make complex information immediately legible.
+      </p>
+      <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
+    </div>
+  </footer>
+  
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    let allRuns = [];
+    let filteredRuns = [];
+    let currentPage = 1;
+    const perPage = 25;
+
+    async function loadData() {
+      // Load weekly data for heatmap
+      const weeklyRes = await fetch('data/weekly.json');
+      const weeklyData = await weeklyRes.json();
+      renderHeatmap(weeklyData);
+      
+      // Load activities for table
+      const activitiesRes = await fetch('data/activities.json');
+      const activities = await activitiesRes.json();
+      
+      allRuns = activities
+        .filter(a => a.type === 'Run')
+        .map(a => ({
+          date: a.start_date_local.split('T')[0],
+          year: a.start_date_local.substring(0, 4),
+          name: a.name.split(',')[0].substring(0, 25),
+          distance: (a.distance / 1000).toFixed(2),
+          time: Math.round(a.moving_time / 60),
+          pace: ((a.moving_time / 60) / (a.distance / 1000)).toFixed(2)
+        }));
+      
+      // Stats
+      const totalDist = allRuns.reduce((sum, r) => sum + parseFloat(r.distance), 0);
+      const totalTime = allRuns.reduce((sum, r) => sum + r.time, 0);
+      document.getElementById('totalRuns').textContent = allRuns.length;
+      document.getElementById('totalDistance').textContent = Math.round(totalDist);
+      document.getElementById('totalHours').textContent = Math.round(totalTime / 60);
+      
+      // Year filter
+      const years = [...new Set(allRuns.map(r => r.year))].sort().reverse();
+      const yearSelect = document.getElementById('yearFilter');
+      years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+      });
+      
+      // Load stats
+      const statsRes = await fetch('data/stats.json');
+      const stats = await statsRes.json();
+      document.getElementById('updatedAt').textContent = new Date(stats.updated_at).toLocaleString();
+      
+      applyFilters();
+    }
+
+    function renderHeatmap(weeklyData) {
+      const container = document.getElementById('heatmap');
+      let activeWeeks = 0;
+      
+      const sortedData = [...weeklyData].sort((a, b) => b.year.localeCompare(a.year));
+      
+      sortedData.forEach(yearData => {
+        const row = document.createElement('div');
+        row.className = 'year-row';
+        
+        const label = document.createElement('div');
+        label.className = 'year-label';
+        label.textContent = yearData.year;
+        row.appendChild(label);
+        
+        const weeksContainer = document.createElement('div');
+        weeksContainer.className = 'weeks-container';
+        
+        const weekMap = {};
+        yearData.weeks.forEach(w => { weekMap[w.week_num] = w; });
+        
+        const avgDistance = yearData.weeks.length > 0 
+          ? yearData.total_distance / yearData.weeks.length : 0;
+        
+        for (let w = 1; w <= 52; w++) {
+          const dot = document.createElement('div');
+          dot.className = 'week-dot';
+          
+          const weekData = weekMap[w];
+          if (weekData) {
+            const ratio = weekData.distance_km / avgDistance;
+            if (ratio >= 2) dot.classList.add('above-high');
+            else if (ratio >= 1.25) dot.classList.add('above');
+            else if (ratio >= 0.75) dot.classList.add('average');
+            else dot.classList.add('below');
+            
+            dot.dataset.info = `W${w} ${yearData.year}: ${weekData.runs} runs, ${weekData.distance_km} km`;
+            activeWeeks++;
+          } else {
+            dot.dataset.info = `W${w} ${yearData.year}: No runs`;
+          }
+          
+          dot.addEventListener('mouseenter', showTooltip);
+          dot.addEventListener('mouseleave', hideTooltip);
+          weeksContainer.appendChild(dot);
+        }
+        
+        row.appendChild(weeksContainer);
+        
+        const stats = document.createElement('div');
+        stats.className = 'year-stats';
+        stats.innerHTML = `<strong>${yearData.total_distance.toFixed(0)} km</strong> / ${yearData.total_runs} runs`;
+        row.appendChild(stats);
+        
+        container.appendChild(row);
+      });
+      
+      document.getElementById('activeWeeks').textContent = activeWeeks;
+    }
+
+    const tooltip = document.getElementById('tooltip');
+    
+    function showTooltip(e) {
+      tooltip.textContent = e.target.dataset.info;
+      tooltip.classList.add('visible');
+      tooltip.style.left = e.pageX + 10 + 'px';
+      tooltip.style.top = e.pageY + 10 + 'px';
+    }
+    
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+
+    function applyFilters() {
+      const year = document.getElementById('yearFilter').value;
+      const limit = parseInt(document.getElementById('limitFilter').value);
+      
+      filteredRuns = year === 'all' ? [...allRuns] : allRuns.filter(r => r.year === year);
+      filteredRuns = filteredRuns.slice(0, limit);
+      
+      currentPage = 1;
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('runsTable');
+      const start = (currentPage - 1) * perPage;
+      const pageRuns = filteredRuns.slice(start, start + perPage);
+      
+      tbody.innerHTML = pageRuns.map((r, i) => `
+        <tr>
+          <td>${start + i + 1}</td>
+          <td>${r.date}</td>
+          <td>${r.name}</td>
+          <td class="distance-col">${r.distance} km</td>
+          <td>${r.time} min</td>
+          <td>${r.pace}/km</td>
+        </tr>
+      `).join('');
+      
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredRuns.length / perPage);
+      const pagination = document.getElementById('pagination');
+      
+      if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+      
+      pagination.innerHTML = `
+        <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← PREV</button>
+        <span style="padding: 8px; font-family: 'Space Mono'; font-size: 0.75rem;">${currentPage} / ${totalPages}</span>
+        <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>NEXT →</button>
+      `;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderTable();
+    }
+
+    document.getElementById('yearFilter').addEventListener('change', applyFilters);
+    document.getElementById('limitFilter').addEventListener('change', applyFilters);
+
+    loadData();
+  </script>
+</body>
+</html>

@@ -3,141 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Run, Ganis, Run!</title>
+  <title>RUN, GANIS, RUN!</title>
   <link rel="stylesheet" href="css/shared.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
   <style>
+    /* 
+     * THIS WEEK
+     * Inspired by Herbert Bayer's Universal Alphabet (1925)
+     * Geometric forms, primary colors, radical simplicity
+     */
+    
     body {
+      font-family: 'Work Sans', sans-serif;
       background: var(--cream);
-      color: var(--black);
+      min-height: 100vh;
     }
     
-    /* Bauhaus decorations */
-    .bg-circle {
-      width: 300px;
-      height: 300px;
+    .poster {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Bauhaus geometric shapes */
+    .shape-circle {
+      position: absolute;
+      width: 400px;
+      height: 400px;
       background: var(--red);
-      top: -100px;
-      right: -100px;
+      border-radius: 50%;
+      top: -150px;
+      right: -150px;
+      z-index: 0;
     }
     
-    .bg-square {
-      width: 150px;
-      height: 150px;
+    .shape-square {
+      position: absolute;
+      width: 200px;
+      height: 200px;
       background: var(--blue);
       bottom: 100px;
-      left: -50px;
+      left: -80px;
+      z-index: 0;
     }
     
-    .bg-circle-2 {
-      width: 100px;
-      height: 100px;
-      background: var(--yellow);
-      bottom: 50px;
-      right: 10%;
+    .shape-triangle {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 173px solid var(--yellow);
+      bottom: -50px;
+      right: 15%;
+      z-index: 0;
     }
     
-    /* Week Progress */
-    .week-hero {
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      padding: 60px 24px;
+      max-width: 800px;
     }
     
-    .week-hero h2 {
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
       font-size: 1rem;
-      color: var(--gray);
-      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--black);
+      opacity: 0.5;
+      margin-bottom: 8px;
+    }
+    
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
       letter-spacing: 0.1em;
-      margin-bottom: 16px;
+      color: var(--black);
+      margin-bottom: 40px;
+      line-height: 1.2;
     }
     
-    .week-runs {
-      font-size: 8rem;
-      font-weight: 700;
-      line-height: 1;
+    .section-title em {
+      font-style: normal;
+      display: block;
+      font-size: 0.6em;
+      opacity: 0.6;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0;
     }
     
-    .week-goal {
-      font-size: 2rem;
-      color: var(--gray);
+    /* The big number */
+    .hero-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(12rem, 30vw, 20rem);
+      line-height: 0.8;
+      color: var(--black);
+      position: relative;
     }
     
-    .goal-dots {
+    .hero-number::after {
+      content: '/3';
+      font-size: 0.3em;
+      position: absolute;
+      bottom: 0.2em;
+      margin-left: 0.1em;
+      opacity: 0.4;
+    }
+    
+    .hero-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      letter-spacing: 0.2em;
+      color: var(--black);
+      margin-top: -20px;
+    }
+    
+    /* Goal circles */
+    .goal-circles {
       display: flex;
       justify-content: center;
-      gap: 16px;
-      margin: 32px 0;
+      gap: 24px;
+      margin: 48px 0;
     }
     
-    .goal-dot {
-      width: 48px;
-      height: 48px;
+    .goal-circle {
+      width: 60px;
+      height: 60px;
       border: 4px solid var(--black);
       border-radius: 50%;
       transition: all 0.3s ease;
     }
     
-    .goal-dot.filled {
+    .goal-circle.filled {
       background: var(--yellow);
       transform: scale(1.1);
     }
     
-    .week-distance {
-      font-size: 1.5rem;
-      margin-top: 16px;
-    }
-    
-    .week-distance span {
-      font-weight: 700;
-      font-size: 2rem;
-    }
-    
-    /* Week comparison */
-    .week-compare {
+    /* Stats row */
+    .stats-row {
       display: flex;
       justify-content: center;
-      gap: 48px;
-      margin-top: 40px;
-      padding: 24px;
+      gap: 60px;
+      margin-top: 48px;
     }
     
-    .compare-item {
+    .stat {
       text-align: center;
     }
     
-    .compare-label {
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--black);
+      line-height: 1;
+    }
+    
+    .stat-value.positive { color: var(--blue); }
+    .stat-value.negative { color: var(--red); }
+    
+    .stat-label {
       font-size: 0.75rem;
-      color: var(--gray);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: var(--black);
+      opacity: 0.6;
+      margin-top: 8px;
     }
-    
-    .compare-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-    
-    .compare-value.up { color: var(--blue); }
-    .compare-value.down { color: var(--red); }
     
     /* Last run card */
     .last-run {
       background: var(--black);
       color: var(--white);
-      padding: 32px;
-      margin: 40px auto;
-      max-width: 600px;
-      border: none;
-    }
-    
-    .last-run .card-label {
-      color: var(--gray);
-    }
-    
-    .last-run-stats {
+      padding: 32px 48px;
+      margin-top: 60px;
       display: flex;
-      justify-content: space-around;
-      margin-top: 24px;
+      gap: 48px;
+      align-items: center;
+    }
+    
+    .last-run-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.2em;
+      color: var(--yellow);
     }
     
     .last-run-stat {
@@ -145,23 +201,27 @@
     }
     
     .last-run-value {
+      font-family: 'Bebas Neue', sans-serif;
       font-size: 2rem;
-      font-weight: 700;
-      color: var(--yellow);
+      color: var(--white);
     }
     
     .last-run-label {
-      font-size: 0.75rem;
-      color: var(--gray);
-      margin-top: 4px;
+      font-size: 0.625rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    @media (max-width: 768px) {
+      .stats-row { flex-direction: column; gap: 24px; }
+      .last-run { flex-direction: column; gap: 24px; padding: 24px; }
+      .shape-circle { width: 200px; height: 200px; top: -80px; right: -80px; }
+      .shape-square { width: 100px; height: 100px; }
     }
   </style>
 </head>
 <body>
-  <div class="bauhaus-circle bg-circle"></div>
-  <div class="bauhaus-square bg-square"></div>
-  <div class="bauhaus-circle bg-circle-2"></div>
-  
   <nav class="nav">
     <a href="index.html" class="nav-brand">
       <div class="musang-container">
@@ -170,63 +230,77 @@
         <div class="dust"></div>
         <div class="dust"></div>
       </div>
-      <span class="nav-title">Run, Ganis, Run!</span>
+      <span class="nav-title">RUN, GANIS, RUN!</span>
     </a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link active">This Week</a>
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="heatmap.html" class="nav-link">Heatmap</a>
-      <a href="runs.html" class="nav-link">All Runs</a>
+      <a href="index.html" class="nav-link active">THIS WEEK</a>
+      <a href="year.html" class="nav-link">THIS YEAR</a>
+      <a href="alltime.html" class="nav-link">ALL TIME</a>
     </div>
   </nav>
 
-  <main>
-    <section class="week-hero">
-      <h2>This Week</h2>
-      <div class="week-runs"><span id="weekRuns">-</span></div>
-      <div class="week-goal">of 3 runs</div>
-      
-      <div class="goal-dots" id="goalDots"></div>
-      
-      <div class="week-distance">
-        <span id="weekDistance">-</span> km covered
-      </div>
-      
-      <div class="week-compare">
-        <div class="compare-item">
-          <div class="compare-label">vs Last Week</div>
-          <div class="compare-value" id="vsLastWeek">-</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-label">Streak</div>
-          <div class="compare-value" id="streak">-</div>
-        </div>
-      </div>
-    </section>
+  <main class="poster">
+    <div class="shape-circle"></div>
+    <div class="shape-square"></div>
+    <div class="shape-triangle"></div>
     
-    <div class="container">
-      <div class="card last-run">
-        <div class="card-label">Last Run</div>
-        <div class="last-run-stats">
-          <div class="last-run-stat">
-            <div class="last-run-value" id="lastDate">-</div>
-            <div class="last-run-label">Date</div>
-          </div>
-          <div class="last-run-stat">
-            <div class="last-run-value" id="lastDistance">-</div>
-            <div class="last-run-label">Distance</div>
-          </div>
-          <div class="last-run-stat">
-            <div class="last-run-value" id="lastPace">-</div>
-            <div class="last-run-label">Pace</div>
-          </div>
+    <div class="content">
+      <div class="section-label">WEEKLY REPORT</div>
+      <h1 class="section-title">
+        THIS WEEK
+        <em>Did you run? Let's see. No judgment. (Okay, maybe a little.)</em>
+      </h1>
+      
+      <div class="hero-number" id="weekRuns">-</div>
+      <div class="hero-label">RUNS</div>
+      
+      <div class="goal-circles" id="goalCircles"></div>
+      
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-value" id="weekDistance">-</div>
+          <div class="stat-label">KM This Week</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="vsLastWeek">-</div>
+          <div class="stat-label">vs Last Week</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="streak">-</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+      
+      <div class="last-run">
+        <div class="last-run-title">LAST RUN</div>
+        <div class="last-run-stat">
+          <div class="last-run-value" id="lastDate">-</div>
+          <div class="last-run-label">Date</div>
+        </div>
+        <div class="last-run-stat">
+          <div class="last-run-value" id="lastDistance">-</div>
+          <div class="last-run-label">Distance</div>
+        </div>
+        <div class="last-run-stat">
+          <div class="last-run-value" id="lastPace">-</div>
+          <div class="last-run-label">Pace</div>
         </div>
       </div>
     </div>
   </main>
 
   <footer class="page-footer">
-    Last updated: <span id="updatedAt">-</span> · Synced from Strava
+    <div class="tribute">
+      <div class="tribute-title">DESIGN TRIBUTE</div>
+      <p class="tribute-text">
+        This page is inspired by <span class="tribute-designer">Herbert Bayer</span>'s 
+        Universal Alphabet <span class="tribute-year">(1925)</span> and his poster work at the Bauhaus. 
+        Bayer believed in radical simplicity—lowercase letters, geometric forms, and the elimination 
+        of unnecessary ornament. The large numbers and primary color shapes honor his vision 
+        that design should be universal and immediately understood.
+      </p>
+      <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
+    </div>
   </footer>
 
   <script>
@@ -235,36 +309,32 @@
         const res = await fetch('data/stats.json');
         const d = await res.json();
         
-        // Week stats
         document.getElementById('weekRuns').textContent = d.this_week.runs;
-        document.getElementById('weekDistance').textContent = d.this_week.distance_km;
+        document.getElementById('weekDistance').textContent = d.this_week.distance_km + ' km';
         
-        // Goal dots
-        const dots = [1, 2, 3].map(i => 
-          `<div class="goal-dot ${i <= d.this_week.runs ? 'filled' : ''}"></div>`
+        // Goal circles
+        const circles = [1, 2, 3].map(i => 
+          `<div class="goal-circle ${i <= d.this_week.runs ? 'filled' : ''}"></div>`
         ).join('');
-        document.getElementById('goalDots').innerHTML = dots;
+        document.getElementById('goalCircles').innerHTML = circles;
         
         // vs Last week
         const diff = d.this_week.distance_km - d.last_week.distance_km;
         const vsEl = document.getElementById('vsLastWeek');
         vsEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + ' km';
-        vsEl.className = 'compare-value ' + (diff >= 0 ? 'up' : 'down');
+        vsEl.className = 'stat-value ' + (diff >= 0 ? 'positive' : 'negative');
         
-        // Streak (calculate from stats)
-        document.getElementById('streak').textContent = (d.streak || d.this_week.runs) + ' days';
+        document.getElementById('streak').textContent = d.streak || d.this_week.runs;
         
-        // Last run
         if (d.lastRun) {
-          document.getElementById('lastDate').textContent = d.lastRun.date.split('-').slice(1).join('/');
+          document.getElementById('lastDate').textContent = d.lastRun.date;
           document.getElementById('lastDistance').textContent = d.lastRun.distance + ' km';
           document.getElementById('lastPace').textContent = d.lastRun.pace + '/km';
         }
         
-        // Updated
         document.getElementById('updatedAt').textContent = new Date(d.updated_at).toLocaleString();
       } catch (e) {
-        console.error('Error loading data:', e);
+        console.error('Error:', e);
       }
     }
     loadData();
