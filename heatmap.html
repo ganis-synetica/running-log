@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Heatmap — Ganis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --green-1: #0e4429;
+      --green-2: #006d32;
+      --green-3: #26a641;
+      --green-4: #39d353;
+      --yellow-1: #5c4827;
+      --yellow-2: #9e6a03;
+      --red-1: #5c2727;
+      --red-2: #bd2c2c;
+      --gray: #21262d;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+    
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+    
+    .legend-section {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* Heatmap Container */
+    .heatmap-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px;
+      overflow-x: auto;
+    }
+    
+    .year-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .year-label {
+      width: 50px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    
+    .weeks-container {
+      display: flex;
+      gap: 3px;
+    }
+    
+    .week-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      background: var(--gray);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    
+    .week-dot:hover {
+      transform: scale(1.5);
+    }
+    
+    /* Color levels - relative to year average */
+    .week-dot.above-high { background: var(--green-4); }
+    .week-dot.above { background: var(--green-3); }
+    .week-dot.average { background: var(--yellow-2); }
+    .week-dot.below { background: var(--red-1); }
+    .week-dot.none { background: var(--gray); }
+    
+    /* Tooltip */
+    .tooltip {
+      position: fixed;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.875rem;
+      pointer-events: none;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    
+    .tooltip.visible {
+      display: block;
+    }
+    
+    .tooltip-week {
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    
+    .tooltip-stats {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .tooltip-stat {
+      text-align: center;
+    }
+    
+    .tooltip-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .tooltip-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    
+    /* Month labels */
+    .month-labels {
+      display: flex;
+      margin-left: 50px;
+      margin-bottom: 8px;
+      gap: 3px;
+    }
+    
+    .month-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      width: calc((52 * 15px) / 12);
+    }
+    
+    /* Year stats */
+    .year-stats {
+      margin-left: 12px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    
+    .year-stats .distance {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* Summary */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+    }
+    
+    .summary-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .summary-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    
+    a {
+      color: var(--green-3);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    .nav {
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .month-labels { display: none; }
+      .year-stats { display: none; }
+      .week-dot { width: 10px; height: 10px; }
+      .weeks-container { gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="index.html">← Dashboard</a>
+    </nav>
+    
+    <h1>Running Activity</h1>
+    <p class="subtitle">Weekly running activity relative to each year's average</p>
+    
+    <div class="legend">
+      <span>Less</span>
+      <div class="legend-section">
+        <div class="legend-dot" style="background: var(--gray)"></div>
+        <div class="legend-dot" style="background: var(--red-1)"></div>
+        <div class="legend-dot" style="background: var(--yellow-2)"></div>
+        <div class="legend-dot" style="background: var(--green-3)"></div>
+        <div class="legend-dot" style="background: var(--green-4)"></div>
+      </div>
+      <span>More</span>
+      <span style="margin-left: 16px; font-size: 0.7rem;">
+        ⬜ No runs · 🔴 Below avg · 🟡 Average · 🟢 Above · 🟢🟢 2x+
+      </span>
+    </div>
+    
+    <div class="heatmap-container">
+      <div class="month-labels">
+        <span class="month-label">Jan</span>
+        <span class="month-label">Feb</span>
+        <span class="month-label">Mar</span>
+        <span class="month-label">Apr</span>
+        <span class="month-label">May</span>
+        <span class="month-label">Jun</span>
+        <span class="month-label">Jul</span>
+        <span class="month-label">Aug</span>
+        <span class="month-label">Sep</span>
+        <span class="month-label">Oct</span>
+        <span class="month-label">Nov</span>
+        <span class="month-label">Dec</span>
+      </div>
+      <div id="heatmap"></div>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-card">
+        <div class="summary-label">Total Runs</div>
+        <div class="summary-value" id="totalRuns">-</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Total Distance</div>
+        <div class="summary-value" id="totalDistance">-</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Best Year</div>
+        <div class="summary-value" id="bestYear">-</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Active Weeks</div>
+        <div class="summary-value" id="activeWeeks">-</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tooltip" id="tooltip">
+    <div class="tooltip-week" id="tooltipWeek">Week 1, 2024</div>
+    <div class="tooltip-stats">
+      <div class="tooltip-stat">
+        <div class="tooltip-value" id="tooltipRuns">0</div>
+        <div class="tooltip-label">runs</div>
+      </div>
+      <div class="tooltip-stat">
+        <div class="tooltip-value" id="tooltipDistance">0</div>
+        <div class="tooltip-label">km</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadData() {
+      const res = await fetch('data/weekly.json');
+      const weeklyData = await res.json();
+      renderHeatmap(weeklyData);
+    }
+    
+    function getColorClass(distance, avgDistance) {
+      if (distance === 0) return 'none';
+      if (avgDistance === 0) return distance > 0 ? 'above' : 'none';
+      
+      const ratio = distance / avgDistance;
+      if (ratio >= 2) return 'above-high';
+      if (ratio >= 1.25) return 'above';
+      if (ratio >= 0.75) return 'average';
+      return 'below';
+    }
+    
+    function renderHeatmap(weeklyData) {
+      const container = document.getElementById('heatmap');
+      let totalRuns = 0;
+      let totalDistance = 0;
+      let activeWeeks = 0;
+      let bestYear = { year: '', distance: 0 };
+      
+      // Sort years descending (newest first)
+      const sortedData = [...weeklyData].sort((a, b) => b.year.localeCompare(a.year));
+      
+      sortedData.forEach(yearData => {
+        const row = document.createElement('div');
+        row.className = 'year-row';
+        
+        // Year label
+        const label = document.createElement('div');
+        label.className = 'year-label';
+        label.textContent = yearData.year;
+        row.appendChild(label);
+        
+        // Weeks container
+        const weeksContainer = document.createElement('div');
+        weeksContainer.className = 'weeks-container';
+        
+        // Create map of week data
+        const weekMap = {};
+        yearData.weeks.forEach(w => {
+          weekMap[w.week_num] = w;
+        });
+        
+        // Calculate average (only for weeks with data)
+        const avgDistance = yearData.weeks.length > 0 
+          ? yearData.total_distance / yearData.weeks.length 
+          : 0;
+        
+        // Render 52 weeks
+        for (let w = 1; w <= 52; w++) {
+          const dot = document.createElement('div');
+          dot.className = 'week-dot';
+          
+          const weekData = weekMap[w];
+          if (weekData) {
+            dot.classList.add(getColorClass(weekData.distance_km, avgDistance));
+            dot.dataset.week = `Week ${w}, ${yearData.year}`;
+            dot.dataset.runs = weekData.runs;
+            dot.dataset.distance = weekData.distance_km;
+            activeWeeks++;
+          } else {
+            dot.classList.add('none');
+            dot.dataset.week = `Week ${w}, ${yearData.year}`;
+            dot.dataset.runs = 0;
+            dot.dataset.distance = 0;
+          }
+          
+          // Tooltip events
+          dot.addEventListener('mouseenter', showTooltip);
+          dot.addEventListener('mouseleave', hideTooltip);
+          dot.addEventListener('touchstart', showTooltip);
+          
+          weeksContainer.appendChild(dot);
+        }
+        
+        row.appendChild(weeksContainer);
+        
+        // Year stats
+        const stats = document.createElement('div');
+        stats.className = 'year-stats';
+        stats.innerHTML = `<span class="distance">${yearData.total_distance.toFixed(0)} km</span> · ${yearData.total_runs} runs`;
+        row.appendChild(stats);
+        
+        container.appendChild(row);
+        
+        // Totals
+        totalRuns += yearData.total_runs;
+        totalDistance += yearData.total_distance;
+        if (yearData.total_distance > bestYear.distance) {
+          bestYear = { year: yearData.year, distance: yearData.total_distance };
+        }
+      });
+      
+      // Update summary
+      document.getElementById('totalRuns').textContent = totalRuns;
+      document.getElementById('totalDistance').textContent = totalDistance.toFixed(0) + ' km';
+      document.getElementById('bestYear').textContent = `${bestYear.year}`;
+      document.getElementById('activeWeeks').textContent = activeWeeks;
+    }
+    
+    const tooltip = document.getElementById('tooltip');
+    
+    function showTooltip(e) {
+      const dot = e.target;
+      tooltip.classList.add('visible');
+      document.getElementById('tooltipWeek').textContent = dot.dataset.week;
+      document.getElementById('tooltipRuns').textContent = dot.dataset.runs;
+      document.getElementById('tooltipDistance').textContent = dot.dataset.distance;
+      
+      const rect = dot.getBoundingClientRect();
+      tooltip.style.left = Math.min(rect.left, window.innerWidth - 150) + 'px';
+      tooltip.style.top = (rect.bottom + 8) + 'px';
+    }
+    
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+    
+    loadData();
+  </script>
+</body>
+</html>
