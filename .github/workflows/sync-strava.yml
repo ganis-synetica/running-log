@@ -169,13 +169,16 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
+          # Get latest changes first
+          git fetch origin main
+          git reset --soft origin/main
+          
           git add data/
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "chore: sync strava data $(date -u +%Y-%m-%d)"
-            git pull --rebase
             git push
             echo "✅ Data synced and pushed!"
           fi
