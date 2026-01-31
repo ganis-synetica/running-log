@@ -129,38 +129,49 @@
 .page-footer {
   background: var(--black);
   color: var(--white);
-  padding: 40px 24px;
-  text-align: center;
+  padding: 60px 24px;
+  text-align: left;
+  margin-top: 80px;
 }
 
 .tribute {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .tribute-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 0.875rem;
-  letter-spacing: 0.2em;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
   color: var(--yellow);
+  margin-bottom: 20px;
+}
+
+.tribute-main {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
   margin-bottom: 16px;
 }
 
-.tribute-text {
-  font-family: 'Work Sans', sans-serif;
+.tribute-funfact {
+  font-family: 'Space Mono', monospace;
   font-size: 0.875rem;
   line-height: 1.6;
-  color: rgba(255,255,255,0.7);
+  color: var(--yellow);
+  padding-left: 16px;
+  border-left: 3px solid var(--yellow);
 }
 
 .tribute-designer {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--white);
 }
 
-.tribute-year {
-  font-family: 'Space Mono', monospace;
-  color: var(--yellow);
+.tribute-work {
+  font-style: italic;
+  color: var(--white);
 }
 
 .data-sync {
