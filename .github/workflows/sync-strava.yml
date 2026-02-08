@@ -56,21 +56,34 @@ jobs:
 
       - name: Generate Stats
         run: |
-          WEEK_AGO=$(date -d '7 days ago' +%Y-%m-%d)
-          TWO_WEEKS=$(date -d '14 days ago' +%Y-%m-%d)
+          # Use ISO week boundaries (Monday-Sunday) instead of rolling 7 days
+          THIS_WEEK_START=$(date -d "last monday" +%Y-%m-%d)
+          # If today is Monday, "last monday" gives today, which is correct
+          if [ "$(date +%u)" = "1" ]; then
+            THIS_WEEK_START=$(date +%Y-%m-%d)
+          fi
+          LAST_WEEK_START=$(date -d "$THIS_WEEK_START - 7 days" +%Y-%m-%d)
           TODAY=$(date +%Y-%m-%d)
+          CURRENT_YEAR=$(date +%Y)
           
-          jq --arg wa "$WEEK_AGO" --arg tw "$TWO_WEEKS" --arg td "$TODAY" '
+          echo "This week starts: $THIS_WEEK_START"
+          echo "Last week starts: $LAST_WEEK_START"
+          
+          jq --arg tws "$THIS_WEEK_START" --arg lws "$LAST_WEEK_START" --arg td "$TODAY" --arg cy "$CURRENT_YEAR" '
             [.[] | select(.type == "Run")] as $r |
+            ($cy + "-01-01") as $yearStart |
             {
-              ytd_2026: ([$r[] | select(.start_date_local | startswith("2026-01"))] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
-              ytd_2025_same_period: ([$r[] | select(.start_date_local | startswith("2025-01"))] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
-              ytd_2021_same_period: ([$r[] | select(.start_date_local | startswith("2021-01"))] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
-              this_week: ([$r[] | select(.start_date_local >= $wa)] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_min: (if length>0 then [.[].moving_time]|add/60|round else 0 end)}),
-              last_week: ([$r[] | select(.start_date_local >= $tw and .start_date_local < $wa)] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_min: (if length>0 then [.[].moving_time]|add/60|round else 0 end)}),
+              current_year: $cy,
+              ytd_2026: ([$r[] | select(.start_date_local >= "2026-01-01" and .start_date_local < "2027-01-01")] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
+              ytd_2025_same_period: ([$r[] | select(.start_date_local >= "2025-01-01" and .start_date_local < ("2025-" + $td[5:10]))] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
+              ytd_2021_same_period: ([$r[] | select(.start_date_local >= "2021-01-01" and .start_date_local < ("2021-" + $td[5:10]))] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_hrs: (if length>0 then [.[].moving_time]|add/3600|.*10|round/10 else 0 end)}),
+              full_year_2025: ([$r[] | select(.start_date_local >= "2025-01-01" and .start_date_local < "2026-01-01")] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end)}),
+              full_year_2021: ([$r[] | select(.start_date_local >= "2021-01-01" and .start_date_local < "2022-01-01")] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end)}),
+              this_week: ([$r[] | select(.start_date_local[0:10] >= $tws)] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_min: (if length>0 then [.[].moving_time]|add/60|round else 0 end)}),
+              last_week: ([$r[] | select(.start_date_local[0:10] >= $lws and .start_date_local[0:10] < $tws)] | {runs: length, distance_km: (if length>0 then [.[].distance]|add/1000|.*10|round/10 else 0 end), time_min: (if length>0 then [.[].moving_time]|add/60|round else 0 end)}),
+              weekly_goal: 3,
               lastRun: ($r | sort_by(.start_date_local) | last | {date: .start_date_local[0:10], distance: ((.distance/1000*100|round)/100|tostring), pace: (((.moving_time/60)/(.distance/1000)*100|round)/100|tostring)}),
-              streak: ([$r[] | select(.start_date_local >= $wa)] | length),
-              updated_at: ($td + "T04:00:00+07:00")
+              updated_at: ($td + "T" + (now | strftime("%H:%M:%S")) + "+07:00")
             }' data/activities.json > data/stats.json
           echo "✓ Stats generated"
 
