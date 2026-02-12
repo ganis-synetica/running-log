@@ -1,19 +1,19 @@
 {
   "current_year": "2026",
   "ytd_2026": {
-    "runs": 16,
-    "distance_km": 70,
-    "time_hrs": 10.8
+    "runs": 12,
+    "distance_km": 46.7,
+    "time_hrs": 7.3
   },
   "ytd_2025_same_period": {
-    "runs": 26,
-    "distance_km": 66.5,
-    "time_hrs": 9.9
+    "runs": 20,
+    "distance_km": 56.3,
+    "time_hrs": 8.3
   },
   "ytd_2021_same_period": {
-    "runs": 15,
-    "distance_km": 63,
-    "time_hrs": 8.4
+    "runs": 9,
+    "distance_km": 41.2,
+    "time_hrs": 5.5
   },
   "full_year_2025": {
     "runs": 57,
@@ -24,20 +24,15 @@
     "distance_km": 928.7
   },
   "this_week": {
-    "runs": 1,
-    "distance_km": 4.5,
-    "time_min": 39
+    "runs": 0,
+    "distance_km": 0,
+    "time_min": 0
   },
   "last_week": {
-    "runs": 2,
-    "distance_km": 12.1,
-    "time_min": 111
+    "runs": 0,
+    "distance_km": 0,
+    "time_min": 0
   },
   "weekly_goal": 3,
-  "lastRun": {
-    "date": "2026-02-11",
-    "distance": "4.51",
-    "pace": "8.61"
-  },
-  "updated_at": "2026-02-11T21:28:41+07:00"
+  "updated_at": "2026-02-12T21:00:32+07:00"
 }
