@@ -24,14 +24,14 @@
     "distance_km": 928.7
   },
   "this_week": {
-    "runs": 1,
-    "distance_km": 3.2,
-    "time_min": 32
+    "runs": 0,
+    "distance_km": 0,
+    "time_min": 0
   },
   "last_week": {
     "runs": 1,
-    "distance_km": 1.1,
-    "time_min": 10
+    "distance_km": 3.2,
+    "time_min": 32
   },
   "weekly_goal": 3,
   "lastRun": {
@@ -39,5 +39,5 @@
     "distance": "3.17",
     "pace": "10.18"
   },
-  "updated_at": "2026-03-01T21:16:38+07:00"
+  "updated_at": "2026-03-02T21:27:13+07:00"
 }
