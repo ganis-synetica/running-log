@@ -11,9 +11,9 @@
     "time_hrs": 13.8
   },
   "ytd_2021_same_period": {
-    "runs": 54,
-    "distance_km": 235.3,
-    "time_hrs": 30.9
+    "runs": 55,
+    "distance_km": 241.6,
+    "time_hrs": 31.7
   },
   "full_year_2025": {
     "runs": 57,
@@ -39,5 +39,5 @@
     "distance": "3.17",
     "pace": "10.18"
   },
-  "updated_at": "2026-05-28T22:28:33+07:00"
+  "updated_at": "2026-05-29T22:24:24+07:00"
 }
