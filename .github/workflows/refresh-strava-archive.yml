@@ -1,0 +1,68 @@
+# The running log is now built LOCALLY from the Apple Health Auto Export folder
+# in iCloud (see scripts/build_data.py). That folder only exists on Ganis' Mac,
+# so this workflow no longer generates the dashboard data and no longer runs on
+# a schedule.
+#
+# Its only remaining job is to refresh data/strava-archive.json — the historical
+# backfill covering periods the Health export never captured (2017, 2022, and
+# patches of 2018/2021/2023). Run it manually if that archive ever needs topping
+# up, then re-run `python3 scripts/build_data.py` locally to rebuild the merge.
+
+name: Refresh Strava Archive (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch Strava activities
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: |
+          echo "Refreshing token..."
+          TOKEN_RESPONSE=$(curl -s -X POST "https://www.strava.com/oauth/token" \
+            -d "client_id=${STRAVA_CLIENT_ID}" \
+            -d "client_secret=${STRAVA_CLIENT_SECRET}" \
+            -d "grant_type=refresh_token" \
+            -d "refresh_token=${STRAVA_REFRESH_TOKEN}")
+
+          ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
+
+          if [ "$ACCESS_TOKEN" = "null" ]; then
+            echo "Token refresh failed"; exit 1
+          fi
+          echo "✓ Token refreshed"
+
+          echo "[]" > /tmp/all.json
+          for page in 1 2 3 4 5 6 7 8 9 10; do
+            curl -s -H "Authorization: Bearer $ACCESS_TOKEN" \
+              "https://www.strava.com/api/v3/athlete/activities?page=${page}&per_page=200" > /tmp/page.json
+            COUNT=$(jq 'length' /tmp/page.json)
+            echo "Page $page: $COUNT"
+            [ "$COUNT" = "0" ] && break
+            jq -s '.[0] + .[1]' /tmp/all.json /tmp/page.json > /tmp/merged.json
+            mv /tmp/merged.json /tmp/all.json
+            [ "$COUNT" -lt 200 ] && break
+          done
+          cp /tmp/all.json data/strava-archive.json
+          echo "✓ $(jq 'length' data/strava-archive.json) activities archived"
+
+      - name: Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: refresh strava archive"
+          file_pattern: "data/strava-archive.json"

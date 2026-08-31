@@ -52,14 +52,14 @@
       {
         "week_num": 52,
         "runs": 1,
-        "distance_km": 7
+        "distance_km": 7.0
       }
     ]
   },
   {
     "year": "2018",
     "total_runs": 125,
-    "total_distance": 470.1,
+    "total_distance": 556.6,
     "weeks": [
       {
         "week_num": 1,
@@ -69,7 +69,7 @@
       {
         "week_num": 2,
         "runs": 1,
-        "distance_km": 10.6
+        "distance_km": 10.5
       },
       {
         "week_num": 3,
@@ -79,12 +79,12 @@
       {
         "week_num": 4,
         "runs": 6,
-        "distance_km": 29
+        "distance_km": 29.8
       },
       {
         "week_num": 5,
         "runs": 3,
-        "distance_km": 20.6
+        "distance_km": 20.8
       },
       {
         "week_num": 6,
@@ -94,12 +94,12 @@
       {
         "week_num": 7,
         "runs": 2,
-        "distance_km": 15.6
+        "distance_km": 15.9
       },
       {
         "week_num": 8,
         "runs": 5,
-        "distance_km": 26.7
+        "distance_km": 27.2
       },
       {
         "week_num": 9,
@@ -109,17 +109,17 @@
       {
         "week_num": 10,
         "runs": 4,
-        "distance_km": 13.1
+        "distance_km": 10.7
       },
       {
         "week_num": 11,
         "runs": 6,
-        "distance_km": 23.1
+        "distance_km": 24.2
       },
       {
         "week_num": 13,
         "runs": 3,
-        "distance_km": 8.7
+        "distance_km": 10.5
       },
       {
         "week_num": 14,
@@ -129,12 +129,12 @@
       {
         "week_num": 15,
         "runs": 1,
-        "distance_km": 4.6
+        "distance_km": 4.7
       },
       {
         "week_num": 19,
         "runs": 6,
-        "distance_km": 17.7
+        "distance_km": 26.8
       },
       {
         "week_num": 20,
@@ -169,17 +169,17 @@
       {
         "week_num": 26,
         "runs": 8,
-        "distance_km": 0.5
+        "distance_km": 28.2
       },
       {
         "week_num": 27,
         "runs": 3,
-        "distance_km": 0
+        "distance_km": 16.7
       },
       {
         "week_num": 28,
         "runs": 2,
-        "distance_km": 0
+        "distance_km": 17.5
       },
       {
         "week_num": 29,
@@ -204,27 +204,27 @@
       {
         "week_num": 33,
         "runs": 2,
-        "distance_km": 5
+        "distance_km": 5.0
       },
       {
         "week_num": 35,
         "runs": 1,
-        "distance_km": 0
+        "distance_km": 4.5
       },
       {
         "week_num": 44,
         "runs": 2,
-        "distance_km": 5
+        "distance_km": 10.8
       },
       {
         "week_num": 49,
         "runs": 4,
-        "distance_km": 11
+        "distance_km": 11.0
       },
       {
         "week_num": 51,
         "runs": 8,
-        "distance_km": 12.6
+        "distance_km": 15.6
       },
       {
         "week_num": 52,
@@ -235,8 +235,8 @@
   },
   {
     "year": "2019",
-    "total_runs": 173,
-    "total_distance": 650.3,
+    "total_runs": 187,
+    "total_distance": 732.9,
     "weeks": [
       {
         "week_num": 1,
@@ -271,12 +271,12 @@
       {
         "week_num": 7,
         "runs": 9,
-        "distance_km": 37.8
+        "distance_km": 38.6
       },
       {
         "week_num": 8,
         "runs": 7,
-        "distance_km": 18.1
+        "distance_km": 22.1
       },
       {
         "week_num": 9,
@@ -285,13 +285,13 @@
       },
       {
         "week_num": 10,
-        "runs": 4,
-        "distance_km": 26.1
+        "runs": 6,
+        "distance_km": 66.2
       },
       {
         "week_num": 11,
         "runs": 2,
-        "distance_km": 7
+        "distance_km": 7.0
       },
       {
         "week_num": 12,
@@ -301,7 +301,7 @@
       {
         "week_num": 13,
         "runs": 4,
-        "distance_km": 6.4
+        "distance_km": 9.4
       },
       {
         "week_num": 14,
@@ -310,8 +310,8 @@
       },
       {
         "week_num": 16,
-        "runs": 4,
-        "distance_km": 12.5
+        "runs": 5,
+        "distance_km": 15.0
       },
       {
         "week_num": 17,
@@ -356,7 +356,7 @@
       {
         "week_num": 25,
         "runs": 3,
-        "distance_km": 15
+        "distance_km": 15.0
       },
       {
         "week_num": 26,
@@ -371,7 +371,7 @@
       {
         "week_num": 28,
         "runs": 2,
-        "distance_km": 16
+        "distance_km": 16.0
       },
       {
         "week_num": 29,
@@ -391,12 +391,12 @@
       {
         "week_num": 33,
         "runs": 5,
-        "distance_km": 28
+        "distance_km": 28.0
       },
       {
         "week_num": 34,
-        "runs": 4,
-        "distance_km": 19
+        "runs": 5,
+        "distance_km": 19.0
       },
       {
         "week_num": 35,
@@ -445,8 +445,13 @@
       },
       {
         "week_num": 44,
+        "runs": 2,
+        "distance_km": 4.2
+      },
+      {
+        "week_num": 45,
         "runs": 1,
-        "distance_km": 0.4
+        "distance_km": 2.8
       },
       {
         "week_num": 48,
@@ -454,26 +459,41 @@
         "distance_km": 28.1
       },
       {
-        "week_num": 51,
+        "week_num": 49,
         "runs": 1,
-        "distance_km": 3
+        "distance_km": 3.0
+      },
+      {
+        "week_num": 51,
+        "runs": 7,
+        "distance_km": 22.1
+      },
+      {
+        "week_num": 52,
+        "runs": 1,
+        "distance_km": 3.0
       }
     ]
   },
   {
     "year": "2020",
-    "total_runs": 63,
-    "total_distance": 241.5,
+    "total_runs": 124,
+    "total_distance": 401.8,
     "weeks": [
       {
         "week_num": 2,
-        "runs": 1,
-        "distance_km": 3.1
+        "runs": 2,
+        "distance_km": 5.7
       },
       {
         "week_num": 3,
-        "runs": 1,
-        "distance_km": 8.2
+        "runs": 2,
+        "distance_km": 11.2
+      },
+      {
+        "week_num": 4,
+        "runs": 2,
+        "distance_km": 6.2
       },
       {
         "week_num": 5,
@@ -488,7 +508,7 @@
       {
         "week_num": 7,
         "runs": 5,
-        "distance_km": 12
+        "distance_km": 12.0
       },
       {
         "week_num": 8,
@@ -497,13 +517,43 @@
       },
       {
         "week_num": 9,
+        "runs": 5,
+        "distance_km": 21.7
+      },
+      {
+        "week_num": 10,
         "runs": 2,
-        "distance_km": 13.4
+        "distance_km": 3.4
+      },
+      {
+        "week_num": 11,
+        "runs": 1,
+        "distance_km": 0.6
+      },
+      {
+        "week_num": 12,
+        "runs": 4,
+        "distance_km": 12.7
+      },
+      {
+        "week_num": 13,
+        "runs": 5,
+        "distance_km": 18.4
+      },
+      {
+        "week_num": 14,
+        "runs": 4,
+        "distance_km": 14.6
+      },
+      {
+        "week_num": 15,
+        "runs": 3,
+        "distance_km": 8.7
       },
       {
         "week_num": 16,
-        "runs": 3,
-        "distance_km": 15.2
+        "runs": 4,
+        "distance_km": 17.5
       },
       {
         "week_num": 17,
@@ -527,8 +577,13 @@
       },
       {
         "week_num": 21,
-        "runs": 2,
-        "distance_km": 9.8
+        "runs": 3,
+        "distance_km": 14.1
+      },
+      {
+        "week_num": 24,
+        "runs": 1,
+        "distance_km": 3.2
       },
       {
         "week_num": 25,
@@ -536,9 +591,49 @@
         "distance_km": 5.1
       },
       {
+        "week_num": 26,
+        "runs": 2,
+        "distance_km": 6.8
+      },
+      {
         "week_num": 27,
         "runs": 1,
-        "distance_km": 5
+        "distance_km": 5.0
+      },
+      {
+        "week_num": 29,
+        "runs": 1,
+        "distance_km": 3.0
+      },
+      {
+        "week_num": 32,
+        "runs": 1,
+        "distance_km": 3.0
+      },
+      {
+        "week_num": 33,
+        "runs": 1,
+        "distance_km": 2.1
+      },
+      {
+        "week_num": 40,
+        "runs": 2,
+        "distance_km": 2.8
+      },
+      {
+        "week_num": 41,
+        "runs": 4,
+        "distance_km": 8.9
+      },
+      {
+        "week_num": 42,
+        "runs": 1,
+        "distance_km": 4.2
+      },
+      {
+        "week_num": 43,
+        "runs": 5,
+        "distance_km": 13.1
       },
       {
         "week_num": 44,
@@ -547,8 +642,13 @@
       },
       {
         "week_num": 45,
-        "runs": 1,
-        "distance_km": 2.8
+        "runs": 5,
+        "distance_km": 9.5
+      },
+      {
+        "week_num": 46,
+        "runs": 2,
+        "distance_km": 6.0
       },
       {
         "week_num": 47,
@@ -557,8 +657,8 @@
       },
       {
         "week_num": 48,
-        "runs": 3,
-        "distance_km": 10.7
+        "runs": 4,
+        "distance_km": 12.1
       },
       {
         "week_num": 49,
@@ -567,30 +667,30 @@
       },
       {
         "week_num": 50,
-        "runs": 2,
-        "distance_km": 5.3
+        "runs": 4,
+        "distance_km": 7.2
       },
       {
         "week_num": 51,
-        "runs": 2,
-        "distance_km": 6.8
+        "runs": 3,
+        "distance_km": 7.0
       },
       {
         "week_num": 52,
-        "runs": 1,
-        "distance_km": 1
+        "runs": 4,
+        "distance_km": 6.7
       },
       {
         "week_num": 53,
-        "runs": 3,
-        "distance_km": 11.5
+        "runs": 5,
+        "distance_km": 17.6
       }
     ]
   },
   {
     "year": "2021",
-    "total_runs": 161,
-    "total_distance": 928.7,
+    "total_runs": 178,
+    "total_distance": 938.3,
     "weeks": [
       {
         "week_num": 1,
@@ -605,12 +705,12 @@
       {
         "week_num": 4,
         "runs": 4,
-        "distance_km": 17
+        "distance_km": 17.0
       },
       {
         "week_num": 5,
         "runs": 5,
-        "distance_km": 19
+        "distance_km": 19.0
       },
       {
         "week_num": 6,
@@ -623,8 +723,13 @@
         "distance_km": 18.3
       },
       {
+        "week_num": 9,
+        "runs": 1,
+        "distance_km": 0.1
+      },
+      {
         "week_num": 10,
-        "runs": 2,
+        "runs": 3,
         "distance_km": 9.3
       },
       {
@@ -639,13 +744,13 @@
       },
       {
         "week_num": 13,
-        "runs": 2,
-        "distance_km": 5.3
+        "runs": 5,
+        "distance_km": 6.0
       },
       {
         "week_num": 14,
-        "runs": 2,
-        "distance_km": 6.4
+        "runs": 3,
+        "distance_km": 6.6
       },
       {
         "week_num": 15,
@@ -659,23 +764,23 @@
       },
       {
         "week_num": 17,
-        "runs": 2,
-        "distance_km": 12.1
+        "runs": 4,
+        "distance_km": 12.2
       },
       {
         "week_num": 18,
-        "runs": 3,
-        "distance_km": 10.9
+        "runs": 5,
+        "distance_km": 13.1
       },
       {
         "week_num": 19,
-        "runs": 3,
-        "distance_km": 15.6
+        "runs": 4,
+        "distance_km": 16.0
       },
       {
         "week_num": 20,
-        "runs": 1,
-        "distance_km": 0.1
+        "runs": 2,
+        "distance_km": 0.7
       },
       {
         "week_num": 21,
@@ -684,23 +789,23 @@
       },
       {
         "week_num": 22,
-        "runs": 3,
-        "distance_km": 16.6
+        "runs": 4,
+        "distance_km": 16.7
       },
       {
         "week_num": 23,
-        "runs": 3,
-        "distance_km": 15
+        "runs": 4,
+        "distance_km": 15.6
       },
       {
         "week_num": 24,
-        "runs": 2,
-        "distance_km": 10.4
+        "runs": 5,
+        "distance_km": 20.7
       },
       {
         "week_num": 25,
-        "runs": 3,
-        "distance_km": 18.9
+        "runs": 4,
+        "distance_km": 19.3
       },
       {
         "week_num": 26,
@@ -795,7 +900,7 @@
       {
         "week_num": 44,
         "runs": 5,
-        "distance_km": 32
+        "distance_km": 32.0
       },
       {
         "week_num": 45,
@@ -806,11 +911,6 @@
         "week_num": 46,
         "runs": 6,
         "distance_km": 38.4
-      },
-      {
-        "week_num": 53,
-        "runs": 1,
-        "distance_km": 6
       }
     ]
   },
@@ -857,7 +957,7 @@
       {
         "week_num": 42,
         "runs": 1,
-        "distance_km": 4
+        "distance_km": 4.0
       },
       {
         "week_num": 44,
@@ -868,8 +968,8 @@
   },
   {
     "year": "2023",
-    "total_runs": 109,
-    "total_distance": 568.8,
+    "total_runs": 110,
+    "total_distance": 573.5,
     "weeks": [
       {
         "week_num": 1,
@@ -884,7 +984,7 @@
       {
         "week_num": 3,
         "runs": 1,
-        "distance_km": 5
+        "distance_km": 5.0
       },
       {
         "week_num": 5,
@@ -994,7 +1094,7 @@
       {
         "week_num": 31,
         "runs": 3,
-        "distance_km": 39
+        "distance_km": 39.0
       },
       {
         "week_num": 32,
@@ -1003,8 +1103,8 @@
       },
       {
         "week_num": 33,
-        "runs": 4,
-        "distance_km": 9.5
+        "runs": 5,
+        "distance_km": 14.1
       },
       {
         "week_num": 34,
@@ -1024,12 +1124,12 @@
       {
         "week_num": 37,
         "runs": 3,
-        "distance_km": 16
+        "distance_km": 16.0
       },
       {
         "week_num": 38,
         "runs": 1,
-        "distance_km": 13
+        "distance_km": 13.0
       },
       {
         "week_num": 39,
@@ -1039,7 +1139,7 @@
       {
         "week_num": 40,
         "runs": 1,
-        "distance_km": 5
+        "distance_km": 5.1
       },
       {
         "week_num": 41,
@@ -1049,7 +1149,7 @@
       {
         "week_num": 42,
         "runs": 2,
-        "distance_km": 13
+        "distance_km": 13.0
       },
       {
         "week_num": 43,
@@ -1064,19 +1164,19 @@
       {
         "week_num": 51,
         "runs": 1,
-        "distance_km": 4
+        "distance_km": 4.0
       },
       {
         "week_num": 52,
         "runs": 1,
-        "distance_km": 10
+        "distance_km": 10.0
       }
     ]
   },
   {
     "year": "2024",
-    "total_runs": 75,
-    "total_distance": 320.6,
+    "total_runs": 87,
+    "total_distance": 355.5,
     "weeks": [
       {
         "week_num": 2,
@@ -1085,8 +1185,8 @@
       },
       {
         "week_num": 3,
-        "runs": 3,
-        "distance_km": 18.3
+        "runs": 5,
+        "distance_km": 25.7
       },
       {
         "week_num": 4,
@@ -1101,12 +1201,12 @@
       {
         "week_num": 6,
         "runs": 8,
-        "distance_km": 47.6
+        "distance_km": 44.6
       },
       {
         "week_num": 7,
         "runs": 1,
-        "distance_km": 0
+        "distance_km": 0.0
       },
       {
         "week_num": 8,
@@ -1116,27 +1216,27 @@
       {
         "week_num": 12,
         "runs": 1,
-        "distance_km": 3.2
+        "distance_km": 3.3
       },
       {
         "week_num": 13,
-        "runs": 1,
-        "distance_km": 3
+        "runs": 2,
+        "distance_km": 3.1
       },
       {
         "week_num": 17,
         "runs": 2,
-        "distance_km": 5
+        "distance_km": 5.0
       },
       {
         "week_num": 18,
         "runs": 1,
-        "distance_km": 5.4
+        "distance_km": 5.3
       },
       {
         "week_num": 19,
         "runs": 1,
-        "distance_km": 22
+        "distance_km": 22.0
       },
       {
         "week_num": 20,
@@ -1146,17 +1246,22 @@
       {
         "week_num": 22,
         "runs": 1,
-        "distance_km": 1
+        "distance_km": 1.0
       },
       {
         "week_num": 25,
-        "runs": 2,
-        "distance_km": 3.6
+        "runs": 3,
+        "distance_km": 5.6
       },
       {
         "week_num": 26,
         "runs": 5,
-        "distance_km": 23.2
+        "distance_km": 23.3
+      },
+      {
+        "week_num": 29,
+        "runs": 1,
+        "distance_km": 2.1
       },
       {
         "week_num": 30,
@@ -1175,13 +1280,13 @@
       },
       {
         "week_num": 33,
-        "runs": 4,
-        "distance_km": 20.9
+        "runs": 5,
+        "distance_km": 27.1
       },
       {
         "week_num": 34,
-        "runs": 4,
-        "distance_km": 10.7
+        "runs": 5,
+        "distance_km": 12.7
       },
       {
         "week_num": 35,
@@ -1190,33 +1295,38 @@
       },
       {
         "week_num": 36,
-        "runs": 5,
+        "runs": 6,
         "distance_km": 29.3
       },
       {
         "week_num": 37,
-        "runs": 4,
-        "distance_km": 20.8
+        "runs": 5,
+        "distance_km": 25.3
       },
       {
         "week_num": 38,
         "runs": 3,
-        "distance_km": 20.3
+        "distance_km": 16.9
       },
       {
         "week_num": 39,
-        "runs": 2,
-        "distance_km": 3
+        "runs": 3,
+        "distance_km": 3.0
       },
       {
         "week_num": 40,
-        "runs": 3,
-        "distance_km": 6.1
+        "runs": 4,
+        "distance_km": 21.3
       },
       {
         "week_num": 41,
         "runs": 4,
         "distance_km": 5.3
+      },
+      {
+        "week_num": 45,
+        "runs": 1,
+        "distance_km": 1.5
       },
       {
         "week_num": 47,
@@ -1232,8 +1342,8 @@
   },
   {
     "year": "2025",
-    "total_runs": 57,
-    "total_distance": 133.7,
+    "total_runs": 68,
+    "total_distance": 153.6,
     "weeks": [
       {
         "week_num": 1,
@@ -1248,17 +1358,17 @@
       {
         "week_num": 3,
         "runs": 8,
-        "distance_km": 21.4
+        "distance_km": 21.5
       },
       {
         "week_num": 4,
-        "runs": 4,
-        "distance_km": 7
+        "runs": 5,
+        "distance_km": 7.6
       },
       {
         "week_num": 6,
         "runs": 5,
-        "distance_km": 9
+        "distance_km": 9.0
       },
       {
         "week_num": 7,
@@ -1282,8 +1392,8 @@
       },
       {
         "week_num": 21,
-        "runs": 2,
-        "distance_km": 5.9
+        "runs": 4,
+        "distance_km": 11.9
       },
       {
         "week_num": 23,
@@ -1298,7 +1408,7 @@
       {
         "week_num": 26,
         "runs": 1,
-        "distance_km": 3
+        "distance_km": 3.0
       },
       {
         "week_num": 28,
@@ -1307,18 +1417,28 @@
       },
       {
         "week_num": 29,
-        "runs": 1,
+        "runs": 2,
         "distance_km": 1.3
       },
       {
-        "week_num": 34,
+        "week_num": 33,
         "runs": 1,
-        "distance_km": 3.2
+        "distance_km": 1.1
+      },
+      {
+        "week_num": 34,
+        "runs": 2,
+        "distance_km": 6.3
       },
       {
         "week_num": 35,
         "runs": 2,
         "distance_km": 3.5
+      },
+      {
+        "week_num": 39,
+        "runs": 2,
+        "distance_km": 3.2
       },
       {
         "week_num": 41,
@@ -1332,30 +1452,35 @@
       },
       {
         "week_num": 49,
-        "runs": 3,
-        "distance_km": 7
+        "runs": 5,
+        "distance_km": 12.9
+      },
+      {
+        "week_num": 50,
+        "runs": 1,
+        "distance_km": 0.0
       },
       {
         "week_num": 52,
         "runs": 1,
-        "distance_km": 3
+        "distance_km": 3.0
       }
     ]
   },
   {
     "year": "2026",
-    "total_runs": 20,
-    "total_distance": 79.9,
+    "total_runs": 70,
+    "total_distance": 233.4,
     "weeks": [
       {
         "week_num": 2,
-        "runs": 3,
-        "distance_km": 10.2
+        "runs": 5,
+        "distance_km": 15.8
       },
       {
         "week_num": 3,
-        "runs": 4,
-        "distance_km": 14.9
+        "runs": 5,
+        "distance_km": 18.6
       },
       {
         "week_num": 4,
@@ -1365,7 +1490,7 @@
       {
         "week_num": 5,
         "runs": 4,
-        "distance_km": 17
+        "distance_km": 17.0
       },
       {
         "week_num": 6,
@@ -1384,8 +1509,93 @@
       },
       {
         "week_num": 9,
+        "runs": 4,
+        "distance_km": 10.8
+      },
+      {
+        "week_num": 10,
+        "runs": 2,
+        "distance_km": 6.9
+      },
+      {
+        "week_num": 11,
         "runs": 1,
+        "distance_km": 1.0
+      },
+      {
+        "week_num": 13,
+        "runs": 1,
+        "distance_km": 0.8
+      },
+      {
+        "week_num": 14,
+        "runs": 2,
+        "distance_km": 2.0
+      },
+      {
+        "week_num": 15,
+        "runs": 2,
+        "distance_km": 7.1
+      },
+      {
+        "week_num": 17,
+        "runs": 3,
+        "distance_km": 14.2
+      },
+      {
+        "week_num": 19,
+        "runs": 3,
         "distance_km": 3.2
+      },
+      {
+        "week_num": 21,
+        "runs": 1,
+        "distance_km": 1.0
+      },
+      {
+        "week_num": 24,
+        "runs": 1,
+        "distance_km": 3.0
+      },
+      {
+        "week_num": 29,
+        "runs": 3,
+        "distance_km": 7.4
+      },
+      {
+        "week_num": 30,
+        "runs": 4,
+        "distance_km": 9.9
+      },
+      {
+        "week_num": 31,
+        "runs": 6,
+        "distance_km": 19.5
+      },
+      {
+        "week_num": 32,
+        "runs": 2,
+        "distance_km": 8.3
+      },
+      {
+        "week_num": 33,
+        "runs": 5,
+        "distance_km": 20.3
+      },
+      {
+        "week_num": 34,
+        "runs": 3,
+        "distance_km": 10.3
+      },
+      {
+        "week_num": 35,
+        "runs": 4,
+        "distance_km": 17.5
+      },
+      {
+        "week_num": 36,
+        "runs": 1,
+        "distance_km": 4.1
       }
     ]
   }
