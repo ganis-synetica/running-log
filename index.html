@@ -308,11 +308,11 @@
     </div>
   </footer>
 
+  <script src="js/runlog-data.js"></script>
   <script>
     async function loadData() {
       try {
-        const res = await fetch('data/stats.json');
-        const d = await res.json();
+        const d = await loadRunData('stats');
         
         document.getElementById('weekRuns').textContent = d.this_week.runs;
         document.getElementById('weekDistance').textContent = d.this_week.distance_km + ' km';

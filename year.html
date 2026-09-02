@@ -330,11 +330,11 @@
     </div>
   </footer>
 
+  <script src="js/runlog-data.js"></script>
   <script>
     async function loadData() {
       try {
-        const res = await fetch('data/stats.json');
-        const d = await res.json();
+        const d = await loadRunData('stats');
         
         // YTD values
         document.getElementById('ytd2026').textContent = d.ytd_2026.distance_km;

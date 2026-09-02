@@ -90,6 +90,8 @@ def record(h, s):
     return {
         'type': 'Run',
         'source': src,
+        # lets the ingest function upsert this run without re-matching on time
+        'health_id': h['id'] if h else None,
         'start_date_local': start,
         'name': name or 'Run',
         'distance': round(km * 1000, 1),

@@ -435,6 +435,7 @@
   
   <div class="tooltip" id="tooltip"></div>
 
+  <script src="js/runlog-data.js"></script>
   <script>
     let allRuns = [];
     let filteredRuns = [];
@@ -443,13 +444,11 @@
 
     async function loadData() {
       // Load weekly data for heatmap
-      const weeklyRes = await fetch('data/weekly.json');
-      const weeklyData = await weeklyRes.json();
+      const weeklyData = await loadRunData('weekly');
       renderHeatmap(weeklyData);
       
       // Load activities for table
-      const activitiesRes = await fetch('data/activities.json');
-      const activities = await activitiesRes.json();
+      const activities = await loadRunData('activities');
       
       allRuns = activities
         .filter(a => a.type === 'Run')
@@ -480,8 +479,7 @@
       });
       
       // Load stats
-      const statsRes = await fetch('data/stats.json');
-      const stats = await statsRes.json();
+      const stats = await loadRunData('stats');
       document.getElementById('updatedAt').textContent = new Date(stats.updated_at).toLocaleString();
       
       applyFilters();

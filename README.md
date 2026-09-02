@@ -34,14 +34,60 @@ Outputs keep the original Strava-shaped schema, so the dashboards read them unch
 - `data/stats.json` — week, YTD and comparison-year figures
 - `data/weekly.json` — per-year, per-ISO-week totals for the heatmap
 
-### Refreshing
+### How it stays current
 
-```bash
-./scripts/sync.sh      # rebuild from Apple Health, commit
-git push               # deploy
+The phone is the source of truth. Health Auto Export posts new workouts to
+`/api/ingest` on its own cadence; the function folds them into a blob store, and
+the dashboards read `/api/data/*` at request time. **No sync step, no commit, no
+redeploy** — and none of it depends on the Mac being awake.
+
+```
+ Apple Watch ─▶ Apple Health ─▶ Health Auto Export (iPhone)
+                                        │  POST every 15 min
+                                        ▼
+                            /api/ingest ──▶ Netlify Blobs
+                                                  │
+        index · year · alltime  ◀── /api/data/* ──┘
+                    │
+                    └─ falls back to data/*.json if the API is unavailable
 ```
 
-Preview locally with `python3 -m http.server 8777`.
+The store is seeded once from the `data/activities.json` committed here — the
+988-run merge of Apple Health and the frozen Strava archive. After that the phone
+only ever sends deltas, so the 465 MB local export is never reprocessed.
+
+The pages **fall back to the committed `data/*.json`** whenever the API does not
+answer, so the dashboard always renders even if the endpoint is misconfigured or
+down. That snapshot is refreshed by the local rebuild below.
+
+### Setup (one time)
+
+1. **Set the shared secret** on the Netlify site — Site configuration →
+   Environment variables → `HAE_INGEST_TOKEN`. Generate one with:
+   ```bash
+   openssl rand -hex 32
+   ```
+2. **Point the phone at it.** In Health Auto Export → Automations, change the
+   existing automation's destination from iCloud Drive to **REST API**:
+   - URL: `https://<your-site>.netlify.app/api/ingest`
+   - Method: POST, Format: JSON
+   - Header: `x-api-key` = the token from step 1
+   - Turn **off** "Include Routes" — GPS traces are large and unused here.
+
+   Leave the existing iCloud automation in place; the local rebuild depends on it.
+
+### Local rebuild (repair path)
+
+Still the way to rebuild from the full local archive — after a gap in the phone
+sync, or to refresh the committed fallback snapshot:
+
+```bash
+./scripts/sync.sh      # rebuild from the iCloud export, commit
+npm test               # aggregation parity + handler round trip
+```
+
+Preview locally with `python3 -m http.server 8777` (the pages fall back to the
+committed JSON, since `/api` only exists on Netlify).
 
 ## Deployment
 

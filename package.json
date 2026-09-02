@@ -1,0 +1,11 @@
+{
+  "name": "running-log",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/test_runlog.mjs && node --experimental-test-module-mocks scripts/test_functions.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

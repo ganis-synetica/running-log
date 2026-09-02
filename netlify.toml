@@ -1,7 +1,20 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  # seeds the blob store on first request
+  included_files = ["data/activities.json"]
+
 [[headers]]
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=300"
+
+# The dashboards fetch /api/data/* at request time so new runs appear without a
+# rebuild; they fall back to the committed data/*.json if the function is down.
+[[headers]]
+  for = "/api/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=60"
