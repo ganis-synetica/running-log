@@ -250,7 +250,7 @@
     
     <div class="content">
       <div class="section-label">YEAR-TO-DATE PERFORMANCE</div>
-      <h1 class="section-title">2026</h1>
+      <h1 class="section-title" id="yearTitle">—</h1>
       <p class="section-subtitle">
         The year you promised would be different. 
         Let's see if past-you was lying to future-you again.
@@ -259,12 +259,12 @@
       <div class="comparisons">
         <div class="compare-card">
           <div class="compare-label">COMPARISON</div>
-          <div class="compare-title">VS LAST YEAR (JAN 2025)</div>
+          <div class="compare-title" id="compareTitleLast">VS LAST YEAR</div>
           <div class="compare-numbers">
             <div class="compare-current"><span id="ytd2026">-</span><small style="font-size: 0.4em; opacity: 0.5;"> km</small></div>
             <div class="compare-vs">
               <div class="compare-vs-value" id="ytd2025">-</div>
-              <div class="compare-vs-label">Jan 2025</div>
+              <div class="compare-vs-label" id="vsLabelLast">—</div>
             </div>
           </div>
           <div class="progress-track">
@@ -275,12 +275,12 @@
         
         <div class="compare-card alt">
           <div class="compare-label">COMPARISON</div>
-          <div class="compare-title">VS BEST YEAR (JAN 2021)</div>
+          <div class="compare-title" id="compareTitleBest">VS BEST YEAR</div>
           <div class="compare-numbers">
             <div class="compare-current"><span id="ytd2026b">-</span><small style="font-size: 0.4em; opacity: 0.5;"> km</small></div>
             <div class="compare-vs">
               <div class="compare-vs-value" id="ytd2021">-</div>
-              <div class="compare-vs-label">Jan 2021</div>
+              <div class="compare-vs-label" id="vsLabelBest">—</div>
             </div>
           </div>
           <div class="progress-track">
@@ -301,7 +301,7 @@
         </div>
         <div class="strip-stat">
           <div class="strip-value" id="goalPct">-</div>
-          <div class="strip-label">Of 2021 Pace</div>
+          <div class="strip-label" id="bestPaceLabel">Of Best Year Pace</div>
         </div>
         <div class="strip-stat">
           <div class="strip-value" id="weeksHit">-</div>
@@ -330,21 +330,43 @@
     </div>
   </footer>
 
-  <script src="js/runlog-data.js"></script>
+  <script src="js/runlog-data.js?v=2"></script>
   <script>
     async function loadData() {
       try {
         const d = await loadRunData('stats');
-        
+
+        // Which years we are comparing comes from the data, so the page is
+        // never a year behind on 1 January.
+        const year = String(d.current_year || new Date().getFullYear());
+        const prev = (d.comparison_years && d.comparison_years.previous) || String(Number(year) - 1);
+        const best = (d.comparison_years && d.comparison_years.best) || prev;
+        const cur = d['ytd_' + year] || { runs: 0, distance_km: 0, time_hrs: 0 };
+        const lastYtd = d['ytd_' + prev + '_same_period'] || { distance_km: 0 };
+        const bestYtd = d['ytd_' + best + '_same_period'] || { distance_km: 0 };
+
+        // "Jan–Sep 2025": the same slice of the year, named honestly
+        const asOf = new Date(d.updated_at || Date.now());
+        const mon = MONTHS[asOf.getMonth()];
+        const period = mon === 'Jan' ? 'Jan' : 'Jan–' + mon;
+
+        document.title = year + ' — RUN, GANIS, RUN!';
+        document.getElementById('yearTitle').textContent = year;
+        document.getElementById('compareTitleLast').textContent = 'VS LAST YEAR (' + period.toUpperCase() + ' ' + prev + ')';
+        document.getElementById('compareTitleBest').textContent = 'VS BEST YEAR (' + period.toUpperCase() + ' ' + best + ')';
+        document.getElementById('vsLabelLast').textContent = period + ' ' + prev;
+        document.getElementById('vsLabelBest').textContent = period + ' ' + best;
+        document.getElementById('bestPaceLabel').textContent = 'Of ' + best + ' Pace';
+
         // YTD values
-        document.getElementById('ytd2026').textContent = d.ytd_2026.distance_km;
-        document.getElementById('ytd2026b').textContent = d.ytd_2026.distance_km;
-        document.getElementById('ytd2025').textContent = d.ytd_2025_same_period.distance_km + ' km';
-        document.getElementById('ytd2021').textContent = d.ytd_2021_same_period.distance_km + ' km';
-        
+        document.getElementById('ytd2026').textContent = cur.distance_km;
+        document.getElementById('ytd2026b').textContent = cur.distance_km;
+        document.getElementById('ytd2025').textContent = lastYtd.distance_km + ' km';
+        document.getElementById('ytd2021').textContent = bestYtd.distance_km + ' km';
+
         // Differences
-        const diffLast = d.ytd_2026.distance_km - d.ytd_2025_same_period.distance_km;
-        const diffBest = d.ytd_2026.distance_km - d.ytd_2021_same_period.distance_km;
+        const diffLast = cur.distance_km - lastYtd.distance_km;
+        const diffBest = cur.distance_km - bestYtd.distance_km;
         
         const diffLastEl = document.getElementById('diffLast');
         diffLastEl.textContent = (diffLast >= 0 ? '↑ ' : '↓ ') + Math.abs(diffLast).toFixed(1) + ' km ' + (diffLast >= 0 ? 'ahead' : 'behind');
@@ -355,18 +377,18 @@
         diffBestEl.className = 'compare-diff ' + (diffBest >= 0 ? 'positive' : 'negative');
         
         // Progress bars
-        const pctLast = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2025_same_period.distance_km) * 100);
-        const pctBest = Math.min(100, (d.ytd_2026.distance_km / d.ytd_2021_same_period.distance_km) * 100);
+        const pctLast = lastYtd.distance_km ? Math.min(100, (cur.distance_km / lastYtd.distance_km) * 100) : 100;
+        const pctBest = bestYtd.distance_km ? Math.min(100, (cur.distance_km / bestYtd.distance_km) * 100) : 100;
         document.getElementById('progressLast').style.width = pctLast + '%';
         document.getElementById('progressBest').style.width = pctBest + '%';
         
         // Stats
-        document.getElementById('totalRuns').textContent = d.ytd_2026.runs;
-        document.getElementById('totalHours').textContent = d.ytd_2026.time_hrs + 'h';
-        document.getElementById('goalPct').textContent = ((d.ytd_2026.distance_km / d.ytd_2021_same_period.distance_km) * 100).toFixed(0) + '%';
-        document.getElementById('weeksHit').textContent = Math.floor(d.ytd_2026.runs / 3);
-        
-        document.getElementById('updatedAt').textContent = new Date(d.updated_at).toLocaleString();
+        document.getElementById('totalRuns').textContent = cur.runs;
+        document.getElementById('totalHours').textContent = cur.time_hrs + 'h';
+        document.getElementById('goalPct').textContent = (bestYtd.distance_km ? (cur.distance_km / bestYtd.distance_km) * 100 : 0).toFixed(0) + '%';
+        document.getElementById('weeksHit').textContent = Math.floor(cur.runs / (d.weekly_goal || 3));
+
+        document.getElementById('updatedAt').textContent = formatSynced(d.updated_at);
       } catch (e) {
         console.error('Error:', e);
       }

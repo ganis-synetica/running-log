@@ -308,7 +308,7 @@
     </div>
   </footer>
 
-  <script src="js/runlog-data.js"></script>
+  <script src="js/runlog-data.js?v=2"></script>
   <script>
     async function loadData() {
       try {
@@ -337,7 +337,7 @@
           document.getElementById('lastPace').textContent = d.lastRun.pace + '/km';
         }
         
-        document.getElementById('updatedAt').textContent = new Date(d.updated_at).toLocaleString();
+        document.getElementById('updatedAt').textContent = formatSynced(d.updated_at);
       } catch (e) {
         console.error('Error:', e);
       }

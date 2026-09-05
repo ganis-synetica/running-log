@@ -10,6 +10,11 @@ export const RUN_NAMES = new Set([
   'Outdoor Run', 'Indoor Run', 'Run', 'Running', 'Trail Run',
 ]);
 
+// Heart-rate zone boundaries as configured on Ganis' Apple Watch (bpm):
+//   Z1 <134 | Z2 134-144 | Z3 145-155 | Z4 156-166 | Z5 167+
+// Must match ZONE_EDGES in scripts/health_common.py.
+export const ZONE_EDGES = [134, 145, 156, 167];
+
 const MATCH_WINDOW_MS = 30 * 60 * 1000;
 export const WEEKLY_GOAL = 3;
 
@@ -50,6 +55,28 @@ function qty(field) {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/** Percent of per-minute HR samples in each zone, [Z1..Z5], summing to 100. */
+export function zonesFrom(series) {
+  const hr = (series || [])
+    .map((x) => x?.Avg)
+    .filter((v) => typeof v === 'number' && Number.isFinite(v));
+  if (!hr.length) return null;
+  const counts = [0, 0, 0, 0, 0];
+  for (const h of hr) counts[ZONE_EDGES.filter((e) => h >= e).length]++;
+  return percent(counts, hr.length);
+}
+
+/** Largest-remainder rounding so the five percentages always sum to 100. */
+function percent(counts, n) {
+  const raw = counts.map((c) => (c * 100) / n);
+  const base = raw.map(Math.floor);
+  const order = raw.map((r, i) => [r - base[i], i])
+    .sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+  const left = 100 - base.reduce((s, v) => s + v, 0);
+  for (const [, i] of order.slice(0, left)) base[i]++;
+  return base;
+}
+
 /** Convert raw Health workouts into the Strava-shaped records the pages read. */
 export function extractRuns(workouts) {
   const out = [];
@@ -71,6 +98,7 @@ export function extractRuns(workouts) {
       total_elevation_gain: qty(w.elevationUp) ?? 0,
       average_heartrate: qty(w.avgHeartRate),
       max_heartrate: qty(w.maxHeartRate),
+      zones: zonesFrom(w.heartRateData),
     });
   }
   return out;
@@ -79,6 +107,19 @@ export function extractRuns(workouts) {
 // ------------------------------------------------------------------- upsert
 
 const ms = (s) => new Date(`${s}Z`).getTime();
+
+function findMatch(runs, byHealthId, rec) {
+  if (rec.health_id && byHealthId.has(rec.health_id)) return byHealthId.get(rec.health_id);
+  const t = ms(rec.start_date_local);
+  let idx = -1, best = Infinity;
+  runs.forEach((r, i) => {
+    const gap = Math.abs(ms(r.start_date_local) - t);
+    if (gap <= MATCH_WINDOW_MS && gap < best) { best = gap; idx = i; }
+  });
+  return idx;
+}
+
+const bySort = (a, b) => a.start_date_local.localeCompare(b.start_date_local);
 
 /**
  * Fold incoming Health runs into the stored log.
@@ -96,16 +137,7 @@ export function upsertRuns(existing, incoming) {
   const counts = { added: 0, updated: 0, unchanged: 0 };
 
   for (const inc of incoming) {
-    let idx = byHealthId.has(inc.health_id) ? byHealthId.get(inc.health_id) : -1;
-
-    if (idx < 0) {
-      const t = ms(inc.start_date_local);
-      let best = Infinity;
-      runs.forEach((r, i) => {
-        const gap = Math.abs(ms(r.start_date_local) - t);
-        if (gap <= MATCH_WINDOW_MS && gap < best) { best = gap; idx = i; }
-      });
-    }
+    const idx = findMatch(runs, byHealthId, inc);
 
     if (idx < 0) {
       runs.push(inc);
@@ -122,6 +154,7 @@ export function upsertRuns(existing, incoming) {
     merged.max_heartrate = inc.max_heartrate ?? cur.max_heartrate;
     merged.total_elevation_gain = inc.total_elevation_gain || cur.total_elevation_gain;
     merged.elapsed_time = inc.elapsed_time || cur.elapsed_time;
+    merged.zones = inc.zones ?? cur.zones ?? null;
     if (cur.source === 'health') {
       merged.moving_time = inc.moving_time || cur.moving_time;
       merged.start_date_local = inc.start_date_local;
@@ -133,7 +166,46 @@ export function upsertRuns(existing, incoming) {
     byHealthId.set(inc.health_id, idx);
   }
 
-  runs.sort((a, b) => a.start_date_local.localeCompare(b.start_date_local));
+  runs.sort(bySort);
+  return { runs, counts };
+}
+
+/**
+ * Bring the stored log up to date with the merge committed in the repo.
+ *
+ * The repo snapshot is rebuilt from the full local archive, so it can carry
+ * runs and fields (like zones) the phone never sent. This only ever FILLS
+ * gaps — a value the phone supplied is never overwritten — and adds runs the
+ * store has not seen.
+ */
+export function mergeBootstrap(stored, seed) {
+  const runs = stored.map((r) => ({ ...r }));
+  const byHealthId = new Map();
+  runs.forEach((r, i) => r.health_id && byHealthId.set(r.health_id, i));
+
+  const counts = { added: 0, filled: 0 };
+
+  for (const s of seed) {
+    const idx = findMatch(runs, byHealthId, s);
+    if (idx < 0) {
+      runs.push({ ...s });
+      if (s.health_id) byHealthId.set(s.health_id, runs.length - 1);
+      counts.added++;
+      continue;
+    }
+    const cur = runs[idx];
+    let touched = false;
+    for (const k of Object.keys(s)) {
+      if ((cur[k] === undefined || cur[k] === null) && s[k] !== undefined && s[k] !== null) {
+        cur[k] = s[k];
+        touched = true;
+      }
+    }
+    if (touched) counts.filled++;
+    if (cur.health_id) byHealthId.set(cur.health_id, idx);
+  }
+
+  if (counts.added) runs.sort(bySort);
   return { runs, counts };
 }
 

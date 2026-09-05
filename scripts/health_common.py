@@ -8,6 +8,33 @@ EXPORT_DIR = os.path.expanduser(
 
 RUN_NAMES = {'Outdoor Run', 'Indoor Run', 'Run', 'Running', 'Trail Run'}
 
+# Heart-rate zone boundaries as configured on Ganis' Apple Watch (bpm):
+#   Z1 <134 | Z2 134-144 | Z3 145-155 | Z4 156-166 | Z5 167+
+# Must match ZONE_EDGES in netlify/functions/lib/runlog.mjs.
+ZONE_EDGES = [134, 145, 156, 167]
+
+
+def zones_from(series):
+    """Percent of per-minute HR samples in each zone, [Z1..Z5], summing to 100."""
+    hr = [x.get('Avg') for x in (series or [])
+          if isinstance(x, dict) and isinstance(x.get('Avg'), (int, float))]
+    if not hr:
+        return None
+    counts = [0] * 5
+    for h in hr:
+        counts[sum(h >= e for e in ZONE_EDGES)] += 1
+    return _percent(counts, len(hr))
+
+
+def _percent(counts, n):
+    """Largest-remainder rounding so the five percentages always sum to 100."""
+    raw = [c * 100 / n for c in counts]
+    base = [int(r) for r in raw]
+    order = sorted(range(5), key=lambda i: (-(raw[i] - base[i]), i))
+    for i in order[:100 - sum(base)]:
+        base[i] += 1
+    return base
+
 # "2026-08-30 17:10:16 +0700"
 _TS = re.compile(r'^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}:\d{2})')
 
@@ -72,6 +99,7 @@ def collect_runs(export_dir=EXPORT_DIR):
             'max_hr': _plain(w.get('maxHeartRate')),
             'energy_kj': _plain(w.get('activeEnergyBurned')),
             'cadence_spm': _plain(w.get('stepCadence')),
+            'zones': zones_from(w.get('heartRateData')),
         }
     return sorted(runs.values(), key=lambda r: r['start_local'])
 

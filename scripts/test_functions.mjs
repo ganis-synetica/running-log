@@ -1,7 +1,8 @@
 /**
  * Exercises the Netlify handlers with the blob store stubbed in memory:
  *   node --experimental-test-module-mocks scripts/test_functions.mjs
- * Covers auth, routing, payload handling and the ingest -> serve round trip.
+ * Covers auth, routing, payload handling, the ingest -> serve round trip and
+ * the bootstrap merge that runs when a new snapshot is committed.
  */
 import { mock } from 'node:test';
 import { readFileSync } from 'node:fs';
@@ -32,10 +33,12 @@ const post = (body, headers = {}) => new Request('https://x/api/ingest', {
   body: typeof body === 'string' ? body : JSON.stringify(body),
 });
 const auth = { 'x-api-key': TOKEN };
+const get = (f) => data(new Request(`https://x/api/data/${f}`));
 
-const run = { name: 'Outdoor Run', id: 'NEW-RUN-1', start: '2026-09-03 06:00:00 +0700',
-              end: '2026-09-03 06:40:00 +0700', duration: 2400, distance: { qty: 5.5, units: 'km' },
-              avgHeartRate: { qty: 141, units: 'bpm' } };
+const run = { name: 'Outdoor Run', id: 'NEW-RUN-1', start: '2026-12-31 06:00:00 +0700',
+              end: '2026-12-31 06:40:00 +0700', duration: 2400, distance: { qty: 5.5, units: 'km' },
+              avgHeartRate: { qty: 141, units: 'bpm' },
+              heartRateData: [130, 140, 140, 150, 160].map((Avg) => ({ Avg })) };
 
 console.log('\n1. auth and method guards (no blob access)');
 delete process.env.HAE_INGEST_TOKEN;
@@ -61,25 +64,44 @@ const before = seed.length;
 const r1 = await (await ingest(post({ data: { workouts: [run] } }, auth))).json();
 check('seeded from committed data + 1', r1.total, before + 1);
 check('added exactly one', r1.added, 1);
+check('fingerprint recorded on seed', blobs.has('seed-fingerprint'), true);
 const r2 = await (await ingest(post({ data: { workouts: [run] } }, auth))).json();
 check('replay adds nothing', r2.added, 0);
 check('replay updates nothing', r2.updated, 0);
 check('total unchanged', r2.total, before + 1);
 
-const get = (f) => data(new Request(`https://x/api/data/${f}`));
 const acts = await (await get('activities')).json();
 check('activities served', acts.length, before + 1);
-check('newest run is the posted one', acts[acts.length - 1].health_id, 'NEW-RUN-1');
-check('distance in metres', acts[acts.length - 1].distance, 5500);
-check('heart rate carried', acts[acts.length - 1].average_heartrate, 141);
+const posted = acts.find((r) => r.health_id === 'NEW-RUN-1');
+check('posted run present', !!posted, true);
+check('distance in metres', posted.distance, 5500);
+check('heart rate carried', posted.average_heartrate, 141);
+check('zones computed on ingest', posted.zones, [20, 40, 20, 20, 0]);
 
 const stats = await (await get('stats')).json();
-check('stats include the new run', stats.lastRun.date, '2026-09-03');
+check('stats include the new run', stats.lastRun.date, '2026-12-31');
 check('stats distance', stats.lastRun.distance, '5.50');
 const weekly = await (await get('weekly')).json();
 check('weekly still covers all years', weekly.length >= 10, true);
 check('unknown file -> 404', (await get('nope')).status, 404);
 check('.json suffix tolerated', (await get('stats.json')).status, 200);
+
+console.log('\n4. a new committed snapshot is merged into an existing store');
+blobs.clear();
+// A store from before zones existed, missing the two newest runs, with one
+// phone-supplied value that must survive.
+const old = seed.slice(0, -2).map((r) => ({ ...r, zones: undefined }));
+old[5].distance = 4321;
+blobs.set('runs', JSON.stringify(old));
+blobs.set('seed-fingerprint', 'stale');
+const merged = await (await get('activities')).json();
+check('missing runs added', merged.length, seed.length);
+check('zones filled from snapshot', merged.filter((r) => r.zones).length, seed.filter((r) => r.zones).length);
+check('phone value kept', merged.find((r) => r.start_date_local === old[5].start_date_local).distance, 4321);
+check('fingerprint updated', blobs.get('seed-fingerprint') !== 'stale', true);
+const writes = blobs.get('runs');
+await get('activities');
+check('same snapshot -> no rewrite', blobs.get('runs') === writes, true);
 
 console.log(failures ? `\n${failures} FAILURE(S)\n` : '\nAll checks passed.\n');
 process.exit(failures ? 1 : 0);

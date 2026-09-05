@@ -173,6 +173,12 @@
       display: flex;
       gap: 2px;
     }
+
+    /* 52 week dots never fit a phone; scroll the grid, not the page */
+    #heatmap {
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
     
     .week-dot {
       width: 10px;
@@ -237,6 +243,11 @@
       cursor: pointer;
     }
     
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .runs-table {
       width: 100%;
       border-collapse: collapse;
@@ -257,6 +268,9 @@
       color: var(--yellow);
       font-weight: 400;
     }
+    .runs-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+    .runs-table th.sortable:hover { color: var(--white); }
+    .runs-table th .sort-ind { display: inline-block; width: 1em; margin-left: 4px; }
     
     .runs-table td {
       font-family: 'Space Mono', monospace;
@@ -271,6 +285,61 @@
       color: var(--yellow);
       font-weight: 700;
     }
+
+    /* Heart-rate zones — colours follow the watch: Z1 blue … Z5 red */
+    .z1 { background: var(--blue); }
+    .z2 { background: #26C6DA; }
+    .z3 { background: var(--yellow); }
+    .z4 { background: #FB8C00; }
+    .z5 { background: var(--red); }
+
+    .zone-bar {
+      display: flex;
+      width: 120px;
+      height: 10px;
+      background: #333;
+      overflow: hidden;
+    }
+    .zone-bar span { height: 100%; }
+    .zone-none { color: #555; }
+
+    .zone-mix {
+      margin: 0 0 24px;
+      padding: 16px 20px;
+      background: #1b1b1b;
+      border-left: 3px solid var(--yellow);
+    }
+    .zone-mix-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 10px;
+    }
+    .zone-mix .zone-bar { width: 100%; height: 18px; }
+    .zone-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+    }
+    .zone-legend span::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      vertical-align: -1px;
+    }
+    .zone-legend .l1::before { background: var(--blue); }
+    .zone-legend .l2::before { background: #26C6DA; }
+    .zone-legend .l3::before { background: var(--yellow); }
+    .zone-legend .l4::before { background: #FB8C00; }
+    .zone-legend .l5::before { background: var(--red); }
+    .zone-legend em { color: #888; font-style: normal; margin-left: auto; }
     
     /* Tooltip */
     .tooltip {
@@ -324,7 +393,7 @@
           <h1 class="section-title">ALL TIME</h1>
         </div>
         <p class="section-subtitle">
-          808 runs. Zero regrets. (Okay, maybe that one time in 2022 when you only ran 18 times the whole year. We don't talk about 2022.)
+          <span id="introRuns">—</span> runs. Zero regrets. (Okay, maybe that one time in 2022 when you only ran 18 times the whole year. We don't talk about 2022.)
         </p>
       </div>
       
@@ -369,19 +438,23 @@
             <select class="filter-select" id="yearFilter"></select>
           </div>
         </div>
+        <div class="zone-mix" id="zoneMix"></div>
+        <div class="table-scroll">
         <table class="runs-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Date</th>
-              <th>Location</th>
-              <th>Distance</th>
-              <th>Time</th>
-              <th>Pace</th>
+              <th class="sortable" data-sort="n">#<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="date">Date<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="name">Location<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="distNum">Distance<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="time">Time<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="paceNum">Pace<span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="intensity">HR Zones<span class="sort-ind"></span></th>
             </tr>
           </thead>
           <tbody id="runsTable"></tbody>
         </table>
+        </div>
       </div>
     </div>
   </main>
@@ -407,7 +480,7 @@
   
   <div class="tooltip" id="tooltip"></div>
 
-  <script src="js/runlog-data.js"></script>
+  <script src="js/runlog-data.js?v=2"></script>
   <script>
     let allRuns = [];
     let filteredRuns = [];
@@ -428,14 +501,27 @@
           year: a.start_date_local.substring(0, 4),
           name: a.name.split(',')[0].substring(0, 25),
           distance: (a.distance / 1000).toFixed(2),
+          distNum: a.distance / 1000,
           time: Math.round(a.moving_time / 60),
-          pace: ((a.moving_time / 60) / (a.distance / 1000)).toFixed(2)
-        }));
+          pace: a.distance ? ((a.moving_time / 60) / (a.distance / 1000)).toFixed(2) + '/km' : '—',
+          paceNum: a.distance ? (a.moving_time / 60) / (a.distance / 1000) : null,
+          zones: Array.isArray(a.zones) && a.zones.length === 5 ? a.zones : null
+        }))
+        .map(r => ({ ...r, intensity: r.zones ? r.zones.reduce((s, p, i) => s + p * (i + 1), 0) / 100 : null }));
+
+      // # = the run's ordinal within its year, fixed at load so it survives any sort
+      const counters = {};
+      for (let i = allRuns.length - 1; i >= 0; i--) {
+        const r = allRuns[i];
+        counters[r.year] = (counters[r.year] || 0) + 1;
+        r.n = counters[r.year];
+      }
       
       // Stats
       const totalDist = allRuns.reduce((sum, r) => sum + parseFloat(r.distance), 0);
       const totalTime = allRuns.reduce((sum, r) => sum + r.time, 0);
       document.getElementById('totalRuns').textContent = allRuns.length;
+      document.getElementById('introRuns').textContent = allRuns.length;
       document.getElementById('totalDistance').textContent = Math.round(totalDist);
       document.getElementById('totalHours').textContent = Math.round(totalTime / 60);
       
@@ -453,9 +539,8 @@
       
       // Load stats
       const stats = await loadRunData('stats');
-      document.getElementById('updatedAt').textContent = new Date(stats.updated_at).toLocaleString();
-      
       applyFilters();
+      document.getElementById('updatedAt').textContent = formatSynced(stats.updated_at);
     }
 
     function renderHeatmap(weeklyData) {
@@ -531,28 +616,85 @@
       tooltip.classList.remove('visible');
     }
 
+    // Click a header: high→low first, click again for low→high, and so on.
+    let sortKey = 'date';
+    let sortDir = -1;   // -1 = descending
+
+    function sortRuns() {
+      const key = sortKey, dir = sortDir;
+      filteredRuns.sort((a, b) => {
+        const av = a[key], bv = b[key];
+        if (av == null && bv == null) return 0;
+        if (av == null) return 1;            // runs without a value always sink to the bottom
+        if (bv == null) return -1;
+        const c = typeof av === 'string' ? av.localeCompare(bv) : av - bv;
+        return c * dir;
+      });
+      document.querySelectorAll('.runs-table th.sortable').forEach(th => {
+        th.querySelector('.sort-ind').textContent = th.dataset.sort === key ? (dir < 0 ? '▼' : '▲') : '';
+      });
+    }
+
     function applyFilters() {
       const year = document.getElementById('yearFilter').value;
       filteredRuns = allRuns.filter(r => r.year === year);
+      renderZoneMix();
+      sortRuns();
       renderTable();
+    }
+
+    const ZONE_LABELS = ['Z1 <134', 'Z2 134–144', 'Z3 145–155', 'Z4 156–166', 'Z5 167+'];
+
+    function zoneBar(zones) {
+      if (!zones) return '<span class="zone-none">—</span>';
+      const title = zones.map((p, i) => `${ZONE_LABELS[i]}: ${p}%`).join('\n');
+      const segs = zones.map((p, i) => p ? `<span class="z${i + 1}" style="width:${p}%"></span>` : '').join('');
+      return `<div class="zone-bar" title="${title}">${segs}</div>`;
+    }
+
+    // Time-weighted zone mix for the selected year, over the runs that have HR data.
+    function renderZoneMix() {
+      const el = document.getElementById('zoneMix');
+      const withHr = filteredRuns.filter(r => r.zones);
+      if (!withHr.length) { el.innerHTML = ''; return; }
+      const totalMin = withHr.reduce((s, r) => s + r.time, 0);
+      const mix = [0, 0, 0, 0, 0];
+      withHr.forEach(r => r.zones.forEach((p, i) => { mix[i] += p * r.time; }));
+      const pct = mix.map(v => Math.round(v / totalMin));
+      const year = document.getElementById('yearFilter').value;
+      el.innerHTML = `
+        <div class="zone-mix-title">${year} heart-rate zone mix</div>
+        ${zoneBar(pct)}
+        <div class="zone-legend">
+          ${pct.map((p, i) => `<span class="l${i + 1}">${ZONE_LABELS[i]} · ${p}%</span>`).join('')}
+          <em>${withHr.length} of ${filteredRuns.length} runs have HR</em>
+        </div>`;
     }
 
     function renderTable() {
       const tbody = document.getElementById('runsTable');
-      // newest first; # counts down so the top row reads "Nth run of the year"
-      tbody.innerHTML = filteredRuns.map((r, i) => `
+      tbody.innerHTML = filteredRuns.map(r => `
         <tr>
-          <td>${filteredRuns.length - i}</td>
+          <td>${r.n}</td>
           <td>${r.date}</td>
           <td>${r.name}</td>
           <td class="distance-col">${r.distance} km</td>
           <td>${r.time} min</td>
-          <td>${r.pace}/km</td>
+          <td>${r.pace}</td>
+          <td>${zoneBar(r.zones)}</td>
         </tr>
       `).join('');
     }
 
     document.getElementById('yearFilter').addEventListener('change', applyFilters);
+    document.querySelectorAll('.runs-table th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        if (sortKey === th.dataset.sort) sortDir = -sortDir;
+        else { sortKey = th.dataset.sort; sortDir = -1; }
+        sortRuns();
+        renderTable();
+      });
+    });
 
     loadData();
   </script>

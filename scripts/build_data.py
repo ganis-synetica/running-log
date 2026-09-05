@@ -100,6 +100,8 @@ def record(h, s):
         'total_elevation_gain': (h.get('elevation_m') if h else s.get('total_elevation_gain')) or 0,
         'average_heartrate': (h.get('avg_hr') if h else s.get('average_heartrate')),
         'max_heartrate': (h.get('max_hr') if h else s.get('max_heartrate')),
+        # % of run in each watch HR zone [Z1..Z5]; only watch-recorded runs have it
+        'zones': h.get('zones') if h else None,
     }
 
 
