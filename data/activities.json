@@ -12842,5 +12842,31 @@
     "total_elevation_gain": 25.75,
     "average_heartrate": 142.65,
     "max_heartrate": 156
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "E7603D4F-FA3D-4509-ACD8-C395A2FF9FC9",
+    "start_date_local": "2026-09-03T15:50:58",
+    "name": "Outdoor Run",
+    "distance": 5705.4,
+    "moving_time": 3254,
+    "elapsed_time": 3254,
+    "total_elevation_gain": 34.59,
+    "average_heartrate": 141.55,
+    "max_heartrate": 170
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "C2448144-123E-4B31-AA4A-AC145A15E4E3",
+    "start_date_local": "2026-09-04T17:22:04",
+    "name": "Outdoor Run",
+    "distance": 4457.0,
+    "moving_time": 2564,
+    "elapsed_time": 2564,
+    "total_elevation_gain": 26.21,
+    "average_heartrate": 137.8,
+    "max_heartrate": 151
   }
 ]

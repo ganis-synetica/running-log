@@ -272,26 +272,6 @@
       font-weight: 700;
     }
     
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 24px;
-    }
-    
-    .page-btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      padding: 8px 16px;
-      background: #333;
-      color: var(--white);
-      border: 1px solid #444;
-      cursor: pointer;
-    }
-    
-    .page-btn:hover { background: #444; }
-    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    
     /* Tooltip */
     .tooltip {
       position: fixed;
@@ -386,14 +366,7 @@
         <div class="runs-header">
           <div class="runs-title">RUN LOG</div>
           <div class="runs-filters">
-            <select class="filter-select" id="yearFilter">
-              <option value="all">ALL YEARS</option>
-            </select>
-            <select class="filter-select" id="limitFilter">
-              <option value="25">25 RUNS</option>
-              <option value="50">50 RUNS</option>
-              <option value="100">100 RUNS</option>
-            </select>
+            <select class="filter-select" id="yearFilter"></select>
           </div>
         </div>
         <table class="runs-table">
@@ -409,7 +382,6 @@
           </thead>
           <tbody id="runsTable"></tbody>
         </table>
-        <div class="pagination" id="pagination"></div>
       </div>
     </div>
   </main>
@@ -439,8 +411,6 @@
   <script>
     let allRuns = [];
     let filteredRuns = [];
-    let currentPage = 1;
-    const perPage = 25;
 
     async function loadData() {
       // Load weekly data for heatmap
@@ -452,6 +422,7 @@
       
       allRuns = activities
         .filter(a => a.type === 'Run')
+        .sort((a, b) => b.start_date_local.localeCompare(a.start_date_local))
         .map(a => ({
           date: a.start_date_local.split('T')[0],
           year: a.start_date_local.substring(0, 4),
@@ -477,6 +448,8 @@
         opt.textContent = y;
         yearSelect.appendChild(opt);
       });
+      const thisYear = String(new Date().getFullYear());
+      yearSelect.value = years.includes(thisYear) ? thisYear : years[0];
       
       // Load stats
       const stats = await loadRunData('stats');
@@ -560,23 +533,16 @@
 
     function applyFilters() {
       const year = document.getElementById('yearFilter').value;
-      const limit = parseInt(document.getElementById('limitFilter').value);
-      
-      filteredRuns = year === 'all' ? [...allRuns] : allRuns.filter(r => r.year === year);
-      filteredRuns = filteredRuns.slice(0, limit);
-      
-      currentPage = 1;
+      filteredRuns = allRuns.filter(r => r.year === year);
       renderTable();
     }
 
     function renderTable() {
       const tbody = document.getElementById('runsTable');
-      const start = (currentPage - 1) * perPage;
-      const pageRuns = filteredRuns.slice(start, start + perPage);
-      
-      tbody.innerHTML = pageRuns.map((r, i) => `
+      // newest first; # counts down so the top row reads "Nth run of the year"
+      tbody.innerHTML = filteredRuns.map((r, i) => `
         <tr>
-          <td>${start + i + 1}</td>
+          <td>${filteredRuns.length - i}</td>
           <td>${r.date}</td>
           <td>${r.name}</td>
           <td class="distance-col">${r.distance} km</td>
@@ -584,30 +550,9 @@
           <td>${r.pace}/km</td>
         </tr>
       `).join('');
-      
-      renderPagination();
-    }
-
-    function renderPagination() {
-      const totalPages = Math.ceil(filteredRuns.length / perPage);
-      const pagination = document.getElementById('pagination');
-      
-      if (totalPages <= 1) { pagination.innerHTML = ''; return; }
-      
-      pagination.innerHTML = `
-        <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← PREV</button>
-        <span style="padding: 8px; font-family: 'Space Mono'; font-size: 0.75rem;">${currentPage} / ${totalPages}</span>
-        <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>NEXT →</button>
-      `;
-    }
-
-    function goToPage(page) {
-      currentPage = page;
-      renderTable();
     }
 
     document.getElementById('yearFilter').addEventListener('change', applyFilters);
-    document.getElementById('limitFilter').addEventListener('change', applyFilters);
 
     loadData();
   </script>
