@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THIS MONTH — RUN, GANIS, RUN!</title>
+  <link rel="stylesheet" href="css/shared.css?v=2">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* 
+     * ALL TIME
+     * Inspired by László Moholy-Nagy's photomontages and data visualization
+     * Grid systems, documentary precision, constructivist composition
+     */
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1A1A1A;
+      color: var(--white);
+      min-height: 100vh;
+    }
+    
+    .poster {
+      min-height: calc(100vh - 60px);
+      padding: 40px 24px;
+      position: relative;
+    }
+    
+    /* Constructivist accents */
+    .construct-line {
+      position: absolute;
+      background: var(--red);
+      z-index: 0;
+    }
+    
+    .construct-line-1 {
+      width: 4px;
+      height: 60%;
+      top: 20%;
+      left: 40px;
+    }
+    
+    .construct-line-2 {
+      width: 200px;
+      height: 4px;
+      top: 40px;
+      right: 10%;
+    }
+    
+    .construct-circle {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border: 4px solid var(--yellow);
+      border-radius: 50%;
+      bottom: 100px;
+      right: 60px;
+      opacity: 0.3;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      color: var(--yellow);
+    }
+    
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+    }
+    
+    .section-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.875rem;
+      max-width: 400px;
+      line-height: 1.5;
+      opacity: 0.6;
+    }
+    
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.1);
+      margin-bottom: 48px;
+    }
+    
+    .stat-cell {
+      background: #1A1A1A;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .stat-cell-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--yellow);
+    }
+    
+    .stat-cell-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-top: 8px;
+    }
+    
+    /* Heatmap section */
+    .heatmap-section {
+      background: #222;
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+    
+    .heatmap-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      opacity: 0.6;
+    }
+    
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+    
+    .year-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .year-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      width: 50px;
+      opacity: 0.5;
+    }
+    
+    .weeks-container {
+      display: flex;
+      gap: 2px;
+    }
+
+    /* 52 week dots never fit a phone; scroll the grid, not the page */
+    #heatmap {
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+    
+    .week-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: #333;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    
+    .week-dot:hover { transform: scale(1.8); }
+    .week-dot.above-high { background: #39d353; }
+    .week-dot.above { background: #26a641; }
+    .week-dot.average { background: #9e6a03; }
+    .week-dot.below { background: #5c2727; }
+    
+    .year-stats {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      margin-left: 16px;
+      opacity: 0.4;
+    }
+    
+    .year-stats strong {
+      color: var(--yellow);
+      opacity: 1;
+    }
+    
+    /* Runs table section */
+    .runs-section {
+      background: #222;
+      padding: 32px;
+    }
+    
+    .runs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .runs-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+    }
+    
+    .runs-filters {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .filter-select {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      background: #333;
+      color: var(--white);
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+    
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .runs-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .runs-table th,
+    .runs-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    
+    .runs-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 400;
+    }
+    .runs-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+    .runs-table th.sortable:hover { color: var(--white); }
+    .runs-table th .sort-ind { display: inline-block; width: 1em; margin-left: 4px; }
+    
+    .runs-table td {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.875rem;
+    }
+    
+    .runs-table tr:hover {
+      background: #2a2a2a;
+    }
+    
+    .distance-col {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    /* Heart-rate zones — colours follow the watch: Z1 blue … Z5 red */
+    .z1 { background: var(--blue); }
+    .z2 { background: #26C6DA; }
+    .z3 { background: var(--yellow); }
+    .z4 { background: #FB8C00; }
+    .z5 { background: var(--red); }
+
+    .zone-bar {
+      display: flex;
+      width: 120px;
+      height: 10px;
+      background: #333;
+      overflow: hidden;
+    }
+    .zone-bar span { height: 100%; }
+    .zone-none { color: #555; }
+
+    .zone-mix {
+      margin: 0 0 24px;
+      padding: 16px 20px;
+      background: #1b1b1b;
+      border-left: 3px solid var(--yellow);
+    }
+    .zone-mix-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 10px;
+    }
+    .zone-mix .zone-bar { width: 100%; height: 18px; }
+    .zone-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+    }
+    .zone-legend span::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      vertical-align: -1px;
+    }
+    .zone-legend .l1::before { background: var(--blue); }
+    .zone-legend .l2::before { background: #26C6DA; }
+    .zone-legend .l3::before { background: var(--yellow); }
+    .zone-legend .l4::before { background: #FB8C00; }
+    .zone-legend .l5::before { background: var(--red); }
+    .zone-legend em { color: #888; font-style: normal; margin-left: auto; }
+    
+    /* Tooltip */
+    .tooltip {
+      position: fixed;
+      background: #000;
+      border: 1px solid var(--yellow);
+      padding: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .tooltip.visible { display: block; }
+    
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .week-dot { width: 8px; height: 8px; }
+      .year-stats { display: none; }
+      .construct-line-1 { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="musang-container">
+        <div class="musang-body">🦝</div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+      </div>
+      <span class="nav-title">RUN, GANIS, RUN!</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">THIS WEEK</a>
+      <a href="month.html" class="nav-link active">THIS MONTH</a>
+      <a href="year.html" class="nav-link">THIS YEAR</a>
+      <a href="alltime.html" class="nav-link">ALL TIME</a>
+    </div>
+  </nav>
+
+  <main class="archive" style="padding: 40px 24px 0;">
+    <header class="page-header">
+      <div>
+        <div class="page-label">MONTHLY REPORT</div>
+        <h1 class="page-title" id="monthTitle">THIS MONTH</h1>
+      </div>
+      <p class="page-intro" id="monthIntro">&nbsp;</p>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <div class="stat-cell-value" id="monthRuns">-</div>
+        <div class="stat-cell-label">Runs This Month</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-value" id="monthKm">-</div>
+        <div class="stat-cell-label">Kilometers</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-value" id="monthHours">-</div>
+        <div class="stat-cell-label">Hours</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-value" id="vsLastMonth">-</div>
+        <div class="stat-cell-label">vs Last Month</div>
+      </div>
+    </div>
+
+    <div class="heatmap-section">
+      <div class="heatmap-title">MONTHLY VOLUME — ALL YEARS</div>
+      <div class="heatmap-legend">
+        <span>LESS</span>
+        <div class="legend-box" style="background: #262626;"></div>
+        <div class="legend-box" style="background: #1b3a2a;"></div>
+        <div class="legend-box" style="background: #216e39;"></div>
+        <div class="legend-box" style="background: #2ea043;"></div>
+        <div class="legend-box" style="background: #f0a202;"></div>
+        <div class="legend-box" style="background: #E53935;"></div>
+        <span>MORE</span>
+        <span style="margin-left: 16px;">// 0 · 20 · 45 · 75 · 110+ KM — SAME SCALE EVERY YEAR</span>
+      </div>
+      <div class="month-heatmap" id="monthHeatmap"></div>
+    </div>
+
+    <div class="runs-section">
+      <div class="runs-header">
+        <div class="runs-title">RUNS THIS MONTH</div>
+      </div>
+      <div class="table-scroll">
+      <table class="runs-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Date</th><th>Location</th><th>Distance</th>
+            <th>Time</th><th>Pace</th><th>HR Zones</th>
+          </tr>
+        </thead>
+        <tbody id="runsTable"></tbody>
+      </table>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="tribute">
+      <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="js/runlog-data.js?v=2"></script>
+  <script src="js/runlog-ui.js?v=1"></script>
+  <script>
+    const tooltip = document.getElementById('tooltip');
+    function showTooltip(e) {
+      tooltip.textContent = e.target.dataset.info;
+      tooltip.classList.add('visible');
+      tooltip.style.left = e.pageX + 10 + 'px';
+      tooltip.style.top = e.pageY + 10 + 'px';
+    }
+    function hideTooltip() { tooltip.classList.remove('visible'); }
+
+    async function loadData() {
+      const s = await loadRunData('summary');
+      const now = new Date();
+      const ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const prevYm = prev.getFullYear() + '-' + String(prev.getMonth() + 1).padStart(2, '0');
+
+      const thisMonth = s.months.find((m) => m.ym === ym) || { km: 0, runs: 0, min: 0 };
+      const lastMonth = s.months.find((m) => m.ym === prevYm) || { km: 0, runs: 0, min: 0 };
+
+      document.getElementById('monthTitle').textContent = MONTHS[now.getMonth()].toUpperCase() + ' ' + now.getFullYear();
+      document.getElementById('monthRuns').textContent = thisMonth.runs;
+      document.getElementById('monthKm').textContent = thisMonth.km.toFixed(0);
+      document.getElementById('monthHours').textContent = (thisMonth.min / 60).toFixed(1);
+
+      const diff = thisMonth.km - lastMonth.km;
+      const vs = document.getElementById('vsLastMonth');
+      vs.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1);
+      vs.style.color = diff >= 0 ? 'var(--yellow)' : 'var(--red)';
+
+      // Same year across all years is the useful comparison for a month page.
+      const sameMonthBest = s.months
+        .filter((m) => m.ym.endsWith('-' + String(now.getMonth() + 1).padStart(2, '0')))
+        .sort((a, b) => b.km - a.km)[0];
+      document.getElementById('monthIntro').textContent = sameMonthBest && sameMonthBest.ym !== ym
+        ? `Your best ${MONTHS[now.getMonth()]} was ${sameMonthBest.ym.slice(0, 4)} at ${sameMonthBest.km.toFixed(0)} km. This one is at ${thisMonth.km.toFixed(0)}.`
+        : `${thisMonth.km.toFixed(0)} km so far this month.`;
+
+      renderMonthHeatmap(document.getElementById('monthHeatmap'), s.months, (cell) => {
+        cell.addEventListener('mouseenter', showTooltip);
+        cell.addEventListener('mouseleave', hideTooltip);
+      });
+
+      const runs = s.recent.filter((r) => r.start_date_local.startsWith(ym))
+        .sort((a, b) => b.start_date_local.localeCompare(a.start_date_local))
+        .map(mapRun);
+      renderRunRows(document.getElementById('runsTable'), runs, 'No runs yet this month.');
+
+      document.getElementById('updatedAt').textContent = formatSynced(s.updated_at);
+    }
+    loadData();
+  </script>
+</body>
+</html>

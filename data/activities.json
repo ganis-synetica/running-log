@@ -17116,5 +17116,105 @@
       0,
       0
     ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "3A604B36-80C1-423A-85C9-66E07A65B6D9",
+    "start_date_local": "2026-09-06T06:05:58",
+    "name": "Outdoor Run",
+    "distance": 5268.0,
+    "moving_time": 2576,
+    "elapsed_time": 2576,
+    "total_elevation_gain": 20.31,
+    "average_heartrate": 157.86,
+    "max_heartrate": 176,
+    "zones": [
+      3,
+      2,
+      37,
+      44,
+      14
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "7F5C5960-AFAB-4E14-8D4A-9F321D9A2058",
+    "start_date_local": "2026-09-08T07:28:20",
+    "name": "Outdoor Run",
+    "distance": 3300.8,
+    "moving_time": 1721,
+    "elapsed_time": 1721,
+    "total_elevation_gain": 17.12,
+    "average_heartrate": 140.08,
+    "max_heartrate": 150,
+    "zones": [
+      7,
+      62,
+      31,
+      0,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "0765887F-2ECF-415C-87FF-6C419B02965A",
+    "start_date_local": "2026-09-09T07:32:41",
+    "name": "Outdoor Run",
+    "distance": 5452.6,
+    "moving_time": 3057,
+    "elapsed_time": 3057,
+    "total_elevation_gain": 32.33,
+    "average_heartrate": 139.0,
+    "max_heartrate": 148,
+    "zones": [
+      10,
+      84,
+      6,
+      0,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "0BFE6649-C78D-4FDA-AD10-615BF679F084",
+    "start_date_local": "2026-09-10T07:27:50",
+    "name": "Outdoor Run",
+    "distance": 5332.6,
+    "moving_time": 2643,
+    "elapsed_time": 2643,
+    "total_elevation_gain": 26.2,
+    "average_heartrate": 151.53,
+    "max_heartrate": 168,
+    "zones": [
+      5,
+      16,
+      50,
+      27,
+      2
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "B69A970D-ED20-4C32-A6CF-6F80F913D1A6",
+    "start_date_local": "2026-09-11T07:28:18",
+    "name": "Outdoor Run",
+    "distance": 4877.6,
+    "moving_time": 2626,
+    "elapsed_time": 2626,
+    "total_elevation_gain": 22.53,
+    "average_heartrate": 141.0,
+    "max_heartrate": 168,
+    "zones": [
+      9,
+      66,
+      21,
+      4,
+      0
+    ]
   }
 ]

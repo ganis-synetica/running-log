@@ -1,0 +1,1317 @@
+{
+  "months": [
+    {
+      "ym": "2017-10",
+      "km": 0.2,
+      "runs": 1,
+      "min": 1
+    },
+    {
+      "ym": "2017-11",
+      "km": 23.3,
+      "runs": 11,
+      "min": 174
+    },
+    {
+      "ym": "2017-12",
+      "km": 38.1,
+      "runs": 7,
+      "min": 286
+    },
+    {
+      "ym": "2018-01",
+      "km": 56.0,
+      "runs": 10,
+      "min": 370
+    },
+    {
+      "ym": "2018-02",
+      "km": 70.7,
+      "runs": 13,
+      "min": 494
+    },
+    {
+      "ym": "2018-03",
+      "km": 65.4,
+      "runs": 15,
+      "min": 546
+    },
+    {
+      "ym": "2018-04",
+      "km": 15.6,
+      "runs": 6,
+      "min": 167
+    },
+    {
+      "ym": "2018-05",
+      "km": 69.1,
+      "runs": 15,
+      "min": 434
+    },
+    {
+      "ym": "2018-06",
+      "km": 109.0,
+      "runs": 22,
+      "min": 735
+    },
+    {
+      "ym": "2018-07",
+      "km": 86.8,
+      "runs": 15,
+      "min": 623
+    },
+    {
+      "ym": "2018-08",
+      "km": 19.7,
+      "runs": 6,
+      "min": 128
+    },
+    {
+      "ym": "2018-10",
+      "km": 10.8,
+      "runs": 2,
+      "min": 287
+    },
+    {
+      "ym": "2018-12",
+      "km": 53.4,
+      "runs": 21,
+      "min": 427
+    },
+    {
+      "ym": "2019-01",
+      "km": 76.9,
+      "runs": 25,
+      "min": 603
+    },
+    {
+      "ym": "2019-02",
+      "km": 92.4,
+      "runs": 28,
+      "min": 1077
+    },
+    {
+      "ym": "2019-03",
+      "km": 102.0,
+      "runs": 22,
+      "min": 738
+    },
+    {
+      "ym": "2019-04",
+      "km": 42.9,
+      "runs": 15,
+      "min": 318
+    },
+    {
+      "ym": "2019-05",
+      "km": 79.1,
+      "runs": 18,
+      "min": 496
+    },
+    {
+      "ym": "2019-06",
+      "km": 77.1,
+      "runs": 18,
+      "min": 518
+    },
+    {
+      "ym": "2019-07",
+      "km": 37.8,
+      "runs": 9,
+      "min": 233
+    },
+    {
+      "ym": "2019-08",
+      "km": 82.7,
+      "runs": 19,
+      "min": 476
+    },
+    {
+      "ym": "2019-09",
+      "km": 55.7,
+      "runs": 12,
+      "min": 377
+    },
+    {
+      "ym": "2019-10",
+      "km": 23.1,
+      "runs": 6,
+      "min": 181
+    },
+    {
+      "ym": "2019-11",
+      "km": 14.5,
+      "runs": 5,
+      "min": 127
+    },
+    {
+      "ym": "2019-12",
+      "km": 48.7,
+      "runs": 10,
+      "min": 412
+    },
+    {
+      "ym": "2020-01",
+      "km": 24.3,
+      "runs": 7,
+      "min": 175
+    },
+    {
+      "ym": "2020-02",
+      "km": 59.0,
+      "runs": 16,
+      "min": 448
+    },
+    {
+      "ym": "2020-03",
+      "km": 40.9,
+      "runs": 14,
+      "min": 1678
+    },
+    {
+      "ym": "2020-04",
+      "km": 68.3,
+      "runs": 17,
+      "min": 502
+    },
+    {
+      "ym": "2020-05",
+      "km": 56.2,
+      "runs": 15,
+      "min": 409
+    },
+    {
+      "ym": "2020-06",
+      "km": 20.1,
+      "runs": 5,
+      "min": 160
+    },
+    {
+      "ym": "2020-07",
+      "km": 3.0,
+      "runs": 1,
+      "min": 24
+    },
+    {
+      "ym": "2020-08",
+      "km": 5.1,
+      "runs": 2,
+      "min": 40
+    },
+    {
+      "ym": "2020-10",
+      "km": 34.9,
+      "runs": 14,
+      "min": 337
+    },
+    {
+      "ym": "2020-11",
+      "km": 35.1,
+      "runs": 13,
+      "min": 310
+    },
+    {
+      "ym": "2020-12",
+      "km": 48.8,
+      "runs": 18,
+      "min": 547
+    },
+    {
+      "ym": "2021-01",
+      "km": 41.3,
+      "runs": 10,
+      "min": 362
+    },
+    {
+      "ym": "2021-02",
+      "km": 44.0,
+      "runs": 11,
+      "min": 356
+    },
+    {
+      "ym": "2021-03",
+      "km": 43.9,
+      "runs": 12,
+      "min": 351
+    },
+    {
+      "ym": "2021-04",
+      "km": 63.8,
+      "runs": 20,
+      "min": 516
+    },
+    {
+      "ym": "2021-05",
+      "km": 53.0,
+      "runs": 15,
+      "min": 430
+    },
+    {
+      "ym": "2021-06",
+      "km": 72.3,
+      "runs": 17,
+      "min": 561
+    },
+    {
+      "ym": "2021-07",
+      "km": 72.8,
+      "runs": 13,
+      "min": 528
+    },
+    {
+      "ym": "2021-08",
+      "km": 140.8,
+      "runs": 19,
+      "min": 1085
+    },
+    {
+      "ym": "2021-09",
+      "km": 155.1,
+      "runs": 25,
+      "min": 1187
+    },
+    {
+      "ym": "2021-10",
+      "km": 149.1,
+      "runs": 22,
+      "min": 1168
+    },
+    {
+      "ym": "2021-11",
+      "km": 108.3,
+      "runs": 16,
+      "min": 776
+    },
+    {
+      "ym": "2022-08",
+      "km": 43.2,
+      "runs": 3,
+      "min": 398
+    },
+    {
+      "ym": "2022-09",
+      "km": 52.6,
+      "runs": 11,
+      "min": 385
+    },
+    {
+      "ym": "2022-10",
+      "km": 9.2,
+      "runs": 2,
+      "min": 65
+    },
+    {
+      "ym": "2022-11",
+      "km": 4.6,
+      "runs": 2,
+      "min": 32
+    },
+    {
+      "ym": "2023-01",
+      "km": 41.3,
+      "runs": 8,
+      "min": 323
+    },
+    {
+      "ym": "2023-02",
+      "km": 50.3,
+      "runs": 9,
+      "min": 392
+    },
+    {
+      "ym": "2023-03",
+      "km": 75.5,
+      "runs": 13,
+      "min": 626
+    },
+    {
+      "ym": "2023-04",
+      "km": 26.0,
+      "runs": 3,
+      "min": 241
+    },
+    {
+      "ym": "2023-05",
+      "km": 32.2,
+      "runs": 11,
+      "min": 269
+    },
+    {
+      "ym": "2023-06",
+      "km": 74.5,
+      "runs": 16,
+      "min": 608
+    },
+    {
+      "ym": "2023-07",
+      "km": 83.4,
+      "runs": 18,
+      "min": 701
+    },
+    {
+      "ym": "2023-08",
+      "km": 66.8,
+      "runs": 12,
+      "min": 688
+    },
+    {
+      "ym": "2023-09",
+      "km": 57.7,
+      "runs": 10,
+      "min": 523
+    },
+    {
+      "ym": "2023-10",
+      "km": 47.3,
+      "runs": 7,
+      "min": 439
+    },
+    {
+      "ym": "2023-11",
+      "km": 4.4,
+      "runs": 1,
+      "min": 41
+    },
+    {
+      "ym": "2023-12",
+      "km": 14.0,
+      "runs": 2,
+      "min": 143
+    },
+    {
+      "ym": "2024-01",
+      "km": 51.6,
+      "runs": 10,
+      "min": 530
+    },
+    {
+      "ym": "2024-02",
+      "km": 54.2,
+      "runs": 12,
+      "min": 544
+    },
+    {
+      "ym": "2024-03",
+      "km": 6.4,
+      "runs": 3,
+      "min": 59
+    },
+    {
+      "ym": "2024-04",
+      "km": 5.0,
+      "runs": 2,
+      "min": 49
+    },
+    {
+      "ym": "2024-05",
+      "km": 28.5,
+      "runs": 3,
+      "min": 281
+    },
+    {
+      "ym": "2024-06",
+      "km": 30.0,
+      "runs": 9,
+      "min": 298
+    },
+    {
+      "ym": "2024-07",
+      "km": 16.5,
+      "runs": 5,
+      "min": 156
+    },
+    {
+      "ym": "2024-08",
+      "km": 56.3,
+      "runs": 14,
+      "min": 554
+    },
+    {
+      "ym": "2024-09",
+      "km": 74.4,
+      "runs": 17,
+      "min": 728
+    },
+    {
+      "ym": "2024-10",
+      "km": 26.6,
+      "runs": 8,
+      "min": 277
+    },
+    {
+      "ym": "2024-11",
+      "km": 5.0,
+      "runs": 3,
+      "min": 46
+    },
+    {
+      "ym": "2024-12",
+      "km": 1.1,
+      "runs": 1,
+      "min": 8
+    },
+    {
+      "ym": "2025-01",
+      "km": 56.9,
+      "runs": 21,
+      "min": 509
+    },
+    {
+      "ym": "2025-02",
+      "km": 24.8,
+      "runs": 14,
+      "min": 231
+    },
+    {
+      "ym": "2025-03",
+      "km": 1.1,
+      "runs": 1,
+      "min": 11
+    },
+    {
+      "ym": "2025-04",
+      "km": 3.8,
+      "runs": 2,
+      "min": 34
+    },
+    {
+      "ym": "2025-05",
+      "km": 11.9,
+      "runs": 4,
+      "min": 119
+    },
+    {
+      "ym": "2025-06",
+      "km": 13.0,
+      "runs": 5,
+      "min": 119
+    },
+    {
+      "ym": "2025-07",
+      "km": 1.9,
+      "runs": 3,
+      "min": 21
+    },
+    {
+      "ym": "2025-08",
+      "km": 10.9,
+      "runs": 5,
+      "min": 103
+    },
+    {
+      "ym": "2025-09",
+      "km": 3.2,
+      "runs": 2,
+      "min": 31
+    },
+    {
+      "ym": "2025-10",
+      "km": 10.1,
+      "runs": 4,
+      "min": 99
+    },
+    {
+      "ym": "2025-12",
+      "km": 15.9,
+      "runs": 7,
+      "min": 160
+    },
+    {
+      "ym": "2026-01",
+      "km": 62.6,
+      "runs": 16,
+      "min": 585
+    },
+    {
+      "ym": "2026-02",
+      "km": 34.1,
+      "runs": 10,
+      "min": 314
+    },
+    {
+      "ym": "2026-03",
+      "km": 10.7,
+      "runs": 6,
+      "min": 96
+    },
+    {
+      "ym": "2026-04",
+      "km": 21.3,
+      "runs": 5,
+      "min": 214
+    },
+    {
+      "ym": "2026-05",
+      "km": 4.2,
+      "runs": 4,
+      "min": 44
+    },
+    {
+      "ym": "2026-06",
+      "km": 3.0,
+      "runs": 1,
+      "min": 30
+    },
+    {
+      "ym": "2026-07",
+      "km": 33.0,
+      "runs": 12,
+      "min": 303
+    },
+    {
+      "ym": "2026-08",
+      "km": 64.4,
+      "runs": 16,
+      "min": 580
+    },
+    {
+      "ym": "2026-09",
+      "km": 43.0,
+      "runs": 9,
+      "min": 388
+    }
+  ],
+  "recent": [
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "C709DC38-6C10-4E98-A5E9-C569DDE3CB22",
+      "start_date_local": "2026-07-13T07:47:35",
+      "name": "Outdoor Run",
+      "distance": 3095.2,
+      "moving_time": 1806,
+      "elapsed_time": 1806,
+      "total_elevation_gain": 16.09,
+      "average_heartrate": 144.26,
+      "max_heartrate": 154,
+      "zones": [
+        10,
+        37,
+        53,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "D17F9AB6-3210-4C7E-942D-21F4ADED4EF1",
+      "start_date_local": "2026-07-14T07:54:06",
+      "name": "Outdoor Run",
+      "distance": 1135.3,
+      "moving_time": 599,
+      "elapsed_time": 599,
+      "total_elevation_gain": 3.33,
+      "average_heartrate": 139.74,
+      "max_heartrate": 150,
+      "zones": [
+        20,
+        40,
+        40,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "45CE2F2E-30A1-4F3E-9846-C78237B77454",
+      "start_date_local": "2026-07-17T07:36:38",
+      "name": "Outdoor Run",
+      "distance": 3177.2,
+      "moving_time": 1930,
+      "elapsed_time": 1930,
+      "total_elevation_gain": 15.7,
+      "average_heartrate": 139.35,
+      "max_heartrate": 153,
+      "zones": [
+        24,
+        47,
+        29,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "F9C56A4C-32F9-4123-AF63-964524FAC89D",
+      "start_date_local": "2026-07-21T07:26:52",
+      "name": "Outdoor Run",
+      "distance": 3544.6,
+      "moving_time": 1896,
+      "elapsed_time": 1896,
+      "total_elevation_gain": 18.97,
+      "average_heartrate": 133.08,
+      "max_heartrate": 148,
+      "zones": [
+        48,
+        40,
+        12,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "CA0D0A26-1445-4F63-9334-41DC1A8C07C5",
+      "start_date_local": "2026-07-22T07:52:04",
+      "name": "Outdoor Run",
+      "distance": 1034.0,
+      "moving_time": 523,
+      "elapsed_time": 523,
+      "total_elevation_gain": 4.23,
+      "average_heartrate": 134.95,
+      "max_heartrate": 148,
+      "zones": [
+        33,
+        45,
+        22,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "D1B64A18-03FC-4E9C-A4D3-F36E547D1E69",
+      "start_date_local": "2026-07-23T07:26:27",
+      "name": "Outdoor Run",
+      "distance": 4014.1,
+      "moving_time": 2200,
+      "elapsed_time": 2200,
+      "total_elevation_gain": 24.97,
+      "average_heartrate": 149.01,
+      "max_heartrate": 159,
+      "zones": [
+        3,
+        11,
+        86,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "F55446FD-8BEC-471B-99DD-C476BB6F013B",
+      "start_date_local": "2026-07-24T07:32:21",
+      "name": "Outdoor Run",
+      "distance": 1285.2,
+      "moving_time": 1036,
+      "elapsed_time": 1036,
+      "total_elevation_gain": 3.28,
+      "average_heartrate": 106.06,
+      "max_heartrate": 124.0,
+      "zones": [
+        100,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "3C24CB39-5A05-422E-B296-478CECF18745",
+      "start_date_local": "2026-07-27T07:54:34",
+      "name": "Outdoor Run",
+      "distance": 3375.1,
+      "moving_time": 1809,
+      "elapsed_time": 1809,
+      "total_elevation_gain": 22.52,
+      "average_heartrate": 146.71,
+      "max_heartrate": 157,
+      "zones": [
+        3,
+        26,
+        71,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "82A1D7A7-45EA-419E-B1E6-41EF6713E28F",
+      "start_date_local": "2026-07-28T08:07:10",
+      "name": "Outdoor Run",
+      "distance": 3357.1,
+      "moving_time": 1810,
+      "elapsed_time": 1810,
+      "total_elevation_gain": 23.69,
+      "average_heartrate": 146.17,
+      "max_heartrate": 156,
+      "zones": [
+        7,
+        30,
+        63,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "070D9A71-FD60-4D10-88FA-F8D77CCEAB5E",
+      "start_date_local": "2026-07-29T07:28:18",
+      "name": "Outdoor Run",
+      "distance": 3503.0,
+      "moving_time": 1814,
+      "elapsed_time": 1814,
+      "total_elevation_gain": 22.23,
+      "average_heartrate": 150.35,
+      "max_heartrate": 158,
+      "zones": [
+        0,
+        16,
+        77,
+        7,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "4BCEF782-30C1-473C-9840-1C28B9BCE033",
+      "start_date_local": "2026-07-30T07:35:40",
+      "name": "Outdoor Run",
+      "distance": 1730.6,
+      "moving_time": 855,
+      "elapsed_time": 855,
+      "total_elevation_gain": 8.32,
+      "average_heartrate": 124.36,
+      "max_heartrate": 148,
+      "zones": [
+        64,
+        20,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "D576D707-2203-4C00-905C-8D5C2DFD0260",
+      "start_date_local": "2026-07-31T07:26:52",
+      "name": "Outdoor Run",
+      "distance": 3768.1,
+      "moving_time": 1883,
+      "elapsed_time": 1883,
+      "total_elevation_gain": 22.4,
+      "average_heartrate": 149.12,
+      "max_heartrate": 161,
+      "zones": [
+        3,
+        19,
+        66,
+        12,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "B49BB33A-86A8-42B8-B980-CF472AAF776C",
+      "start_date_local": "2026-08-02T18:14:46",
+      "name": "Outdoor Run",
+      "distance": 3772.7,
+      "moving_time": 2091,
+      "elapsed_time": 2091,
+      "total_elevation_gain": 12,
+      "average_heartrate": 124.59,
+      "max_heartrate": 154,
+      "zones": [
+        44,
+        45,
+        11,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "641BF4F0-78E2-482B-B13C-F14C49910F24",
+      "start_date_local": "2026-08-03T07:31:40",
+      "name": "Outdoor Run",
+      "distance": 3618.7,
+      "moving_time": 1809,
+      "elapsed_time": 1809,
+      "total_elevation_gain": 19.23,
+      "average_heartrate": 145.89,
+      "max_heartrate": 156,
+      "zones": [
+        10,
+        19,
+        71,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "1A0C4F57-4BB1-4AA0-A2C7-9020C5839F93",
+      "start_date_local": "2026-08-04T07:32:19",
+      "name": "Outdoor Run",
+      "distance": 4648.3,
+      "moving_time": 2504,
+      "elapsed_time": 2504,
+      "total_elevation_gain": 25.43,
+      "average_heartrate": 142.5,
+      "max_heartrate": 152,
+      "zones": [
+        5,
+        55,
+        40,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "F9F20407-18AC-4236-AC0B-BBE3F97AB4B8",
+      "start_date_local": "2026-08-10T07:46:44",
+      "name": "Outdoor Run",
+      "distance": 1071.7,
+      "moving_time": 576,
+      "elapsed_time": 576,
+      "total_elevation_gain": 3.57,
+      "average_heartrate": 143.77,
+      "max_heartrate": 156,
+      "zones": [
+        9,
+        27,
+        64,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "2A3279F9-B46A-45A5-AD82-408D50D50556",
+      "start_date_local": "2026-08-11T07:24:51",
+      "name": "Outdoor Run",
+      "distance": 4298.3,
+      "moving_time": 2316,
+      "elapsed_time": 2316,
+      "total_elevation_gain": 21.81,
+      "average_heartrate": 141.92,
+      "max_heartrate": 153,
+      "zones": [
+        13,
+        33,
+        54,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "65417FAB-7A89-43AA-9928-2E75A23B539F",
+      "start_date_local": "2026-08-12T07:34:15",
+      "name": "Outdoor Run",
+      "distance": 5013.0,
+      "moving_time": 2646,
+      "elapsed_time": 2646,
+      "total_elevation_gain": 24.97,
+      "average_heartrate": 125.91,
+      "max_heartrate": 154,
+      "zones": [
+        40,
+        38,
+        22,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "92114C41-07E6-4A32-BAA5-4E12C113DC3E",
+      "start_date_local": "2026-08-13T07:20:12",
+      "name": "Outdoor Run",
+      "distance": 6188.0,
+      "moving_time": 3283,
+      "elapsed_time": 3283,
+      "total_elevation_gain": 31.32,
+      "average_heartrate": 140.33,
+      "max_heartrate": 157,
+      "zones": [
+        22,
+        26,
+        50,
+        2,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "383A3688-7AFF-4C6D-A99A-DF5907F8DE95",
+      "start_date_local": "2026-08-14T07:35:57",
+      "name": "Outdoor Run",
+      "distance": 3771.2,
+      "moving_time": 1804,
+      "elapsed_time": 1804,
+      "total_elevation_gain": 24.3,
+      "average_heartrate": 147.69,
+      "max_heartrate": 159,
+      "zones": [
+        10,
+        23,
+        57,
+        10,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "CE55180C-087C-421B-A517-2D4B19A60D79",
+      "start_date_local": "2026-08-18T07:27:49",
+      "name": "Outdoor Run",
+      "distance": 3820.3,
+      "moving_time": 2073,
+      "elapsed_time": 2073,
+      "total_elevation_gain": 24,
+      "average_heartrate": 138.75,
+      "max_heartrate": 147,
+      "zones": [
+        11,
+        86,
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "5A90954A-63BE-434D-8928-DAFBC4E6291C",
+      "start_date_local": "2026-08-19T07:39:57",
+      "name": "Outdoor Run",
+      "distance": 4504.3,
+      "moving_time": 2420,
+      "elapsed_time": 2420,
+      "total_elevation_gain": 22.94,
+      "average_heartrate": 141.51,
+      "max_heartrate": 155,
+      "zones": [
+        7,
+        76,
+        17,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "A9A4303F-4D93-4819-BA8E-4C27F4773393",
+      "start_date_local": "2026-08-20T07:46:09",
+      "name": "Outdoor Run",
+      "distance": 2013.9,
+      "moving_time": 1033,
+      "elapsed_time": 1033,
+      "total_elevation_gain": 7.24,
+      "average_heartrate": 138.49,
+      "max_heartrate": 144,
+      "zones": [
+        6,
+        94,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "4F77D01D-E6D3-4DED-94BC-870126BF3AA8",
+      "start_date_local": "2026-08-26T07:39:07",
+      "name": "Outdoor Run",
+      "distance": 1357.8,
+      "moving_time": 687,
+      "elapsed_time": 687,
+      "total_elevation_gain": 5.56,
+      "average_heartrate": 136.99,
+      "max_heartrate": 152,
+      "zones": [
+        33,
+        25,
+        42,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "181DE185-E353-44F1-B165-87C2302E9E66",
+      "start_date_local": "2026-08-27T07:24:23",
+      "name": "Outdoor Run",
+      "distance": 4611.5,
+      "moving_time": 2484,
+      "elapsed_time": 2484,
+      "total_elevation_gain": 23.25,
+      "average_heartrate": 142.68,
+      "max_heartrate": 159,
+      "zones": [
+        5,
+        79,
+        9,
+        7,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "7409D6B3-D344-4E8F-85C1-E81C4D352A7B",
+      "start_date_local": "2026-08-28T07:32:23",
+      "name": "Outdoor Run",
+      "distance": 4416.9,
+      "moving_time": 2479,
+      "elapsed_time": 2479,
+      "total_elevation_gain": 21.92,
+      "average_heartrate": 141.92,
+      "max_heartrate": 150,
+      "zones": [
+        2,
+        81,
+        17,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "0857487F-2665-4005-97CC-5D9799E9AF58",
+      "start_date_local": "2026-08-30T17:10:16",
+      "name": "Outdoor Run",
+      "distance": 7162.4,
+      "moving_time": 4212,
+      "elapsed_time": 4212,
+      "total_elevation_gain": 28.45,
+      "average_heartrate": 142.9,
+      "max_heartrate": 158,
+      "zones": [
+        3,
+        76,
+        21,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "4AFF45A4-0B40-4D6D-9154-EA6FB4AC9DD9",
+      "start_date_local": "2026-08-31T07:35:25",
+      "name": "Outdoor Run",
+      "distance": 4144.4,
+      "moving_time": 2411,
+      "elapsed_time": 2411,
+      "total_elevation_gain": 26.79,
+      "average_heartrate": 137.02,
+      "max_heartrate": 146,
+      "zones": [
+        15,
+        85,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "45B39205-43EE-44A7-BFA5-A2B994BA82B3",
+      "start_date_local": "2026-09-01T07:35:42",
+      "name": "Outdoor Run",
+      "distance": 4327.1,
+      "moving_time": 2407,
+      "elapsed_time": 2407,
+      "total_elevation_gain": 24.47,
+      "average_heartrate": 139.53,
+      "max_heartrate": 154,
+      "zones": [
+        15,
+        61,
+        24,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "3720FADA-2936-4844-8EE2-FBBCAD190C48",
+      "start_date_local": "2026-09-02T07:32:29",
+      "name": "Outdoor Run",
+      "distance": 4234.6,
+      "moving_time": 2411,
+      "elapsed_time": 2411,
+      "total_elevation_gain": 25.75,
+      "average_heartrate": 142.65,
+      "max_heartrate": 156,
+      "zones": [
+        0,
+        90,
+        10,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "E7603D4F-FA3D-4509-ACD8-C395A2FF9FC9",
+      "start_date_local": "2026-09-03T15:50:58",
+      "name": "Outdoor Run",
+      "distance": 5705.4,
+      "moving_time": 3254,
+      "elapsed_time": 3254,
+      "total_elevation_gain": 34.59,
+      "average_heartrate": 141.55,
+      "max_heartrate": 170,
+      "zones": [
+        5,
+        78,
+        11,
+        4,
+        2
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "C2448144-123E-4B31-AA4A-AC145A15E4E3",
+      "start_date_local": "2026-09-04T17:22:04",
+      "name": "Outdoor Run",
+      "distance": 4457.0,
+      "moving_time": 2564,
+      "elapsed_time": 2564,
+      "total_elevation_gain": 26.21,
+      "average_heartrate": 137.8,
+      "max_heartrate": 151,
+      "zones": [
+        21,
+        65,
+        14,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "3A604B36-80C1-423A-85C9-66E07A65B6D9",
+      "start_date_local": "2026-09-06T06:05:58",
+      "name": "Outdoor Run",
+      "distance": 5268.0,
+      "moving_time": 2576,
+      "elapsed_time": 2576,
+      "total_elevation_gain": 20.31,
+      "average_heartrate": 157.86,
+      "max_heartrate": 176,
+      "zones": [
+        3,
+        2,
+        37,
+        44,
+        14
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "7F5C5960-AFAB-4E14-8D4A-9F321D9A2058",
+      "start_date_local": "2026-09-08T07:28:20",
+      "name": "Outdoor Run",
+      "distance": 3300.8,
+      "moving_time": 1721,
+      "elapsed_time": 1721,
+      "total_elevation_gain": 17.12,
+      "average_heartrate": 140.08,
+      "max_heartrate": 150,
+      "zones": [
+        7,
+        62,
+        31,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "0765887F-2ECF-415C-87FF-6C419B02965A",
+      "start_date_local": "2026-09-09T07:32:41",
+      "name": "Outdoor Run",
+      "distance": 5452.6,
+      "moving_time": 3057,
+      "elapsed_time": 3057,
+      "total_elevation_gain": 32.33,
+      "average_heartrate": 139.0,
+      "max_heartrate": 148,
+      "zones": [
+        10,
+        84,
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "0BFE6649-C78D-4FDA-AD10-615BF679F084",
+      "start_date_local": "2026-09-10T07:27:50",
+      "name": "Outdoor Run",
+      "distance": 5332.6,
+      "moving_time": 2643,
+      "elapsed_time": 2643,
+      "total_elevation_gain": 26.2,
+      "average_heartrate": 151.53,
+      "max_heartrate": 168,
+      "zones": [
+        5,
+        16,
+        50,
+        27,
+        2
+      ]
+    },
+    {
+      "type": "Run",
+      "source": "health",
+      "health_id": "B69A970D-ED20-4C32-A6CF-6F80F913D1A6",
+      "start_date_local": "2026-09-11T07:28:18",
+      "name": "Outdoor Run",
+      "distance": 4877.6,
+      "moving_time": 2626,
+      "elapsed_time": 2626,
+      "total_elevation_gain": 22.53,
+      "average_heartrate": 141.0,
+      "max_heartrate": 168,
+      "zones": [
+        9,
+        66,
+        21,
+        4,
+        0
+      ]
+    }
+  ],
+  "updated_at": "2026-09-11T17:04:05+07:00"
+}

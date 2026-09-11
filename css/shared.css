@@ -180,3 +180,144 @@
   font-size: 0.75rem;
   color: rgba(255,255,255,0.4);
 }
+
+/* ---------------------------------------------------------------- run list
+   Shared by This Week, This Month and All Time (see js/runlog-ui.js). */
+.runs-empty {
+  text-align: center;
+  padding: 28px 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------- week strip */
+.day-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  align-items: end;
+}
+.day-col { text-align: center; }
+.day-bar-track {
+  height: 90px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 2px solid currentColor;
+}
+.day-bar {
+  width: 60%;
+  background: var(--blue);
+  min-height: 2px;
+  transition: height 0.3s;
+}
+.day-col.rest .day-bar { background: transparent; }
+.day-col.is-today .day-bar { background: var(--red); }
+.day-col.future { opacity: 0.35; }
+.day-km {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  margin-top: 6px;
+  opacity: 0.75;
+}
+.day-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+.day-col.is-today .day-label { color: var(--red); font-weight: 700; }
+
+/* ---------------------------------------------------------- month heatmap */
+.month-heatmap { display: flex; flex-direction: column; gap: 4px; }
+.mh-row { display: flex; align-items: center; gap: 10px; }
+.mh-year {
+  width: 42px;
+  flex: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+.mh-cells {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.mh-col-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  text-align: center;
+  opacity: 0.5;
+}
+.mh-cell {
+  height: 24px;
+  background: #262626;
+  border-radius: 2px;
+}
+.mh-cell.lvl-1 { background: #1b3a2a; }   /* under 20 km  */
+.mh-cell.lvl-2 { background: #216e39; }   /* 20-45 km     */
+.mh-cell.lvl-3 { background: #2ea043; }   /* 45-75 km     */
+.mh-cell.lvl-4 { background: #f0a202; }   /* 75-110 km    */
+.mh-cell.lvl-5 { background: var(--red); }/* 110 km plus  */
+.mh-total {
+  width: 110px;
+  flex: none;
+  text-align: right;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  opacity: 0.8;
+}
+.mh-head .mh-cell { background: none; }
+
+/* --------------------------------------------------------- cumulative chart */
+.ch-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ch-grid { stroke: currentColor; stroke-width: 1; opacity: 0.12; }
+.ch-axis {
+  fill: currentColor;
+  opacity: 0.55;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+}
+.ch-line { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.ch-line.other { stroke: currentColor; opacity: 0.16; stroke-width: 1.5; }
+.ch-line.prev  { stroke: var(--blue); opacity: 0.85; stroke-width: 2.5; }
+.ch-line.best  { stroke: var(--yellow); opacity: 0.95; stroke-width: 2.5; }
+.ch-line.cur   { stroke: var(--red); stroke-width: 4; }
+.ch-dot { fill: currentColor; opacity: 0.2; }
+.ch-dot.prev { fill: var(--blue); opacity: 1; }
+.ch-dot.best { fill: var(--yellow); opacity: 1; }
+.ch-dot.cur  { fill: var(--red); opacity: 1; }
+.ch-series.hidden { display: none; }
+.ch-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.ch-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  padding: 5px 10px;
+  border: 1px solid currentColor;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.45;
+  border-radius: 2px;
+}
+.ch-chip em { font-style: normal; opacity: 0.7; }
+.ch-chip.cur  { opacity: 1; border-color: var(--red); color: var(--red); font-weight: 700; }
+.ch-chip.best { opacity: 1; border-color: var(--yellow); }
+.ch-chip.prev { opacity: 1; border-color: var(--blue); }
+.ch-chip.off { opacity: 0.2; text-decoration: line-through; }
+
+@media (max-width: 640px) {
+  .mh-year { width: 34px; font-size: 0.6rem; }
+  .mh-total { width: 78px; font-size: 0.58rem; }
+  .mh-cell { height: 16px; }
+}
+
+/* Grid/flex children default to min-width:auto, so a wide table pushes its
+   track open and the whole page scrolls sideways. Pin them and let the table
+   scroll inside its own container instead. */
+.week-extra, .year-extra { min-width: 0; }
+.week-panel, .year-panel { min-width: 0; }
+.week-panel .runs-table, .year-panel .runs-table { min-width: 520px; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }

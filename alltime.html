@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALL TIME — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/shared.css?v=2">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -376,6 +376,7 @@
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">THIS WEEK</a>
+      <a href="month.html" class="nav-link">THIS MONTH</a>
       <a href="year.html" class="nav-link">THIS YEAR</a>
       <a href="alltime.html" class="nav-link active">ALL TIME</a>
     </div>
@@ -481,6 +482,7 @@
   <div class="tooltip" id="tooltip"></div>
 
   <script src="js/runlog-data.js?v=2"></script>
+  <script src="js/runlog-ui.js?v=1"></script>
   <script>
     let allRuns = [];
     let filteredRuns = [];
@@ -567,7 +569,10 @@
         const avgDistance = yearData.weeks.length > 0 
           ? yearData.total_distance / yearData.weeks.length : 0;
         
-        for (let w = 1; w <= 52; w++) {
+        // 53 fixed columns so week N sits at the same x in every row —
+        // previously only weeks with runs were rendered, so rows were ragged
+        // and nothing lined up vertically between years.
+        for (let w = 1; w <= 53; w++) {
           const dot = document.createElement('div');
           dot.className = 'week-dot';
           

@@ -182,6 +182,24 @@ def build_weekly(runs):
     return out
 
 
+def build_summary(runs, today, days=62):
+    """Mirror of buildSummary in netlify/functions/lib/runlog.mjs."""
+    cut = (today - timedelta(days=days)).strftime('%Y-%m-%d')
+    months = {}
+    for r in runs:
+        ym = r['start_date_local'][:7]
+        m = months.setdefault(ym, {'ym': ym, 'km': 0.0, 'runs': 0, 'min': 0.0})
+        m['km'] += r['distance'] / 1000
+        m['runs'] += 1
+        m['min'] += r['moving_time'] / 60
+    return {
+        'months': [{'ym': m['ym'], 'km': round(m['km'], 1), 'runs': m['runs'],
+                    'min': round(m['min'])} for m in sorted(months.values(), key=lambda x: x['ym'])],
+        'recent': [r for r in runs if r['start_date_local'][:10] >= cut],
+        'updated_at': datetime.now().astimezone().replace(microsecond=0).isoformat(),
+    }
+
+
 def main():
     print(f'Reading Health export: {EXPORT_DIR}')
     health = load_health()
@@ -197,6 +215,7 @@ def main():
     write('activities.json', runs)
     write('stats.json', build_stats(runs, today))
     write('weekly.json', build_weekly(runs))
+    write('summary.json', build_summary(runs, today))
     print(f'  latest run: {runs[-1]["start_date_local"][:10]}' if runs else '')
 
 

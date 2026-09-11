@@ -297,6 +297,35 @@ export function buildStats(runs, now = new Date(), sources = {}) {
   };
 }
 
+/**
+ * Slim payload for the Week, Month and Year pages: per-month totals for the
+ * heatmap and line chart, plus full records for recent runs only. A few KB
+ * instead of the ~270 KB full log.
+ */
+export function buildSummary(runs, now = new Date(), days = 62) {
+  const cut = new Date(now);
+  cut.setDate(cut.getDate() - days);
+  const cutStr = iso(new Date(Date.UTC(cut.getFullYear(), cut.getMonth(), cut.getDate())));
+
+  const months = new Map();
+  for (const r of runs) {
+    const ym = r.start_date_local.slice(0, 7);
+    const m = months.get(ym) || { ym, km: 0, runs: 0, min: 0 };
+    m.km += r.distance / 1000;
+    m.runs++;
+    m.min += r.moving_time / 60;
+    months.set(ym, m);
+  }
+
+  return {
+    months: [...months.values()]
+      .sort((a, b) => a.ym.localeCompare(b.ym))
+      .map((m) => ({ ym: m.ym, km: round(m.km), runs: m.runs, min: Math.round(m.min) })),
+    recent: runs.filter((r) => r.start_date_local.slice(0, 10) >= cutStr),
+    updated_at: new Date().toISOString(),
+  };
+}
+
 export function buildWeekly(runs) {
   const years = new Map();
   for (const r of runs) {

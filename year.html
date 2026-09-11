@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/shared.css?v=2">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -223,6 +223,49 @@
       .diagonal-stripe { height: 80px; top: 150px; }
       .diagonal-stripe-2 { top: 230px; }
     }
+
+    .week-extra, .year-extra {
+      max-width: 1100px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+      display: grid;
+      gap: 24px;
+    }
+    .week-panel, .year-panel {
+      background: var(--black);
+      color: var(--white);
+      padding: 24px;
+    }
+    .week-panel-title, .year-panel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+    .year-panel-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin: -10px 0 18px;
+    }
+    .week-panel .runs-table th, .week-panel .runs-table td,
+    .year-panel .runs-table th, .year-panel .runs-table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .week-panel .runs-table th { color: var(--yellow); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .week-panel .runs-table { width: 100%; border-collapse: collapse; }
+    .week-panel .table-scroll { overflow-x: auto; }
+    .week-panel .distance-col { color: var(--yellow); font-weight: 700; }
+    .zone-bar { display: flex; width: 110px; height: 10px; background: #333; overflow: hidden; }
+    .zone-bar span { height: 100%; }
+    .z1 { background: var(--blue); } .z2 { background: #26C6DA; }
+    .z3 { background: var(--yellow); } .z4 { background: #FB8C00; } .z5 { background: var(--red); }
+    .zone-none { color: #555; }
   </style>
 </head>
 <body>
@@ -238,6 +281,7 @@
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">THIS WEEK</a>
+      <a href="month.html" class="nav-link">THIS MONTH</a>
       <a href="year.html" class="nav-link active">THIS YEAR</a>
       <a href="alltime.html" class="nav-link">ALL TIME</a>
     </div>
@@ -311,6 +355,14 @@
     </div>
   </main>
 
+  <section class="year-extra">
+    <div class="year-panel">
+      <div class="year-panel-title">CUMULATIVE KILOMETERS BY MONTH</div>
+      <p class="year-panel-note">Every year as one line. Tap a year to mute it.</p>
+      <div id="cumulativeChart"></div>
+    </div>
+  </section>
+
   <footer class="page-footer">
     <div class="tribute">
       <div class="tribute-title">TRIBUTE TO JOOST SCHMIDT</div>
@@ -331,6 +383,7 @@
   </footer>
 
   <script src="js/runlog-data.js?v=2"></script>
+  <script src="js/runlog-ui.js?v=1"></script>
   <script>
     async function loadData() {
       try {
@@ -389,6 +442,10 @@
         document.getElementById('weeksHit').textContent = Math.floor(cur.runs / (d.weekly_goal || 3));
 
         document.getElementById('updatedAt').textContent = formatSynced(d.updated_at);
+
+        const s = await loadRunData('summary');
+        renderCumulativeChart(document.getElementById('cumulativeChart'), s.months,
+          { current: year, previous: prev, best: best });
       } catch (e) {
         console.error('Error:', e);
       }
