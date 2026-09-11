@@ -321,3 +321,54 @@
 .week-panel, .year-panel { min-width: 0; }
 .week-panel .runs-table, .year-panel .runs-table { min-width: 520px; }
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ----------------------------------------------------------- week heatmap
+   Moved out of alltime.html so This Week can use it (js/runlog-ui.js). */
+.heatmap-scroll { overflow-x: auto; padding-bottom: 6px; }
+.year-row { display: flex; align-items: center; margin-bottom: 4px; }
+.year-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  width: 50px;
+  flex: none;
+  opacity: 0.5;
+}
+.weeks-container { display: flex; gap: 2px; }
+.week-dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 2px;
+  background: #333;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.week-dot:hover { transform: scale(1.8); }
+.week-dot.above-high { background: #39d353; }
+.week-dot.above { background: #26a641; }
+.week-dot.average { background: #9e6a03; }
+.week-dot.below { background: #5c2727; }
+.year-stats {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.625rem;
+  margin-left: 16px;
+  white-space: nowrap;
+  opacity: 0.4;
+}
+.year-stats strong { color: var(--yellow); opacity: 1; }
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.625rem;
+  opacity: 0.6;
+}
+.legend-box { width: 12px; height: 12px; border-radius: 2px; flex: none; }
+
+@media (max-width: 640px) {
+  .week-dot { width: 8px; height: 8px; }
+  .year-stats { display: none; }
+  .year-label { width: 38px; font-size: 0.65rem; }
+}

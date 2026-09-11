@@ -210,3 +210,67 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     });
   });
 };
+
+// ------------------------------------------------------- week heatmap
+
+/**
+ * Year rows x 53 fixed week columns. Columns are fixed so week N sits at the
+ * same x in every row and the grid actually compares vertically.
+ * Colour is relative to that year's average week, which reads the rhythm of a
+ * year rather than its absolute volume (the month heatmap covers volume).
+ */
+window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip) {
+  let activeWeeks = 0;
+  el.innerHTML = '';
+
+  [...weeklyData].sort((a, b) => b.year.localeCompare(a.year)).forEach((yearData) => {
+    const row = document.createElement('div');
+    row.className = 'year-row';
+
+    const label = document.createElement('div');
+    label.className = 'year-label';
+    label.textContent = yearData.year;
+    row.appendChild(label);
+
+    const weeks = document.createElement('div');
+    weeks.className = 'weeks-container';
+
+    const byWeek = {};
+    yearData.weeks.forEach((w) => { byWeek[w.week_num] = w; });
+    const avg = yearData.weeks.length ? yearData.total_distance / yearData.weeks.length : 0;
+
+    for (let w = 1; w <= 53; w++) {
+      const dot = document.createElement('div');
+      dot.className = 'week-dot';
+      const wd = byWeek[w];
+      if (wd) {
+        const ratio = avg ? wd.distance_km / avg : 0;
+        dot.classList.add(ratio >= 2 ? 'above-high' : ratio >= 1.25 ? 'above' : ratio >= 0.75 ? 'average' : 'below');
+        dot.dataset.info = `W${w} ${yearData.year}: ${wd.runs} runs, ${wd.distance_km} km`;
+        activeWeeks++;
+      } else {
+        dot.dataset.info = `W${w} ${yearData.year}: no runs`;
+      }
+      if (onTip) onTip(dot);
+      weeks.appendChild(dot);
+    }
+    row.appendChild(weeks);
+
+    const stats = document.createElement('div');
+    stats.className = 'year-stats';
+    stats.innerHTML = `<strong>${yearData.total_distance.toFixed(0)} km</strong> / ${yearData.total_runs} runs`;
+    row.appendChild(stats);
+
+    el.appendChild(row);
+  });
+  return activeWeeks;
+};
+
+/** ISO week key, for counting distinct active weeks client-side. */
+window.isoWeekKey = function isoWeekKey(dateStr) {
+  const d = new Date(`${dateStr}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7) + 3);
+  const firstThu = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  firstThu.setUTCDate(firstThu.getUTCDate() - ((firstThu.getUTCDay() + 6) % 7) + 3);
+  return `${d.getUTCFullYear()}-${1 + Math.round((d - firstThu) / (7 * 86400000))}`;
+};

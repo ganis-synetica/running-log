@@ -339,6 +339,21 @@
       <div class="day-strip" id="dayStrip"></div>
     </div>
     <div class="week-panel">
+      <div class="week-panel-title">ACTIVITY HEATMAP</div>
+      <div class="heatmap-legend">
+        <span>LESS</span>
+        <div class="legend-box" style="background: #333;"></div>
+        <div class="legend-box" style="background: #5c2727;"></div>
+        <div class="legend-box" style="background: #9e6a03;"></div>
+        <div class="legend-box" style="background: #26a641;"></div>
+        <div class="legend-box" style="background: #39d353;"></div>
+        <span>MORE</span>
+        <span style="margin-left: 16px;">// RELATIVE TO YEAR AVG</span>
+      </div>
+      <div class="heatmap-scroll"><div id="heatmap"></div></div>
+    </div>
+
+    <div class="week-panel">
       <div class="week-panel-title">RUNS THIS WEEK</div>
       <div class="table-scroll">
         <table class="runs-table">
@@ -373,9 +388,20 @@
     </div>
   </footer>
 
+  <div class="tooltip" id="tooltip"></div>
+
   <script src="js/runlog-data.js?v=2"></script>
   <script src="js/runlog-ui.js?v=2"></script>
   <script>
+    const tooltip = document.getElementById('tooltip');
+    function showTooltip(e) {
+      tooltip.textContent = e.target.dataset.info;
+      tooltip.classList.add('visible');
+      tooltip.style.left = e.pageX + 10 + 'px';
+      tooltip.style.top = e.pageY + 10 + 'px';
+    }
+    function hideTooltip() { tooltip.classList.remove('visible'); }
+
     async function loadData() {
       try {
         const d = await loadRunData('stats');
@@ -414,6 +440,12 @@
           .map(mapRun);
         renderDayStrip(document.getElementById('dayStrip'), runs, weekStart);
         renderRunRows(document.getElementById('runsTable'), runs, 'No runs yet this week. The week is not over.');
+
+        const weekly = await loadRunData('weekly');
+        renderWeekHeatmap(document.getElementById('heatmap'), weekly, (dot) => {
+          dot.addEventListener('mouseenter', showTooltip);
+          dot.addEventListener('mouseleave', hideTooltip);
+        });
       } catch (e) {
         console.error('Error:', e);
       }
