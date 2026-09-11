@@ -164,11 +164,11 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     return { year: y, pts, total: cum };
   });
 
-  // A typical year, averaged month by month. The first year of the record is
-  // excluded because tracking only began partway through it (so its low total
-  // is missing data, not a quiet year), and the current year because it is not
-  // finished. 2022 stays in: its long gap is real history.
-  const full = series.filter((s) => s.year !== current && s.year !== series[0].year);
+  // A typical year, averaged month by month across every past year. Only the
+  // current year is excluded, because it is unfinished. Note this includes the
+  // first year of the record, where tracking began partway through, so the
+  // average sits lower than a full-coverage year would.
+  const full = series.filter((s) => s.year !== current);
   if (full.length) {
     let cum = 0;
     const avg = Array.from({ length: 12 }, (_, i) => {
@@ -223,7 +223,7 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `
         <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true"
-          ${s.years ? `title="Mean of ${s.years} complete years"` : ''}>
+          ${s.years ? `title="Mean of ${s.years} past years, ${s.pts[11].toFixed(0)} km"` : ''}>
           ${s.year} <em>${s.total.toFixed(0)} km</em>
         </button>`).join('')}
     </div>`;
