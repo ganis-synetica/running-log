@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=6">
+  <link rel="stylesheet" href="css/shared.css?v=7">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -249,6 +249,39 @@
       opacity: 0.6;
       margin: -10px 0 18px;
     }
+    .year-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .target-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+    }
+    .target-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--yellow);
+      opacity: 0.8;
+    }
+    .target-box input {
+      width: 86px;
+      padding: 7px 9px;
+      background: #111;
+      border: 1px solid #444;
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+    .target-box input:focus {
+      outline: none;
+      border-color: var(--red);
+    }
     .week-panel .runs-table th, .week-panel .runs-table td,
     .year-panel .runs-table th, .year-panel .runs-table td {
       padding: 10px;
@@ -357,8 +390,17 @@
 
   <section class="year-extra">
     <div class="year-panel">
-      <div class="year-panel-title">CUMULATIVE KILOMETERS BY MONTH</div>
-      <p class="year-panel-note">Every year as one line. Tap a year to mute it.</p>
+      <div class="year-panel-head">
+        <div>
+          <div class="year-panel-title">CUMULATIVE KILOMETERS BY MONTH</div>
+          <p class="year-panel-note">Every year as one line. Tap a year to mute it.</p>
+        </div>
+        <label class="target-box">
+          <span class="target-label">KM / WEEK FROM HERE</span>
+          <input id="weeklyTarget" type="number" min="0" max="300" step="1" value="20"
+                 inputmode="numeric" aria-label="Weekly kilometres to project from today">
+        </label>
+      </div>
       <div id="cumulativeChart"></div>
     </div>
   </section>
@@ -383,7 +425,7 @@
   </footer>
 
   <script src="js/runlog-data.js?v=2"></script>
-  <script src="js/runlog-ui.js?v=7"></script>
+  <script src="js/runlog-ui.js?v=8"></script>
   <script>
     async function loadData() {
       try {
@@ -444,8 +486,30 @@
         document.getElementById('updatedAt').textContent = formatSynced(d.updated_at);
 
         const s = await loadRunData('summary');
-        renderCumulativeChart(document.getElementById('cumulativeChart'), s.months,
-          { current: year, previous: prev, best: best, weeklyTarget: 20 });
+        const chartEl = document.getElementById('cumulativeChart');
+        const targetEl = document.getElementById('weeklyTarget');
+        try {
+          const saved = Number(localStorage.getItem('runlog.weeklyTarget'));
+          if (saved > 0) targetEl.value = saved;
+        } catch (err) { /* private mode: fall back to the default */ }
+
+        // Re-rendering rebuilds the legend, so carry the muted years across.
+        const drawChart = () => {
+          const muted = [...chartEl.querySelectorAll('.ch-chip.off')].map((c) => c.dataset.year);
+          renderCumulativeChart(chartEl, s.months, {
+            current: year, previous: prev, best: best,
+            weeklyTarget: Math.max(0, Number(targetEl.value) || 0),
+          });
+          muted.forEach((y) => {
+            const chip = chartEl.querySelector(`.ch-chip[data-year="${y}"]`);
+            if (chip) chip.click();
+          });
+        };
+        targetEl.addEventListener('input', () => {
+          drawChart();
+          try { localStorage.setItem('runlog.weeklyTarget', targetEl.value); } catch (err) { /* ignore */ }
+        });
+        drawChart();
       } catch (e) {
         console.error('Error:', e);
       }

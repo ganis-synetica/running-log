@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THIS MONTH — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=6">
+  <link rel="stylesheet" href="css/shared.css?v=7">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -415,13 +415,13 @@
       <div class="heatmap-legend">
         <span>LESS</span>
         <div class="legend-box" style="background: #262626;"></div>
-        <div class="legend-box" style="background: #1b3a2a;"></div>
-        <div class="legend-box" style="background: #216e39;"></div>
-        <div class="legend-box" style="background: #2ea043;"></div>
-        <div class="legend-box" style="background: #f0a202;"></div>
-        <div class="legend-box" style="background: #E53935;"></div>
+        <div class="legend-box" style="background: #5c2727;"></div>
+        <div class="legend-box" style="background: #9e6a03;"></div>
+        <div class="legend-box" style="background: #26a641;"></div>
+        <div class="legend-box" style="background: #39d353;"></div>
+        <div class="legend-box" style="background: #6ee787;"></div>
         <span>MORE</span>
-        <span style="margin-left: 16px;">// 0 · 20 · 45 · 75 · 110+ KM — SAME SCALE EVERY YEAR</span>
+        <span style="margin-left: 16px;">// 0 · 20 · 45 · 75 · 110+ KM — SAME SCALE EVERY YEAR · RANK IS THAT MONTH AGAINST EVERY OTHER YEAR</span>
       </div>
       <div class="month-heatmap" id="monthHeatmap"></div>
     </div>
@@ -453,14 +453,15 @@
   <div class="tooltip" id="tooltip"></div>
 
   <script src="js/runlog-data.js?v=2"></script>
-  <script src="js/runlog-ui.js?v=7"></script>
+  <script src="js/runlog-ui.js?v=8"></script>
   <script>
     const tooltip = document.getElementById('tooltip');
     function showTooltip(e) {
-      tooltip.textContent = e.target.dataset.info;
+      tooltip.textContent = e.currentTarget.dataset.info;
       tooltip.classList.add('visible');
-      tooltip.style.left = e.pageX + 10 + 'px';
-      tooltip.style.top = e.pageY + 10 + 'px';
+      // The tooltip is position: fixed, so viewport coordinates, not page ones.
+      tooltip.style.left = e.clientX + 10 + 'px';
+      tooltip.style.top = e.clientY + 10 + 'px';
     }
     function hideTooltip() { tooltip.classList.remove('visible'); }
 

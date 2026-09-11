@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALL TIME — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=6">
+  <link rel="stylesheet" href="css/shared.css?v=7">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -385,7 +385,7 @@
   <div class="tooltip" id="tooltip"></div>
 
   <script src="js/runlog-data.js?v=2"></script>
-  <script src="js/runlog-ui.js?v=7"></script>
+  <script src="js/runlog-ui.js?v=8"></script>
   <script>
     let allRuns = [];
     let filteredRuns = [];
@@ -449,8 +449,9 @@
     function showTooltip(e) {
       tooltip.textContent = e.target.dataset.info;
       tooltip.classList.add('visible');
-      tooltip.style.left = e.pageX + 10 + 'px';
-      tooltip.style.top = e.pageY + 10 + 'px';
+      // The tooltip is position: fixed, so viewport coordinates, not page ones.
+      tooltip.style.left = e.clientX + 10 + 'px';
+      tooltip.style.top = e.clientY + 10 + 'px';
     }
     
     function hideTooltip() {

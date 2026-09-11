@@ -109,6 +109,41 @@ window.renderMonthHeatmap = function renderMonthHeatmap(el, months, onTip) {
   // (28 of 95 months are under 20 km) so a linear split made a 1 km month and
   // a 30 km month the same colour.
   const LEVELS = [20, 45, 75, 110];
+  const MEDALS = { 1: '\u{1F947}', 2: '\u{1F948}', 3: '\u{1F949}' };
+  const POO = '\u{1F4A9}';
+
+  // Rank each month against the same month in every other year, so a cell says
+  // where it stands among all Januaries and not just how green it is. Ties
+  // share a rank, the top three take a medal and last place takes a poo.
+  // A month only qualifies once tracking had started and the month is over: a
+  // recorded zero is a real worst month, an untracked or unfinished one is not.
+  const firstYm = months.filter((m) => m.km > 0).map((m) => m.ym).sort()[0] || '9999-99';
+  const now = new Date();
+  const nowYm = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const years = [...byYear.keys()].sort();
+  const rank = new Map();
+  const colSize = new Map();
+  const worst = new Set();
+  for (let mo = 1; mo <= 12; mo++) {
+    const col = years
+      .map((y) => ({
+        ym: `${y}-${String(mo).padStart(2, '0')}`,
+        km: (byYear.get(y).get(mo) || {}).km || 0,
+      }))
+      .filter((c) => c.ym >= firstYm && c.ym <= nowYm)
+      .sort((a, b) => b.km - a.km);
+    colSize.set(mo, col.length);
+    let r = 0, prev = null;
+    col.forEach((c, i) => {
+      if (prev === null || c.km < prev) r = i + 1;
+      prev = c.km;
+      rank.set(c.ym, r);
+    });
+    if (col.length > 1) {
+      const min = col[col.length - 1].km;
+      col.filter((c) => c.km === min).forEach((c) => worst.add(c.ym));
+    }
+  }
 
   const head = `<div class="mh-row mh-head"><div class="mh-year"></div>
     <div class="mh-cells">${MONTH_NAMES.map((n, i) => `<div class="mh-col-label">${i + 1}</div>`).join('')}</div>
@@ -120,15 +155,25 @@ window.renderMonthHeatmap = function renderMonthHeatmap(el, months, onTip) {
     const cells = [];
     for (let mo = 1; mo <= 12; mo++) {
       const m = ms.get(mo);
+      const name = MONTH_NAMES[mo - 1];
+      const ym = `${y}-${String(mo).padStart(2, '0')}`;
       let cls = 'mh-cell';
+      let body = '';
+      let info = `${name} ${y}: no runs`;
       if (m && m.km > 0) {
         total += m.km; runs += m.runs;
         cls += ` lvl-${LEVELS.filter((t) => m.km >= t).length + 1}`;
+        info = `${name} ${y}: ${m.km.toFixed(1)} km, ${m.runs} runs`;
       }
-      const info = m && m.km > 0
-        ? `${MONTH_NAMES[mo - 1]} ${y}: ${m.km.toFixed(1)} km, ${m.runs} runs`
-        : `${MONTH_NAMES[mo - 1]} ${y}: no runs`;
-      cells.push(`<div class="${cls}" data-info="${info}"></div>`);
+      const r = rank.get(ym);
+      if (r) {
+        if (r === 1) cls += ' is-best';
+        const mark = MEDALS[r] || (worst.has(ym) ? POO : '');
+        const badge = mark ? `<span class="mh-medal">${mark}</span>` : '';
+        body = `<span class="mh-rank">${badge}#${r}</span>`;
+        info += ` — #${r} of ${colSize.get(mo)} ${name}s`;
+      }
+      cells.push(`<div class="${cls}" data-info="${info}">${body}</div>`);
     }
     return `<div class="mh-row"><div class="mh-year">${y}</div>
       <div class="mh-cells">${cells.join('')}</div>
@@ -253,12 +298,6 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     <svg viewBox="0 0 ${W} ${H}" class="ch-svg" role="img" aria-label="Cumulative kilometres by month, one line per year">
       ${grid}${xlabels}${projPath}${paths}${endLabels}
     </svg>
-    ${projection ? `<div class="ch-note">
-      <strong>Run ${projection.target} km a week</strong> for the rest of ${current} and you finish on
-      about <strong>${projection.total.toFixed(0)} km</strong> —
-      past ${series.filter((s) => s.year !== current && s.year !== 'Average' && s.total < projection.total)
-        .sort((a, b) => b.total - a.total).slice(0, 2).map((s) => s.year).join(' and ')}.
-    </div>` : ''}
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `
         <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true"
@@ -283,12 +322,14 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
 /**
  * Year rows x 53 fixed week columns. Columns are fixed so week N sits at the
  * same x in every row and the grid actually compares vertically.
- * Colour is relative to that year's average week, which reads the rhythm of a
- * year rather than its absolute volume (the month heatmap covers volume).
+ * Same absolute scale as the month heatmap, roughly its edges over four and a
+ * bit weeks, so a thin year looks thin instead of being flattered by its own
+ * average.
  */
 window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip) {
   let activeWeeks = 0;
   el.innerHTML = '';
+  const LEVELS = [5, 10, 18, 25];
 
   [...weeklyData].sort((a, b) => b.year.localeCompare(a.year)).forEach((yearData) => {
     const row = document.createElement('div');
@@ -304,15 +345,13 @@ window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip) {
 
     const byWeek = {};
     yearData.weeks.forEach((w) => { byWeek[w.week_num] = w; });
-    const avg = yearData.weeks.length ? yearData.total_distance / yearData.weeks.length : 0;
 
     for (let w = 1; w <= 53; w++) {
       const dot = document.createElement('div');
       dot.className = 'week-dot';
       const wd = byWeek[w];
-      if (wd) {
-        const ratio = avg ? wd.distance_km / avg : 0;
-        dot.classList.add(ratio >= 2 ? 'above-high' : ratio >= 1.25 ? 'above' : ratio >= 0.75 ? 'average' : 'below');
+      if (wd && wd.distance_km > 0) {
+        dot.classList.add(`lvl-${LEVELS.filter((t) => wd.distance_km >= t).length + 1}`);
         dot.dataset.info = `W${w} ${yearData.year}: ${wd.runs} runs, ${wd.distance_km} km`;
         activeWeeks++;
       } else {
