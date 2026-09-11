@@ -382,3 +382,9 @@
 .ch-end.prev { fill: var(--blue); opacity: 1; font-weight: 700; }
 .ch-end.best { fill: var(--yellow); opacity: 1; font-weight: 700; }
 .ch-end.cur  { fill: var(--red); opacity: 1; font-weight: 700; font-size: 11px; }
+
+/* The month-by-month mean of the complete years — a typical year, for scale. */
+.ch-line.avg { stroke: var(--white); stroke-width: 2; stroke-dasharray: 6 5; opacity: 0.85; }
+.ch-dot.avg  { fill: var(--white); opacity: 0.9; }
+.ch-end.avg  { fill: var(--white); opacity: 0.9; font-weight: 700; }
+.ch-chip.avg { opacity: 1; border-color: var(--white); border-style: dashed; }

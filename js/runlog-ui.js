@@ -164,12 +164,27 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     return { year: y, pts, total: cum };
   });
 
+  // A typical year, averaged month by month. The first year of the record is
+  // excluded because tracking only began partway through it (so its low total
+  // is missing data, not a quiet year), and the current year because it is not
+  // finished. 2022 stays in: its long gap is real history.
+  const full = series.filter((s) => s.year !== current && s.year !== series[0].year);
+  if (full.length) {
+    let cum = 0;
+    const avg = Array.from({ length: 12 }, (_, i) => {
+      cum += full.reduce((t, s) => t + (byYear.get(s.year)[i] || 0), 0) / full.length;
+      return cum;
+    });
+    series.push({ year: 'Average', pts: avg, total: avg[11], years: full.length });
+  }
+
   const maxKm = Math.max(100, ...series.map((s) => Math.max(...s.pts.filter((p) => p !== null))));
   const W = 760, H = 380, L = 52, R = 46, T = 16, B = 34;   // right gutter holds the year labels
   const x = (i) => L + (i * (W - L - R)) / 11;
   const y = (v) => T + (H - T - B) * (1 - v / maxKm);
 
-  const role = (yr) => (yr === current ? 'cur' : yr === best ? 'best' : yr === previous ? 'prev' : 'other');
+  const role = (yr) => (yr === 'Average' ? 'avg' : yr === current ? 'cur'
+    : yr === best ? 'best' : yr === previous ? 'prev' : 'other');
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round((maxKm * f) / 50) * 50);
 
   const grid = [...new Set(ticks)].map((v) => `
@@ -207,7 +222,8 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     </svg>
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `
-        <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true">
+        <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true"
+          ${s.years ? `title="Mean of ${s.years} complete years"` : ''}>
           ${s.year} <em>${s.total.toFixed(0)} km</em>
         </button>`).join('')}
     </div>`;
