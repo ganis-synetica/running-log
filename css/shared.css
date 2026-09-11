@@ -390,3 +390,29 @@
 .ch-chip.avg { opacity: 1; border-color: var(--white); border-style: dashed; }
 
 .ch-chip small { font-size: 0.85em; opacity: 0.55; margin-left: 2px; }
+
+/* Where the weekly target lands by year end. */
+.ch-proj {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2;
+  stroke-dasharray: 2 4;
+  opacity: 0.75;
+}
+.ch-proj-dot { fill: none; stroke: var(--red); stroke-width: 2; }
+.ch-proj-label {
+  fill: var(--red);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+}
+.ch-note {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--red);
+  background: rgba(229, 57, 53, 0.08);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.ch-note strong { color: var(--red); }

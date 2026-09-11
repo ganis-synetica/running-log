@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=5">
+  <link rel="stylesheet" href="css/shared.css?v=6">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -383,7 +383,7 @@
   </footer>
 
   <script src="js/runlog-data.js?v=2"></script>
-  <script src="js/runlog-ui.js?v=6"></script>
+  <script src="js/runlog-ui.js?v=7"></script>
   <script>
     async function loadData() {
       try {
@@ -445,7 +445,7 @@
 
         const s = await loadRunData('summary');
         renderCumulativeChart(document.getElementById('cumulativeChart'), s.months,
-          { current: year, previous: prev, best: best });
+          { current: year, previous: prev, best: best, weeklyTarget: 20 });
       } catch (e) {
         console.error('Error:', e);
       }

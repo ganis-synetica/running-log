@@ -184,7 +184,26 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     });
   }
 
-  const maxKm = Math.max(100, ...series.map((s) => Math.max(...s.pts.filter((p) => p !== null))));
+  // Where the weekly target lands, carried forward from today to each month
+  // end. Drawn as a dotted continuation of the current year's line.
+  let projection = null;
+  if (opts.weeklyTarget) {
+    const cs = series.find((x) => x.year === current);
+    const last = cs ? cs.pts.reduce((acc, v, i) => (v === null ? acc : i), -1) : -1;
+    if (last >= 0) {
+      const now = new Date();
+      const pts = new Array(12).fill(null);
+      pts[last] = cs.pts[last];
+      for (let m = last + 1; m < 12; m++) {
+        const end = new Date(now.getFullYear(), m + 1, 0);
+        pts[m] = cs.pts[last] + ((end - now) / 86400000 / 7) * opts.weeklyTarget;
+      }
+      projection = { pts, total: pts[11], target: opts.weeklyTarget };
+    }
+  }
+
+  const maxKm = Math.max(100, ...series.map((s) => Math.max(...s.pts.filter((p) => p !== null))),
+    projection ? projection.total : 0);
   const W = 760, H = 380, L = 52, R = 46, T = 16, B = 34;   // right gutter holds the year labels
   const x = (i) => L + (i * (W - L - R)) / 11;
   const y = (v) => T + (H - T - B) * (1 - v / maxKm);
@@ -212,6 +231,14 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
   const endLabels = ends.map((e) =>
     `<text class="ch-end ${e.role}" x="${e.x + 7}" y="${e.y + 3.5}">${e.year}</text>`).join('');
 
+  const projPath = !projection ? '' : (() => {
+    const d = projection.pts.map((v, i) => (v === null ? null : `${i === projection.pts.findIndex((p) => p !== null) ? 'M' : 'L'}${x(i)},${y(v)}`))
+      .filter(Boolean).join(' ');
+    return `<path class="ch-proj" d="${d}"/>
+      <circle class="ch-proj-dot" cx="${x(11)}" cy="${y(projection.total)}" r="4"/>
+      <text class="ch-proj-label" x="${x(11)}" y="${y(projection.total) - 10}" text-anchor="end">${projection.total.toFixed(0)} km</text>`;
+  })();
+
   const paths = series.map((s) => {
     const d = s.pts.map((v, i) => (v === null ? null : `${i && s.pts[i - 1] !== null ? 'L' : 'M'}${x(i)},${y(v)}`))
       .filter(Boolean).join(' ');
@@ -224,8 +251,14 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
 
   el.innerHTML = `
     <svg viewBox="0 0 ${W} ${H}" class="ch-svg" role="img" aria-label="Cumulative kilometres by month, one line per year">
-      ${grid}${xlabels}${paths}${endLabels}
+      ${grid}${xlabels}${projPath}${paths}${endLabels}
     </svg>
+    ${projection ? `<div class="ch-note">
+      <strong>Run ${projection.target} km a week</strong> for the rest of ${current} and you finish on
+      about <strong>${projection.total.toFixed(0)} km</strong> —
+      past ${series.filter((s) => s.year !== current && s.year !== 'Average' && s.total < projection.total)
+        .sort((a, b) => b.total - a.total).slice(0, 2).map((s) => s.year).join(' and ')}.
+    </div>` : ''}
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `
         <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true"
