@@ -111,7 +111,7 @@ window.renderMonthHeatmap = function renderMonthHeatmap(el, months, onTip) {
   const LEVELS = [20, 45, 75, 110];
 
   const head = `<div class="mh-row mh-head"><div class="mh-year"></div>
-    <div class="mh-cells">${MONTH_NAMES.map((n) => `<div class="mh-col-label">${n[0]}</div>`).join('')}</div>
+    <div class="mh-cells">${MONTH_NAMES.map((n, i) => `<div class="mh-col-label">${i + 1}</div>`).join('')}</div>
     <div class="mh-total"></div></div>`;
 
   const rows = [...byYear.keys()].sort().reverse().map((y) => {
