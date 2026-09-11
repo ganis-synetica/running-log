@@ -5,6 +5,7 @@
   --red: #E53935;
   --blue: #1565C0;
   --yellow: #FDD835;
+  --yellow-dark: #B89A1E;   /* active nav: the yellow, dimmed to sit inside the black bar */
   --black: #1A1A1A;
   --white: #FAFAFA;
   --cream: #FFF8E1;
@@ -104,9 +105,10 @@
 }
 
 .nav-link.active {
-  border-bottom-color: var(--yellow);
-  color: var(--yellow);
+  background: var(--yellow-dark);
+  color: var(--black);
 }
+.nav-link.active:hover { background: var(--yellow-dark); }
 
 @media (max-width: 768px) {
   .nav {

@@ -4,215 +4,184 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THIS MONTH — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=7">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
-    /* 
-     * ALL TIME
-     * Inspired by László Moholy-Nagy's photomontages and data visualization
-     * Grid systems, documentary precision, constructivist composition
+    /*
+     * THIS MONTH
+     * Inspired by Josef Albers — Homage to the Square (1950–76) and
+     * Interaction of Color (1963). Nested squares that sit low, not centred;
+     * one colour shown on several grounds so it never reads the same twice.
+     *
+     * Type: Jost, a Futura revival. Futura (Renner, 1927) is the geometric
+     * sans of the Bauhaus years, built from the same circle and square Albers
+     * used for his 1926 stencil alphabet. Set lowercase, as the Bauhaus did
+     * from 1925 on: "we write everything small, it saves time."
      */
-    
+
+    :root {
+      --ground: #BFB8A8;          /* warm grey, an Albers ground */
+      --ink: #1A1A1A;
+      --ochre: #E0A23A;
+      --amber: #E9A825;
+      --rust: #C4641E;
+      --oxblood: #8E2A1C;
+      --slate: #5C5A55;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background: #1A1A1A;
-      color: var(--white);
+      font-family: 'Jost', 'Futura', sans-serif;
+      background: var(--ground);
+      color: var(--ink);
       min-height: 100vh;
     }
-    
+
     .poster {
-      min-height: calc(100vh - 60px);
-      padding: 40px 24px;
-      position: relative;
-    }
-    
-    /* Constructivist accents */
-    .construct-line {
-      position: absolute;
-      background: var(--red);
-      z-index: 0;
-    }
-    
-    .construct-line-1 {
-      width: 4px;
-      height: 60%;
-      top: 20%;
-      left: 40px;
-    }
-    
-    .construct-line-2 {
-      width: 200px;
-      height: 4px;
-      top: 40px;
-      right: 10%;
-    }
-    
-    .construct-circle {
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      border: 4px solid var(--yellow);
-      border-radius: 50%;
-      bottom: 100px;
-      right: 60px;
-      opacity: 0.3;
-    }
-    
-    .content {
-      position: relative;
-      z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 56px 24px 0;
     }
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      gap: 24px;
+
+    /* ------------------------------------------------------------ hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 48px;
+      margin-bottom: 56px;
     }
-    
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.625rem;
-      letter-spacing: 0.3em;
-      color: var(--yellow);
-    }
-    
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 10vw, 6rem);
-      line-height: 0.9;
-      letter-spacing: 0.02em;
-    }
-    
-    .section-subtitle {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.875rem;
-      max-width: 400px;
-      line-height: 1.5;
+
+    .page-label {
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+      text-transform: lowercase;
       opacity: 0.6;
     }
-    
-    /* Stats grid */
+
+    .page-title {
+      font-weight: 700;
+      font-size: clamp(3.2rem, 9vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      margin: 12px 0 20px;
+    }
+
+    .page-intro {
+      font-weight: 300;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      max-width: 34ch;
+    }
+
+    /* Homage to the Square. Every square is placed from the outer edge:
+       bottom margin 1, sides 2, top 3 — the low-sitting stack that makes an
+       Albers an Albers. Colours run light to dark, edge to centre. */
+    .homage {
+      position: relative;
+      width: clamp(220px, 32vw, 380px);
+      aspect-ratio: 1;
+      background: var(--yellow);
+    }
+    .homage div { position: absolute; }
+    .homage .sq2 { left: 10%; top: 15%; width: 80%; height: 80%; background: var(--amber); }
+    .homage .sq3 { left: 20%; top: 30%; width: 60%; height: 60%; background: var(--rust); }
+    .homage .sq4 { left: 30%; top: 45%; width: 40%; height: 40%; background: var(--oxblood); }
+
+    /* ---------------------------------------------- interaction of color */
+    /* The same yellow figure on four grounds. Albers's whole argument in one
+       row: a colour is never seen as it physically is. */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      background: rgba(255,255,255,0.1);
-      margin-bottom: 48px;
-    }
-    
-    .stat-cell {
-      background: #1A1A1A;
-      padding: 24px;
-      text-align: center;
-    }
-    
-    .stat-cell-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      color: var(--yellow);
-    }
-    
-    .stat-cell-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.625rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.5;
-      margin-top: 8px;
-    }
-    
-    /* Heatmap section */
-    .heatmap-section {
-      background: #222;
-      padding: 32px;
-      margin-bottom: 48px;
-    }
-    
-    .heatmap-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 0.1em;
+      gap: 0;
       margin-bottom: 8px;
     }
-    
+
+    .stat-cell {
+      padding: 32px 24px 28px;
+      text-align: left;
+    }
+    .stat-cell.g1 { background: var(--ochre); }
+    .stat-cell.g2 { background: var(--slate); }
+    .stat-cell.g3 { background: var(--oxblood); }
+    .stat-cell.g4 { background: var(--ink); }
+
+    .stat-cell-value {
+      font-weight: 700;
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--yellow);
+    }
+
+    .stat-cell-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: lowercase;
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .stat-cell.g1 .stat-cell-label { color: rgba(0, 0, 0, 0.6); }
+
+    /* Up or down against last month as a small square, so the figure itself
+       stays the one yellow the row is about. */
+    .stat-cell-label .mark {
+      display: none;
+      width: 10px;
+      height: 10px;
+    }
+    .stat-cell-value.up   ~ .stat-cell-label .mark { display: inline-block; background: var(--blue); }
+    .stat-cell-value.down ~ .stat-cell-label .mark { display: inline-block; background: var(--red); }
+
+    .stats-caption {
+      font-weight: 400;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: lowercase;
+      opacity: 0.55;
+      margin-bottom: 56px;
+    }
+
+    /* --------------------------------------------------------- panels */
+    .heatmap-section,
+    .runs-section {
+      background: var(--ink);
+      color: var(--white);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .heatmap-title,
+    .runs-title {
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: lowercase;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+
     .heatmap-legend {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 24px;
       font-family: 'Space Mono', monospace;
       font-size: 0.625rem;
       opacity: 0.6;
     }
-    
+
     .legend-box {
       width: 12px;
       height: 12px;
-      border-radius: 2px;
-    }
-    
-    .year-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-    
-    .year-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      width: 50px;
-      opacity: 0.5;
-    }
-    
-    .weeks-container {
-      display: flex;
-      gap: 2px;
     }
 
-    /* 52 week dots never fit a phone; scroll the grid, not the page */
-    #heatmap {
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-    
-    .week-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      background: #333;
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    
-    .week-dot:hover { transform: scale(1.8); }
-    .week-dot.above-high { background: #39d353; }
-    .week-dot.above { background: #26a641; }
-    .week-dot.average { background: #9e6a03; }
-    .week-dot.below { background: #5c2727; }
-    
-    .year-stats {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.625rem;
-      margin-left: 16px;
-      opacity: 0.4;
-    }
-    
-    .year-stats strong {
-      color: var(--yellow);
-      opacity: 1;
-    }
-    
-    /* Runs table section */
-    .runs-section {
-      background: #222;
-      padding: 32px;
-    }
-    
     .runs-header {
       display: flex;
       justify-content: space-between;
@@ -221,28 +190,7 @@
       flex-wrap: wrap;
       gap: 16px;
     }
-    
-    .runs-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 0.1em;
-    }
-    
-    .runs-filters {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .filter-select {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      padding: 8px 12px;
-      background: #333;
-      color: var(--white);
-      border: 1px solid #444;
-      cursor: pointer;
-    }
-    
+
     .table-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -252,14 +200,14 @@
       width: 100%;
       border-collapse: collapse;
     }
-    
+
     .runs-table th,
     .runs-table td {
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #333;
     }
-    
+
     .runs-table th {
       font-family: 'Space Mono', monospace;
       font-size: 0.625rem;
@@ -268,19 +216,16 @@
       color: var(--yellow);
       font-weight: 400;
     }
-    .runs-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
-    .runs-table th.sortable:hover { color: var(--white); }
-    .runs-table th .sort-ind { display: inline-block; width: 1em; margin-left: 4px; }
-    
+
     .runs-table td {
       font-family: 'Space Mono', monospace;
       font-size: 0.875rem;
     }
-    
+
     .runs-table tr:hover {
       background: #2a2a2a;
     }
-    
+
     .distance-col {
       color: var(--yellow);
       font-weight: 700;
@@ -303,48 +248,11 @@
     .zone-bar span { height: 100%; }
     .zone-none { color: #555; }
 
-    .zone-mix {
-      margin: 0 0 24px;
-      padding: 16px 20px;
-      background: #1b1b1b;
-      border-left: 3px solid var(--yellow);
-    }
-    .zone-mix-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.625rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--yellow);
-      margin-bottom: 10px;
-    }
-    .zone-mix .zone-bar { width: 100%; height: 18px; }
-    .zone-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 10px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-    }
-    .zone-legend span::before {
-      content: '';
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 6px;
-      vertical-align: -1px;
-    }
-    .zone-legend .l1::before { background: var(--blue); }
-    .zone-legend .l2::before { background: #26C6DA; }
-    .zone-legend .l3::before { background: var(--yellow); }
-    .zone-legend .l4::before { background: #FB8C00; }
-    .zone-legend .l5::before { background: var(--red); }
-    .zone-legend em { color: #888; font-style: normal; margin-left: auto; }
-    
     /* Tooltip */
     .tooltip {
       position: fixed;
       background: #000;
+      color: #fff;
       border: 1px solid var(--yellow);
       padding: 12px;
       font-family: 'Space Mono', monospace;
@@ -352,14 +260,19 @@
       z-index: 1000;
       display: none;
     }
-    
     .tooltip.visible { display: block; }
-    
+
+    /* The footer is shared, but this page's body type carries into it. */
+    .tribute-main { font-family: 'Jost', sans-serif; font-size: 1.05rem; }
+
     @media (max-width: 768px) {
+      .poster { padding-top: 40px; }
+      .hero { grid-template-columns: 1fr; gap: 32px; }
+      .homage { width: min(60vw, 260px); }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .week-dot { width: 8px; height: 8px; }
-      .year-stats { display: none; }
-      .construct-line-1 { display: none; }
+      .stat-cell { padding: 24px 20px 20px; }
+      .stat-cell-value { font-size: 2.4rem; }
+      .heatmap-section, .runs-section { padding: 24px 16px; }
     }
   </style>
 </head>
@@ -382,36 +295,42 @@
     </div>
   </nav>
 
-  <main class="archive" style="padding: 40px 24px 0;">
-    <header class="page-header">
+  <main class="poster">
+    <header class="hero">
       <div>
-        <div class="page-label">MONTHLY REPORT</div>
-        <h1 class="page-title" id="monthTitle">THIS MONTH</h1>
+        <div class="page-label">monthly report</div>
+        <h1 class="page-title" id="monthTitle">this month</h1>
+        <p class="page-intro" id="monthIntro">&nbsp;</p>
       </div>
-      <p class="page-intro" id="monthIntro">&nbsp;</p>
+      <div class="homage" role="img" aria-label="Nested squares after Josef Albers's Homage to the Square">
+        <div class="sq2"></div>
+        <div class="sq3"></div>
+        <div class="sq4"></div>
+      </div>
     </header>
 
     <div class="stats-grid">
-      <div class="stat-cell">
+      <div class="stat-cell g1">
         <div class="stat-cell-value" id="monthRuns">-</div>
-        <div class="stat-cell-label">Runs This Month</div>
+        <div class="stat-cell-label">runs this month</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell g2">
         <div class="stat-cell-value" id="monthKm">-</div>
-        <div class="stat-cell-label">Kilometers</div>
+        <div class="stat-cell-label">kilometers</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell g3">
         <div class="stat-cell-value" id="monthHours">-</div>
-        <div class="stat-cell-label">Hours</div>
+        <div class="stat-cell-label">hours</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell g4">
         <div class="stat-cell-value" id="vsLastMonth">-</div>
-        <div class="stat-cell-label">vs Last Month</div>
+        <div class="stat-cell-label">vs last month <span class="mark"></span></div>
       </div>
     </div>
+    <p class="stats-caption">one yellow, four grounds. it is never the same yellow.</p>
 
     <div class="heatmap-section">
-      <div class="heatmap-title">MONTHLY VOLUME — ALL YEARS</div>
+      <div class="heatmap-title">monthly volume, all years</div>
       <div class="heatmap-legend">
         <span>LESS</span>
         <div class="legend-box" style="background: #262626;"></div>
@@ -428,7 +347,7 @@
 
     <div class="runs-section">
       <div class="runs-header">
-        <div class="runs-title">RUNS THIS MONTH</div>
+        <div class="runs-title">runs this month</div>
       </div>
       <div class="table-scroll">
       <table class="runs-table">
@@ -446,6 +365,24 @@
 
   <footer class="page-footer">
     <div class="tribute">
+      <div class="tribute-title">TRIBUTE TO JOSEF ALBERS</div>
+      <p class="tribute-main">
+        Inspired by <span class="tribute-designer">Josef Albers</span>'s
+        <span class="tribute-work">Homage to the Square (1950 to 1976)</span>.
+        Albers arrived at the Bauhaus as a student and left it as a master, the first
+        to make that jump. He ran the preliminary course after Itten and the glass
+        workshop, and drew a stencil alphabet in 1926 that built every letter from a
+        few squares and quarter-circles. From 1950 he painted the same nested squares
+        more than a thousand times, never centred but pushed low, so that colour and
+        not shape carried the picture. This page runs on that idea: one yellow, several
+        grounds, and Futura's geometry set small, the way the Bauhaus wrote everything.
+      </p>
+      <p class="tribute-funfact">
+        Fun fact: Albers painted every Homage with a palette knife, straight from the
+        tube and unmixed, then wrote the paint makers on the back of the panel so anyone
+        could check his recipe. Interaction of Color opens with the whole lesson in one
+        line: a colour is almost never seen as it really is.
+      </p>
       <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
     </div>
   </footer>
@@ -465,6 +402,10 @@
     }
     function hideTooltip() { tooltip.classList.remove('visible'); }
 
+    // Full names for the big title; the shared MONTHS are the three-letter kind.
+    const FULL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
+
     async function loadData() {
       const s = await loadRunData('summary');
       const now = new Date();
@@ -475,22 +416,25 @@
       const thisMonth = s.months.find((m) => m.ym === ym) || { km: 0, runs: 0, min: 0 };
       const lastMonth = s.months.find((m) => m.ym === prevYm) || { km: 0, runs: 0, min: 0 };
 
-      document.getElementById('monthTitle').textContent = MONTHS[now.getMonth()].toUpperCase() + ' ' + now.getFullYear();
+      document.getElementById('monthTitle').textContent = FULL_MONTHS[now.getMonth()] + ' ' + now.getFullYear();
       document.getElementById('monthRuns').textContent = thisMonth.runs;
       document.getElementById('monthKm').textContent = thisMonth.km.toFixed(0);
       document.getElementById('monthHours').textContent = (thisMonth.min / 60).toFixed(1);
 
+      // The figure stays the one yellow; a small square beside the label says
+      // which way it went.
       const diff = thisMonth.km - lastMonth.km;
       const vs = document.getElementById('vsLastMonth');
       vs.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1);
-      vs.style.color = diff >= 0 ? 'var(--yellow)' : 'var(--red)';
+      vs.classList.toggle('up', diff >= 0);
+      vs.classList.toggle('down', diff < 0);
 
-      // Same year across all years is the useful comparison for a month page.
+      // Same month across all years is the useful comparison for a month page.
       const sameMonthBest = s.months
         .filter((m) => m.ym.endsWith('-' + String(now.getMonth() + 1).padStart(2, '0')))
         .sort((a, b) => b.km - a.km)[0];
       document.getElementById('monthIntro').textContent = sameMonthBest && sameMonthBest.ym !== ym
-        ? `Your best ${MONTHS[now.getMonth()]} was ${sameMonthBest.ym.slice(0, 4)} at ${sameMonthBest.km.toFixed(0)} km. This one is at ${thisMonth.km.toFixed(0)}.`
+        ? `Your best ${FULL_MONTHS[now.getMonth()]} was ${sameMonthBest.ym.slice(0, 4)} at ${sameMonthBest.km.toFixed(0)} km. This one is at ${thisMonth.km.toFixed(0)}.`
         : `${thisMonth.km.toFixed(0)} km so far this month.`;
 
       renderMonthHeatmap(document.getElementById('monthHeatmap'), s.months, (cell) => {

@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 — RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=7">
+  <link rel="stylesheet" href="css/shared.css?v=8">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     /* 
      * THIS YEAR
-     * Inspired by Joost Schmidt's Bauhaus Exhibition Poster (1923)
-     * Bold diagonal typography, stark contrasts, architectural precision
+     * Inspired by Joost Schmidt's poster for the 1923 Bauhaus exhibition:
+     * heavy capitals set on the diagonal, a circle as the anchor, red and
+     * black bars holding the rest in place. Here the year itself rides the
+     * band instead of sitting above it.
      */
     
     body {
@@ -27,41 +29,17 @@
       overflow: hidden;
     }
     
-    /* Diagonal stripe */
-    .diagonal-stripe {
+    /* Circle, bars and blocks behind everything, drawn once as SVG. */
+    .schmidt-bg {
       position: absolute;
-      width: 200%;
-      height: 120px;
-      background: var(--yellow);
-      transform: rotate(-5deg);
-      top: 200px;
-      left: -50%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
       z-index: 0;
+      pointer-events: none;
     }
-    
-    .diagonal-stripe-2 {
-      position: absolute;
-      width: 200%;
-      height: 40px;
-      background: var(--red);
-      transform: rotate(-5deg);
-      top: 320px;
-      left: -50%;
-      z-index: 0;
-    }
-    
-    /* Geometric accents */
-    .geo-circle {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border: 20px solid var(--white);
-      border-radius: 50%;
-      opacity: 0.1;
-      bottom: -100px;
-      right: -100px;
-    }
-    
+
     .content {
       position: relative;
       z-index: 1;
@@ -75,13 +53,28 @@
       letter-spacing: 0.3em;
       opacity: 0.6;
     }
+
+    /* The band carries the year. It is one rotated block, so the type and
+       the stripe can never drift apart at another width. The red rule under
+       it is part of the same block for the same reason. */
+    .band {
+      position: relative;
+      margin: 36px -20vw 72px;
+      padding: 8px 20vw 0;
+      background: var(--yellow);
+      color: var(--black);
+      transform: rotate(-5deg);
+      transform-origin: 50% 50%;
+      box-shadow: 0 18px 0 var(--red), 0 26px 0 var(--black);
+    }
     
     .section-title {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(4rem, 15vw, 10rem);
       line-height: 0.85;
       letter-spacing: -0.02em;
-      margin: 20px 0 40px;
+      margin: 0;
+      padding-bottom: 6px;
     }
     
     .section-subtitle {
@@ -220,8 +213,7 @@
     
     @media (max-width: 768px) {
       .stats-strip { flex-wrap: wrap; gap: 24px; justify-content: center; }
-      .diagonal-stripe { height: 80px; top: 150px; }
-      .diagonal-stripe-2 { top: 230px; }
+      .band { margin: 28px -12vw 56px; padding: 6px 12vw 0; box-shadow: 0 12px 0 var(--red), 0 18px 0 var(--black); }
     }
 
     .week-extra, .year-extra {
@@ -321,13 +313,23 @@
   </nav>
 
   <main class="poster">
-    <div class="diagonal-stripe"></div>
-    <div class="diagonal-stripe-2"></div>
-    <div class="geo-circle"></div>
+    <svg class="schmidt-bg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+      <!-- the poster's circle, cut by the edge -->
+      <circle cx="1060" cy="150" r="190" fill="#1A1A1A"/>
+      <circle cx="1060" cy="150" r="140" fill="none" stroke="#FAFAFA" stroke-width="6"/>
+      <circle cx="1060" cy="150" r="46" fill="#E53935"/>
+      <!-- blocks on the same diagonal as the band -->
+      <g transform="rotate(-5 600 400)">
+        <rect x="-100" y="470" width="360" height="22" fill="#1A1A1A"/>
+        <rect x="300" y="470" width="90" height="22" fill="#E53935"/>
+        <rect x="900" y="700" width="500" height="14" fill="#FAFAFA" opacity="0.5"/>
+      </g>
+      <rect x="0" y="0" width="14" height="800" fill="#1A1A1A" opacity="0.6"/>
+    </svg>
     
     <div class="content">
       <div class="section-label">YEAR-TO-DATE PERFORMANCE</div>
-      <h1 class="section-title" id="yearTitle">—</h1>
+      <div class="band"><h1 class="section-title" id="yearTitle">—</h1></div>
       <p class="section-subtitle">
         The year you promised would be different. 
         Let's see if past-you was lying to future-you again.
@@ -409,16 +411,18 @@
     <div class="tribute">
       <div class="tribute-title">TRIBUTE TO JOOST SCHMIDT</div>
       <p class="tribute-main">
-        Inspired by <span class="tribute-designer">Joost Schmidt</span>'s 
-        <span class="tribute-work">Bauhaus Exhibition Poster (1923)</span>. 
-        Schmidt loved bold diagonal compositions and believed typography should have 
-        the same structural power as architecture. His most famous work is the 1923 
-        Bauhaus exhibition poster—a masterpiece of geometric tension.
+        Inspired by <span class="tribute-designer">Joost Schmidt</span>'s
+        <span class="tribute-work">poster for the Bauhaus exhibition (1923)</span>.
+        Schmidt was still a student when he drew it. Heavy capitals run on the
+        diagonal, a circle anchors the middle, and red and black bars hold the rest
+        in place. This page takes the diagonal. The year rides a band that cuts across
+        the ground, and the type is heavy grotesque capitals.
       </p>
       <p class="tribute-funfact">
-        Fun fact: Schmidt started as a sculptor before discovering typography. 
-        He became head of the Bauhaus printing workshop at just 30, and his students 
-        described his teaching style as "intense but never boring."
+        Fun fact: Schmidt was at the Bauhaus for thirteen of the school's fourteen
+        years, from 1919 as a student to 1932 as a master. From 1928 he ran the
+        advertising workshop and taught lettering, so a whole generation of Bauhaus
+        posters passed under his ruler.
       </p>
       <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
     </div>

@@ -4,13 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=7">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:wght@400;600;700&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
   <style>
     /* 
      * THIS WEEK
-     * Inspired by Herbert Bayer's Universal Alphabet (1925)
-     * Geometric forms, primary colors, radical simplicity
+     * Inspired by Herbert Bayer's Universal alphabet (1925): one case only,
+     * letters built from circles and straight lines. Display type is Josefin
+     * Sans, a 1920s geometric, set lowercase throughout. Behind it the three
+     * Bauhaus forms in their taught colours: yellow triangle, red square,
+     * blue circle.
      */
     
     body {
@@ -30,38 +33,15 @@
       overflow: hidden;
     }
     
-    /* Bauhaus geometric shapes */
-    .shape-circle {
+    /* The three forms, drawn once as SVG so they scale with the poster. */
+    .bayer-bg {
       position: absolute;
-      width: 400px;
-      height: 400px;
-      background: var(--red);
-      border-radius: 50%;
-      top: -150px;
-      right: -150px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
       z-index: 0;
-    }
-    
-    .shape-square {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      background: var(--blue);
-      bottom: 100px;
-      left: -80px;
-      z-index: 0;
-    }
-    
-    .shape-triangle {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-left: 100px solid transparent;
-      border-right: 100px solid transparent;
-      border-bottom: 173px solid var(--yellow);
-      bottom: -50px;
-      right: 15%;
-      z-index: 0;
+      pointer-events: none;
     }
     
     /* Content */
@@ -73,7 +53,8 @@
     }
     
     .section-label {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
       font-size: 1rem;
       letter-spacing: 0.3em;
       color: var(--black);
@@ -82,9 +63,11 @@
     }
     
     .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: 0.1em;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      letter-spacing: 0.02em;
       color: var(--black);
       margin-bottom: 40px;
       line-height: 1.2;
@@ -102,9 +85,11 @@
     
     /* The big number */
     .hero-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(12rem, 30vw, 20rem);
-      line-height: 0.8;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
+      font-weight: 700;
+      font-size: clamp(11rem, 28vw, 18rem);
+      line-height: 0.9;
       color: var(--black);
       position: relative;
     }
@@ -119,32 +104,38 @@
     }
     
     .hero-label {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
+      font-weight: 600;
       font-size: clamp(1.5rem, 4vw, 2.5rem);
       letter-spacing: 0.2em;
       color: var(--black);
-      margin-top: -20px;
+      margin-top: 0;
     }
     
-    /* Goal circles */
+    /* The week as seven circles, Monday to Sunday. Green ran, red missed,
+       blue is today with no run yet, grey has not happened. */
     .goal-circles {
       display: flex;
       justify-content: center;
-      gap: 24px;
+      gap: 20px;
       margin: 48px 0;
     }
     
     .goal-circle {
-      width: 60px;
-      height: 60px;
-      border: 4px solid var(--black);
+      width: 52px;
+      height: 52px;
+      border: 4px solid #C9C2AD;
       border-radius: 50%;
       transition: all 0.3s ease;
     }
-    
-    .goal-circle.filled {
-      background: var(--yellow);
-      transform: scale(1.1);
+    .goal-circle.ran    { background: #26a641; border-color: #26a641; transform: scale(1.1); }
+    .goal-circle.missed { background: var(--red); border-color: var(--red); }
+    .goal-circle.today  { background: var(--blue); border-color: var(--blue); }
+
+    @media (max-width: 480px) {
+      .goal-circles { gap: 10px; }
+      .goal-circle { width: 36px; height: 36px; border-width: 3px; }
     }
     
     /* Stats row */
@@ -160,7 +151,8 @@
     }
     
     .stat-value {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
       font-size: 3rem;
       color: var(--black);
       line-height: 1;
@@ -172,7 +164,7 @@
     .stat-label {
       font-size: 0.75rem;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
+      text-transform: lowercase;
       color: var(--black);
       opacity: 0.6;
       margin-top: 8px;
@@ -190,7 +182,8 @@
     }
     
     .last-run-title {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
       font-size: 0.875rem;
       letter-spacing: 0.2em;
       color: var(--yellow);
@@ -201,7 +194,8 @@
     }
     
     .last-run-value {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
       font-size: 2rem;
       color: var(--white);
     }
@@ -209,15 +203,13 @@
     .last-run-label {
       font-size: 0.625rem;
       letter-spacing: 0.15em;
-      text-transform: uppercase;
+      text-transform: lowercase;
       color: rgba(255,255,255,0.5);
     }
     
     @media (max-width: 768px) {
       .stats-row { flex-direction: column; gap: 24px; }
       .last-run { flex-direction: column; gap: 24px; padding: 24px; }
-      .shape-circle { width: 200px; height: 200px; top: -80px; right: -80px; }
-      .shape-square { width: 100px; height: 100px; }
     }
 
     .week-extra, .year-extra {
@@ -233,7 +225,8 @@
       padding: 24px;
     }
     .week-panel-title, .year-panel-title {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
       font-size: 1.1rem;
       letter-spacing: 0.1em;
       color: var(--yellow);
@@ -298,19 +291,24 @@
   </nav>
 
   <main class="poster">
-    <div class="shape-circle"></div>
-    <div class="shape-square"></div>
-    <div class="shape-triangle"></div>
-    
+    <!-- Kandinsky's Bauhaus questionnaire, the way Bayer printed it: the
+         triangle is yellow, the square red, the circle blue. -->
+    <svg class="bayer-bg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+      <circle cx="1090" cy="80" r="260" fill="#1565C0"/>
+      <rect x="-60" y="520" width="240" height="240" fill="#E53935"/>
+      <polygon points="880,900 1020,660 1160,900" fill="#FDD835"/>
+      <rect x="0" y="430" width="1200" height="3" fill="#1A1A1A" opacity="0.12"/>
+    </svg>
+
     <div class="content">
-      <div class="section-label">WEEKLY REPORT</div>
+      <div class="section-label">weekly report</div>
       <h1 class="section-title">
-        THIS WEEK
+        this week
         <em>Did you run? Let's see. No judgment. (Okay, maybe a little.)</em>
       </h1>
       
       <div class="hero-number" id="weekRuns">-</div>
-      <div class="hero-label">RUNS</div>
+      <div class="hero-label">runs</div>
       
       <div class="goal-circles" id="goalCircles"></div>
       
@@ -330,7 +328,7 @@
       </div>
       
       <div class="last-run">
-        <div class="last-run-title">LAST RUN</div>
+        <div class="last-run-title">last run</div>
         <div class="last-run-stat">
           <div class="last-run-value" id="lastDate">-</div>
           <div class="last-run-label">Date</div>
@@ -349,11 +347,11 @@
 
   <section class="week-extra">
     <div class="week-panel">
-      <div class="week-panel-title">THIS WEEK, DAY BY DAY</div>
+      <div class="week-panel-title">this week, day by day</div>
       <div class="day-strip" id="dayStrip"></div>
     </div>
     <div class="week-panel">
-      <div class="week-panel-title">ACTIVITY HEATMAP</div>
+      <div class="week-panel-title">activity heatmap</div>
       <div class="heatmap-legend">
         <span>LESS</span>
         <div class="legend-box" style="background: #333;"></div>
@@ -369,7 +367,7 @@
     </div>
 
     <div class="week-panel">
-      <div class="week-panel-title">RUNS THIS WEEK</div>
+      <div class="week-panel-title">runs this week</div>
       <div class="table-scroll">
         <table class="runs-table">
           <thead>
@@ -388,16 +386,19 @@
     <div class="tribute">
       <div class="tribute-title">TRIBUTE TO HERBERT BAYER</div>
       <p class="tribute-main">
-        Inspired by <span class="tribute-designer">Herbert Bayer</span>'s 
-        <span class="tribute-work">Universal Alphabet (1925)</span>. 
-        Bayer believed in radical simplicity—only lowercase letters, pure geometric forms, 
-        and zero unnecessary ornament. His most famous work is the Universal typeface, 
-        which stripped the alphabet down to circles, triangles, and lines.
+        Inspired by <span class="tribute-designer">Herbert Bayer</span>'s
+        <span class="tribute-work">Universal alphabet (1925)</span>.
+        Bayer drew it from circles and straight lines, in one case only. He put the
+        reason on the Bauhaus letterhead he designed the same year: we write everything
+        small, it saves time. This page follows him. The type is geometric and
+        lowercase, and the three forms behind it are the Bauhaus set as the school
+        taught it, yellow triangle, red square, blue circle.
       </p>
       <p class="tribute-funfact">
-        Fun fact: Bayer designed the iconic Bauhaus logo and later became 
-        the art director for Vogue magazine. He also lost vision in one eye, 
-        which he said made him see design more clearly.
+        Fun fact: Bayer's first printed work was money. In 1923, with German inflation
+        at its worst, the state of Thuringia had the Bauhaus student design its
+        emergency banknotes. He set them in plain sans type, with the values running
+        to millions of marks.
       </p>
       <div class="data-sync">Last synced: <span id="updatedAt">-</span></div>
     </div>
@@ -425,12 +426,6 @@
         document.getElementById('weekRuns').textContent = d.this_week.runs;
         document.getElementById('weekDistance').textContent = d.this_week.distance_km + ' km';
         
-        // Goal circles
-        const circles = [1, 2, 3].map(i => 
-          `<div class="goal-circle ${i <= d.this_week.runs ? 'filled' : ''}"></div>`
-        ).join('');
-        document.getElementById('goalCircles').innerHTML = circles;
-        
         // vs Last week
         const diff = d.this_week.distance_km - d.last_week.distance_km;
         const vsEl = document.getElementById('vsLastWeek');
@@ -455,6 +450,21 @@
           .sort((a, b) => b.start_date_local.localeCompare(a.start_date_local))
           .map(mapRun);
         renderDayStrip(document.getElementById('dayStrip'), runs, weekStart);
+
+        // Seven circles, one per day of this week. A run wins over everything,
+        // a past day with none is a miss, today with none is still open.
+        const ranOn = new Set(runs.map((r) => r.date));
+        const today = new Date();
+        const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const start = new Date(`${weekStart}T00:00:00`);
+        document.getElementById('goalCircles').innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((name, i) => {
+          const day = new Date(start);
+          day.setDate(day.getDate() + i);
+          const key = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+          const state = ranOn.has(key) ? 'ran' : key < todayKey ? 'missed' : key === todayKey ? 'today' : 'future';
+          const word = { ran: 'ran', missed: 'no run', today: 'today, nothing yet', future: 'not yet' }[state];
+          return `<div class="goal-circle ${state}" title="${name} ${key}: ${word}"></div>`;
+        }).join('');
         renderRunRows(document.getElementById('runsTable'), runs, 'No runs yet this week. The week is not over.');
 
         const weekly = await loadRunData('weekly');
