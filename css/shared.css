@@ -388,3 +388,5 @@
 .ch-dot.avg  { fill: var(--white); opacity: 0.9; }
 .ch-end.avg  { fill: var(--white); opacity: 0.9; font-weight: 700; }
 .ch-chip.avg { opacity: 1; border-color: var(--white); border-style: dashed; }
+
+.ch-chip small { font-size: 0.85em; opacity: 0.55; margin-left: 2px; }

@@ -164,18 +164,24 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     return { year: y, pts, total: cum };
   });
 
-  // A typical year, averaged month by month across every past year. Only the
-  // current year is excluded, because it is unfinished. Note this includes the
-  // first year of the record, where tracking began partway through, so the
-  // average sits lower than a full-coverage year would.
-  const full = series.filter((s) => s.year !== current);
+  // A typical year, averaged month by month over the fully tracked years.
+  // Excluded: the current year (unfinished) and the first year of the record,
+  // where tracking only began partway through — its low total is missing data,
+  // not a quiet year, and including it drags the baseline down by ~47 km.
+  // 2022 stays in: its nine-month gap is real history.
+  const full = series.filter((s) => s.year !== current && s.year !== series[0].year);
   if (full.length) {
     let cum = 0;
     const avg = Array.from({ length: 12 }, (_, i) => {
       cum += full.reduce((t, s) => t + (byYear.get(s.year)[i] || 0), 0) / full.length;
       return cum;
     });
-    series.push({ year: 'Average', pts: avg, total: avg[11], years: full.length });
+    series.push({
+      year: 'Average',
+      pts: avg,
+      total: avg[11],
+      range: `${full[0].year}–${full[full.length - 1].year}`,
+    });
   }
 
   const maxKm = Math.max(100, ...series.map((s) => Math.max(...s.pts.filter((p) => p !== null))));
@@ -223,8 +229,8 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `
         <button class="ch-chip ${role(s.year)}" data-year="${s.year}" aria-pressed="true"
-          ${s.years ? `title="Mean of ${s.years} past years, ${s.pts[11].toFixed(0)} km"` : ''}>
-          ${s.year} <em>${s.total.toFixed(0)} km</em>
+          ${s.range ? `title="Mean of ${s.range}"` : ''}>
+          ${s.year}${s.range ? ` <small>${s.range}</small>` : ''} <em>${s.total.toFixed(0)} km</em>
         </button>`).join('')}
     </div>`;
 
