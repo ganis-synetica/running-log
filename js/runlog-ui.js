@@ -165,7 +165,7 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
   });
 
   const maxKm = Math.max(100, ...series.map((s) => Math.max(...s.pts.filter((p) => p !== null))));
-  const W = 760, H = 380, L = 52, R = 16, T = 16, B = 34;
+  const W = 760, H = 380, L = 52, R = 46, T = 16, B = 34;   // right gutter holds the year labels
   const x = (i) => L + (i * (W - L - R)) / 11;
   const y = (v) => T + (H - T - B) * (1 - v / maxKm);
 
@@ -179,6 +179,18 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
   const xlabels = MONTH_NAMES.map((n, i) =>
     `<text class="ch-axis" x="${x(i)}" y="${H - B + 20}" text-anchor="middle">${n[0]}</text>`).join('');
 
+  // Year printed at the end of its own line: the chips below say which year is
+  // which, but not which line is which.
+  const ends = series.map((s) => {
+    const last = s.pts.reduce((acc, v, i) => (v === null ? acc : i), 0);
+    return { year: s.year, x: x(last), y: y(s.pts[last]), role: role(s.year) };
+  }).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) {            // nudge apart so they stay legible
+    if (ends[i].y - ends[i - 1].y < 11) ends[i].y = ends[i - 1].y + 11;
+  }
+  const endLabels = ends.map((e) =>
+    `<text class="ch-end ${e.role}" x="${e.x + 7}" y="${e.y + 3.5}">${e.year}</text>`).join('');
+
   const paths = series.map((s) => {
     const d = s.pts.map((v, i) => (v === null ? null : `${i && s.pts[i - 1] !== null ? 'L' : 'M'}${x(i)},${y(v)}`))
       .filter(Boolean).join(' ');
@@ -191,7 +203,7 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
 
   el.innerHTML = `
     <svg viewBox="0 0 ${W} ${H}" class="ch-svg" role="img" aria-label="Cumulative kilometres by month, one line per year">
-      ${grid}${xlabels}${paths}
+      ${grid}${xlabels}${paths}${endLabels}
     </svg>
     <div class="ch-legend">
       ${series.slice().reverse().map((s) => `

@@ -372,3 +372,13 @@
   .year-stats { display: none; }
   .year-label { width: 38px; font-size: 0.65rem; }
 }
+
+.ch-end {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  fill: currentColor;
+  opacity: 0.3;
+}
+.ch-end.prev { fill: var(--blue); opacity: 1; font-weight: 700; }
+.ch-end.best { fill: var(--yellow); opacity: 1; font-weight: 700; }
+.ch-end.cur  { fill: var(--red); opacity: 1; font-weight: 700; font-size: 11px; }
