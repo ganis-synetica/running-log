@@ -422,17 +422,33 @@
     async function loadData() {
       try {
         const d = await loadRunData('stats');
-        
-        document.getElementById('weekRuns').textContent = d.this_week.runs;
-        document.getElementById('weekDistance').textContent = d.this_week.distance_km + ' km';
-        
+        const s = await loadRunData('summary');
+
+        // Weeks are counted here against today, not taken from stats.json:
+        // its this_week is frozen at build time and goes stale with the snapshot.
+        const weekStart = mondayOf(new Date());
+        const lastStart = mondayOf(new Date(Date.now() - 7 * 864e5));
+        const week = (lo, hi) => {
+          const sel = s.recent.filter((r) => {
+            const day = r.start_date_local.slice(0, 10);
+            return day >= lo && day < hi;
+          });
+          const km = sel.reduce((sum, r) => sum + r.distance, 0) / 1000;
+          return { runs: sel.length, distance_km: Math.round(km * 10) / 10 };
+        };
+        const thisWeek = week(weekStart, '9999');
+        const lastWeek = week(lastStart, weekStart);
+
+        document.getElementById('weekRuns').textContent = thisWeek.runs;
+        document.getElementById('weekDistance').textContent = thisWeek.distance_km + ' km';
+
         // vs Last week
-        const diff = d.this_week.distance_km - d.last_week.distance_km;
+        const diff = thisWeek.distance_km - lastWeek.distance_km;
         const vsEl = document.getElementById('vsLastWeek');
         vsEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + ' km';
         vsEl.className = 'stat-value ' + (diff >= 0 ? 'positive' : 'negative');
         
-        document.getElementById('streak').textContent = d.streak || d.this_week.runs;
+        document.getElementById('streak').textContent = d.streak || thisWeek.runs;
         
         if (d.lastRun) {
           document.getElementById('lastDate').textContent = d.lastRun.date;
@@ -443,8 +459,6 @@
         document.getElementById('updatedAt').textContent = formatSynced(d.updated_at);
 
         // Day strip and this week's log come from the slim summary payload.
-        const s = await loadRunData('summary');
-        const weekStart = mondayOf(new Date());
         const runs = s.recent
           .filter((r) => r.start_date_local.slice(0, 10) >= weekStart)
           .sort((a, b) => b.start_date_local.localeCompare(a.start_date_local))
