@@ -1469,8 +1469,8 @@
   },
   {
     "year": "2026",
-    "total_runs": 79,
-    "total_distance": 276.4,
+    "total_runs": 85,
+    "total_distance": 312.1,
     "weeks": [
       {
         "week_num": 2,
@@ -1599,8 +1599,18 @@
       },
       {
         "week_num": 37,
+        "runs": 5,
+        "distance_km": 29.4
+      },
+      {
+        "week_num": 38,
         "runs": 4,
-        "distance_km": 19.0
+        "distance_km": 20.3
+      },
+      {
+        "week_num": 39,
+        "runs": 1,
+        "distance_km": 5.0
       }
     ]
   }

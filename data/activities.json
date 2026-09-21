@@ -17216,5 +17216,125 @@
       4,
       0
     ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "B82CEDD7-4C11-44FF-8645-99178AACF57D",
+    "start_date_local": "2026-09-12T05:48:47",
+    "name": "Outdoor Run",
+    "distance": 10423.2,
+    "moving_time": 5818,
+    "elapsed_time": 5818,
+    "total_elevation_gain": 33.85,
+    "average_heartrate": 140.52,
+    "max_heartrate": 148,
+    "zones": [
+      8,
+      87,
+      5,
+      0,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "4FDABD71-5660-4913-AE81-16CE3095BA56",
+    "start_date_local": "2026-09-14T07:32:14",
+    "name": "Outdoor Run",
+    "distance": 4384.5,
+    "moving_time": 2331,
+    "elapsed_time": 2331,
+    "total_elevation_gain": 27.13,
+    "average_heartrate": 143.36,
+    "max_heartrate": 160,
+    "zones": [
+      5,
+      60,
+      30,
+      5,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "E347B5AA-B84A-447E-8F5F-FC18C7F1AB79",
+    "start_date_local": "2026-09-15T07:32:14",
+    "name": "Outdoor Run",
+    "distance": 5785.4,
+    "moving_time": 3007,
+    "elapsed_time": 3007,
+    "total_elevation_gain": 30.75,
+    "average_heartrate": 142.64,
+    "max_heartrate": 153,
+    "zones": [
+      4,
+      67,
+      29,
+      0,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "8ABD33BF-68F7-4E38-A102-629760A031DF",
+    "start_date_local": "2026-09-17T07:30:19",
+    "name": "Outdoor Run",
+    "distance": 5087.0,
+    "moving_time": 2319,
+    "elapsed_time": 2319,
+    "total_elevation_gain": 30.56,
+    "average_heartrate": 154.81,
+    "max_heartrate": 163,
+    "zones": [
+      3,
+      5,
+      46,
+      46,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "92AC6F03-92B6-4983-96BF-B856F5A1624B",
+    "start_date_local": "2026-09-18T07:38:49",
+    "name": "Outdoor Run",
+    "distance": 5068.4,
+    "moving_time": 2713,
+    "elapsed_time": 2713,
+    "total_elevation_gain": 26.63,
+    "average_heartrate": 137.81,
+    "max_heartrate": 147,
+    "zones": [
+      24,
+      74,
+      2,
+      0,
+      0
+    ]
+  },
+  {
+    "type": "Run",
+    "source": "health",
+    "health_id": "EFA3EF05-D399-44A4-92DD-5EC22577E834",
+    "start_date_local": "2026-09-21T07:35:08",
+    "name": "Outdoor Run",
+    "distance": 5007.9,
+    "moving_time": 2570,
+    "elapsed_time": 2570,
+    "total_elevation_gain": 23.74,
+    "average_heartrate": 140.65,
+    "max_heartrate": 149,
+    "zones": [
+      5,
+      88,
+      7,
+      0,
+      0
+    ]
   }
 ]
