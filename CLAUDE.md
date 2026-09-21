@@ -58,7 +58,8 @@ Four pages, one signature visual each, so nothing is duplicated across them:
 | `year.html` — This Year | cumulative km, one line per year | `summary` |
 | `alltime.html` — All Time | full sortable run log | `activities` |
 
-- `js/runlog-data.js` — `loadRunData(name)` tries `/api/data/<name>`, falls back to `data/<name>.json`, and records which in `window.__runlogSource`.
+- `js/runlog-data.js` — `loadRunData(name)` tries `api/data/<name>`, falls back to `data/<name>.json`, and records which in `window.__runlogSource`.
+- **Keep every path relative.** ganisatmawarin.com proxies this site under `/running/log/` (rules in the website repo's `netlify.toml`), so a leading `/` would hit the website instead. `index.html` adds the trailing slash if a visitor lands on `/running/log`; each page carries a canonical URL on the main domain.
 - `js/runlog-ui.js` — every shared widget: run rows, zone bars, day strip, both heatmaps, the cumulative chart.
 - `data/summary.json` is the slim payload (per-month totals + last 62 days of runs, ~24 KB). Only All Time loads the full `activities.json` (~380 KB). Keep it that way.
 

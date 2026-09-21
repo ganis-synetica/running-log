@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://ganisatmawarin.com/running/log/">
+  <script>
+    // Served under ganisatmawarin.com/running/log/ by proxy; relative paths need the trailing slash.
+    if (!/(\/|\.html|\/index)$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);
+  </script>
   <title>RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=8">
+  <link rel="stylesheet" href="css/shared.css?v=9">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:wght@400;600;700&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -273,6 +278,7 @@
 </head>
 <body>
   <nav class="nav">
+    <div class="nav-left">
     <a href="index.html" class="nav-brand">
       <div class="musang-container">
         <div class="musang-body">🦝</div>
@@ -282,6 +288,8 @@
       </div>
       <span class="nav-title">RUN, GANIS, RUN!</span>
     </a>
+    <a href="https://ganisatmawarin.com/" class="nav-home">&larr; ganisatmawarin.com</a>
+    </div>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">THIS WEEK</a>
       <a href="month.html" class="nav-link">THIS MONTH</a>
@@ -406,7 +414,7 @@
 
   <div class="tooltip" id="tooltip"></div>
 
-  <script src="js/runlog-data.js?v=2"></script>
+  <script src="js/runlog-data.js?v=3"></script>
   <script src="js/runlog-ui.js?v=8"></script>
   <script>
     const tooltip = document.getElementById('tooltip');

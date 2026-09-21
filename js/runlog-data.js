@@ -5,10 +5,13 @@
  * to the JSON committed in the repo if that is unavailable — so the dashboard
  * always renders something, even before the ingest endpoint is configured or if
  * it later goes down.
+ *
+ * The API path is relative so it also works when ganisatmawarin.com proxies the
+ * dashboard under /running/log/.
  */
 window.loadRunData = async function loadRunData(name) {
   try {
-    const res = await fetch(`/api/data/${name}`, { cache: 'no-store' });
+    const res = await fetch(`api/data/${name}`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       window.__runlogSource = 'live';
