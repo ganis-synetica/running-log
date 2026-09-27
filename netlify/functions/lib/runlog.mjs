@@ -108,11 +108,21 @@ export function extractRuns(workouts) {
 
 const ms = (s) => new Date(`${s}Z`).getTime();
 
+/**
+ * Locate the stored run an incoming record belongs to: same health_id, else
+ * closest start within the match window.
+ *
+ * The window only ever bridges Strava to Health. Two records that both carry
+ * a health_id are two distinct watch workouts, so they never match each
+ * other however close they start — a false start you abandon and restart a
+ * few minutes later is a separate run, not a better reading of the same one.
+ */
 function findMatch(runs, byHealthId, rec) {
   if (rec.health_id && byHealthId.has(rec.health_id)) return byHealthId.get(rec.health_id);
   const t = ms(rec.start_date_local);
   let idx = -1, best = Infinity;
   runs.forEach((r, i) => {
+    if (rec.health_id && r.health_id) return;
     const gap = Math.abs(ms(r.start_date_local) - t);
     if (gap <= MATCH_WINDOW_MS && gap < best) { best = gap; idx = i; }
   });
@@ -124,10 +134,11 @@ const bySort = (a, b) => a.start_date_local.localeCompare(b.start_date_local);
 /**
  * Fold incoming Health runs into the stored log.
  *
- * Matches an existing record by health_id, else by start time within 30 min —
- * the same rule scripts/build_data.py uses. On a match with a Strava record,
- * Health supplies distance and heart rate while Strava keeps moving_time
- * (which excludes pauses) and the run title.
+ * Matches an existing record by health_id, else by start time within 30 min
+ * against Strava-only records — the same rule scripts/build_data.py uses,
+ * which pairs each Strava activity with at most one Health workout. On a
+ * match with a Strava record, Health supplies distance and heart rate while
+ * Strava keeps moving_time (which excludes pauses) and the run title.
  */
 export function upsertRuns(existing, incoming) {
   const runs = existing.map((r) => ({ ...r }));

@@ -1,19 +1,19 @@
 {
   "current_year": "2026",
   "ytd_2026": {
-    "runs": 85,
-    "distance_km": 312.1,
-    "time_hrs": 47.8
+    "runs": 90,
+    "distance_km": 341.9,
+    "time_hrs": 52.2
   },
   "ytd_2025_same_period": {
-    "runs": 55,
-    "distance_km": 124.4,
-    "time_hrs": 19.1
+    "runs": 57,
+    "distance_km": 127.6,
+    "time_hrs": 19.7
   },
   "ytd_2021_same_period": {
-    "runs": 136,
-    "distance_km": 631.7,
-    "time_hrs": 82.7
+    "runs": 141,
+    "distance_km": 683.4,
+    "time_hrs": 89.1
   },
   "full_year_2025": {
     "runs": 68,
@@ -31,9 +31,9 @@
   },
   "weekly_goal": 3,
   "this_week": {
-    "runs": 1,
-    "distance_km": 5.0,
-    "time_min": 43
+    "runs": 6,
+    "distance_km": 34.8,
+    "time_min": 311
   },
   "last_week": {
     "runs": 4,
@@ -41,13 +41,13 @@
     "time_min": 173
   },
   "lastRun": {
-    "date": "2026-09-21",
-    "distance": "5.01",
-    "pace": "8.55"
+    "date": "2026-09-26",
+    "distance": "13.95",
+    "pace": "9.40"
   },
   "sources": {
     "health_export": "/Users/ganis/Library/Mobile Documents/iCloud~com~ifunography~HealthExport/Documents/iCloud",
     "strava_archive": "data/strava-archive.json"
   },
-  "updated_at": "2026-09-21T16:00:37+07:00"
+  "updated_at": "2026-09-27T09:26:15+07:00"
 }

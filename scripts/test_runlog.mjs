@@ -92,6 +92,23 @@ check('strava keeps title', merged.runs[0].name, 'Sleman');
 check('health supplies distance', merged.runs[0].distance, 4230);
 check('health supplies zones', merged.runs[0].zones, [17, 33, 17, 17, 16]);
 
+console.log('\n6b. a false start and the real run stay two runs');
+// 2026-09-24: a 99 s false start, then the real run 3m44s later. Both are
+// Health workouts with their own ids, so the 30-min window must not fold one
+// into the other — it once kept the 0.16 km stub and dropped the 5.41 km run.
+const falseStart = { name: 'Outdoor Run', start: '2026-12-31 07:28:45 +0700', end: '2026-12-31 07:30:24 +0700',
+                     duration: 99, distance: { qty: 0.16, units: 'km' }, id: 'STUB' };
+const pair = extractRuns([w, falseStart]);
+const both = upsertRuns(base, pair);
+check('same post: both added', both.counts.added, 2);
+check('same post: real run kept', both.runs.find((r) => r.health_id === 'ABC')?.distance, 4230);
+const apart = upsertRuns(upsertRuns(base, extractRuns([falseStart])).runs, newest);
+check('separate posts: real run added, not merged', apart.counts, { added: 1, updated: 0, unchanged: 0 });
+check('separate posts: stub untouched', apart.runs.find((r) => r.health_id === 'STUB')?.distance, 160);
+const seeded = mergeBootstrap(upsertRuns(base, extractRuns([falseStart])).runs, [...base, ...newest]);
+check('bootstrap adds the real run beside the stub', seeded.counts.added, 1);
+check('strava record still bridges to one health run', upsertRuns(stravaOnly, pair).runs.length, 2);
+
 console.log('\n7. bootstrap merge fills gaps without overwriting');
 const stored = runs.slice(0, -2).map((r) => ({ ...r, zones: undefined }));   // store predates zones, lacks 2 runs
 stored[10].distance = 1234;                                                    // a phone-supplied value
