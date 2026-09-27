@@ -393,6 +393,10 @@
   transition: transform 0.1s;
 }
 .week-dot:hover { transform: scale(1.8); }
+/* Best year for that week number (rankWeeks). Inset so the ring stays inside
+   the 10px cell and the km colour still shows in the middle. */
+.week-dot.week-best, .legend-box.week-best { box-shadow: inset 0 0 0 2px #FFD700; }
+.legend-box.week-best { background: #333; }
 .year-stats {
   font-family: 'Space Mono', monospace;
   font-size: 0.625rem;

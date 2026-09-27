@@ -325,8 +325,14 @@ window.renderCumulativeChart = function renderCumulativeChart(el, months, opts) 
  * Same absolute scale as the month heatmap, roughly its edges over four and a
  * bit weeks, so a thin year looks thin instead of being flattered by its own
  * average.
+ * With `ranks` (from rankWeeks), the best year of each week column gets a
+ * gold ring. Only gold: most columns have about five active years, so a
+ * top-three ring landed on half of all cells and marked nothing. A 10px cell
+ * has no room for the month heatmap's "#N", so the full rank (and silver or
+ * bronze) lives in the tooltip. No last-place mark either: most columns have
+ * several empty years tied at the bottom.
  */
-window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip) {
+window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip, ranks) {
   let activeWeeks = 0;
   el.innerHTML = '';
   const LEVELS = [5, 10, 18, 25];
@@ -354,6 +360,11 @@ window.renderWeekHeatmap = function renderWeekHeatmap(el, weeklyData, onTip) {
         dot.classList.add(`lvl-${LEVELS.filter((t) => wd.distance_km >= t).length + 1}`);
         dot.dataset.info = `W${w} ${yearData.year}: ${wd.runs} runs, ${wd.distance_km} km`;
         activeWeeks++;
+        const r = ranks && ranks.get(`${yearData.year}-${w}`);
+        if (r) {
+          if (r.rank === 1) dot.classList.add('week-best');
+          dot.dataset.info += ` — ${WEEK_MEDALS[r.rank] || ''}#${r.rank} of ${r.of} W${w}s`;
+        }
       } else {
         dot.dataset.info = `W${w} ${yearData.year}: no runs`;
       }
@@ -380,3 +391,51 @@ window.isoWeekKey = function isoWeekKey(dateStr) {
   firstThu.setUTCDate(firstThu.getUTCDate() - ((firstThu.getUTCDay() + 6) % 7) + 3);
   return `${d.getUTCFullYear()}-${1 + Math.round((d - firstThu) / (7 * 86400000))}`;
 };
+
+/**
+ * Rank every week two ways, the weekly twin of the month heatmap's ranks:
+ *   sameWeek — against the same ISO week number in every other year
+ *   inYear   — against every other week of its own year
+ * Both return Map `${year}-${week}` -> { rank, of }. Ties share a rank.
+ *
+ * A week qualifies once tracking had started and up to the current week, so a
+ * recorded zero counts as a real bad week while an untracked one does not.
+ * Week 53 only exists in some ISO years and is only compared among those;
+ * a group of one is left unranked.
+ * `override` ({ key: km }) lets the caller rank the current week on the same
+ * number it displays.
+ */
+window.rankWeeks = function rankWeeks(weeklyData, todayKey, override = {}) {
+  const km = new Map();
+  weeklyData.forEach((y) => y.weeks.forEach((w) => km.set(`${y.year}-${w.week_num}`, w.distance_km)));
+  Object.entries(override).forEach(([k, v]) => km.set(k, v));
+
+  const sameWeek = new Map(), inYear = new Map();
+  const first = [...km].filter(([, v]) => v > 0).map(([k]) => k.split('-').map(Number))
+    .sort((a, b) => a[0] - b[0] || a[1] - b[1])[0];
+  if (!first) return { sameWeek, inYear };
+
+  const [nowY, nowW] = isoWeekKey(todayKey).split('-').map(Number);
+  const weeksIn = (y) => Number(isoWeekKey(`${y}-12-28`).split('-')[1]);
+  const cell = (y, w) => ({ key: `${y}-${w}`, km: km.get(`${y}-${w}`) || 0 });
+  const tracked = (y, w) => w <= weeksIn(y)
+    && (y > first[0] || w >= first[1]) && (y < nowY || w <= nowW);
+  // A group of one has nothing to beat, so it gets no rank (2020's week 53).
+  const rankInto = (out, group) => group.length > 1 && group.forEach((c) => out.set(c.key, {
+    rank: 1 + group.filter((o) => o.km > c.km).length, of: group.length,
+  }));
+
+  const years = [];
+  for (let y = first[0]; y <= nowY; y++) years.push(y);
+  for (let w = 1; w <= 53; w++) {
+    rankInto(sameWeek, years.filter((y) => tracked(y, w)).map((y) => cell(y, w)));
+  }
+  years.forEach((y) => {
+    const group = [];
+    for (let w = 1; w <= 53; w++) if (tracked(y, w)) group.push(cell(y, w));
+    rankInto(inYear, group);
+  });
+  return { sameWeek, inYear };
+};
+
+window.WEEK_MEDALS = { 1: '\u{1F947}', 2: '\u{1F948}', 3: '\u{1F949}' };

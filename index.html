@@ -9,7 +9,7 @@
     if (!/(\/|\.html|\/index)$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);
   </script>
   <title>RUN, GANIS, RUN!</title>
-  <link rel="stylesheet" href="css/shared.css?v=9">
+  <link rel="stylesheet" href="css/shared.css?v=10">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:wght@400;600;700&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
   <style>
     /* 
@@ -144,6 +144,40 @@
     }
     
     /* Stats row */
+    /* This week's km ranked two ways, under the hero. The month page ranks
+       months the same way; a medal for the top three. */
+    .week-ranks {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .week-ranks:empty { display: none; }
+    .week-rank {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border: 2px solid var(--black);
+      background: var(--cream);
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: lowercase;
+      font-size: 1rem;
+      color: var(--black);
+    }
+    .week-rank.gold { background: var(--yellow); }
+    .week-rank-medal { font-size: 1.4rem; line-height: 1; }
+    .week-rank strong { font-weight: 700; font-size: 1.25rem; }
+    .week-ranks-note {
+      flex-basis: 100%;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      color: var(--black);
+      opacity: 0.5;
+    }
+
     .stats-row {
       display: flex;
       justify-content: center;
@@ -317,6 +351,7 @@
       
       <div class="hero-number" id="weekRuns">-</div>
       <div class="hero-label">runs</div>
+      <div class="week-ranks" id="weekRanks"></div>
       
       <div class="goal-circles" id="goalCircles"></div>
       
@@ -370,6 +405,8 @@
         <div class="legend-box" style="background: #6ee787;"></div>
         <span>MORE</span>
         <span style="margin-left: 16px;">// 0 · 5 · 10 · 18 · 25+ KM — SAME SCALE EVERY YEAR</span>
+        <span class="legend-box week-best"></span>
+        <span>BEST YEAR FOR THAT WEEK</span>
       </div>
       <div class="heatmap-scroll"><div id="heatmap"></div></div>
     </div>
@@ -415,7 +452,7 @@
   <div class="tooltip" id="tooltip"></div>
 
   <script src="js/runlog-data.js?v=3"></script>
-  <script src="js/runlog-ui.js?v=8"></script>
+  <script src="js/runlog-ui.js?v=9"></script>
   <script>
     const tooltip = document.getElementById('tooltip');
     function showTooltip(e) {
@@ -489,11 +526,28 @@
         }).join('');
         renderRunRows(document.getElementById('runsTable'), runs, 'No runs yet this week. The week is not over.');
 
+        // Rank this week on the km shown above, not the weekly payload's copy,
+        // so the medal and the number beside it can never disagree.
         const weekly = await loadRunData('weekly');
+        const weekKey = isoWeekKey(todayKey);
+        const ranks = rankWeeks(weekly, todayKey, { [weekKey]: thisWeek.distance_km });
         renderWeekHeatmap(document.getElementById('heatmap'), weekly, (dot) => {
           dot.addEventListener('mouseenter', showTooltip);
           dot.addEventListener('mouseleave', hideTooltip);
-        });
+        }, ranks.sameWeek);
+
+        const [weekYear, weekNum] = weekKey.split('-');
+        const chip = (r, what) => {
+          if (!r) return '';
+          const medal = thisWeek.distance_km > 0 && WEEK_MEDALS[r.rank];
+          return `<div class="week-rank${medal && r.rank === 1 ? ' gold' : ''}">`
+            + (medal ? `<span class="week-rank-medal">${medal}</span>` : '')
+            + `<span><strong>#${r.rank}</strong> of ${r.of} ${what}</span></div>`;
+        };
+        const chips = chip(ranks.sameWeek.get(weekKey), `week ${weekNum}s`)
+          + chip(ranks.inYear.get(weekKey), `weeks in ${weekYear}`);
+        document.getElementById('weekRanks').innerHTML = chips
+          && chips + '<div class="week-ranks-note">ranked so far · settles sunday night</div>';
       } catch (e) {
         console.error('Error:', e);
       }

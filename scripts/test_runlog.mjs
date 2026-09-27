@@ -1,9 +1,11 @@
 /**
  * Verifies the JS logic in netlify/functions/lib/runlog.mjs, including that
- * its aggregation produces the same numbers as scripts/build_data.py.
+ * its aggregation produces the same numbers as scripts/build_data.py, and the
+ * pure ranking in js/runlog-ui.js (loaded in a vm, no DOM needed).
  *   node scripts/test_runlog.mjs
  */
 import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
 import {
   normalizePayload, extractRuns, upsertRuns, mergeBootstrap,
   buildStats, buildWeekly, isoWeek, zonesFrom,
@@ -120,6 +122,27 @@ check('existing value not overwritten', mb.runs.find((r) => r.start_date_local =
 check('sorted after adds', mb.runs.every((r, i, a) => !i || a[i-1].start_date_local <= r.start_date_local), true);
 const again = mergeBootstrap(mb.runs, runs);
 check('second merge is a no-op', again.counts, { added: 0, filled: 0 });
+
+console.log('\n8. week ranks (js/runlog-ui.js)');
+const ui = { window: null };
+ui.window = ui;
+vm.createContext(ui);
+vm.runInContext(readFileSync('js/runlog-ui.js', 'utf8'), ui);
+const wk = (year, weeks) => ({ year, weeks: Object.entries(weeks).map(([n, km]) => ({ week_num: Number(n), distance_km: km })) });
+const rk = ui.rankWeeks([
+  wk('2019', { 50: 2 }),                        // tracking starts at 2019 W50
+  wk('2020', { 1: 8, 2: 8, 53: 9 }),            // 2020 is a 53-week ISO year
+  wk('2021', { 1: 3, 2: 12 }),
+], '2021-01-12', { '2021-2': 15 });              // today is 2021 W2
+check('ties share a rank', [rk.sameWeek.get('2020-1'), rk.sameWeek.get('2021-1')],
+      [{ rank: 1, of: 2 }, { rank: 2, of: 2 }]);
+check('override ranks the displayed km', rk.sameWeek.get('2021-2'), { rank: 1, of: 2 });
+check('weeks before tracking are unranked', rk.sameWeek.get('2019-1'), undefined);
+check('recorded zero after tracking counts', rk.inYear.get('2019-51'), { rank: 2, of: 3 });
+check('future weeks are unranked', rk.sameWeek.get('2021-3'), undefined);
+check('a lone week 53 is unranked', rk.sameWeek.get('2020-53'), undefined);
+check('in-year ranks against its own year', rk.inYear.get('2020-53'), { rank: 1, of: 53 });
+check('no data -> empty', ui.rankWeeks([], '2021-01-12').sameWeek.size, 0);
 
 console.log(failures ? `\n${failures} FAILURE(S)\n` : '\nAll checks passed.\n');
 process.exit(failures ? 1 : 0);
